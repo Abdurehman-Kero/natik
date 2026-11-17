@@ -1,0 +1,20 @@
+# One origin for the site and the API (ARCHITECTURE §1): the session cookie stays first-party.
+# Caddy obtains and renews HTTPS certificates automatically (NFR-SEC-001).
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+
+	# API and its docs
+	handle /api/* {
+		reverse_proxy api:4000
+	}
+
+	# Everything else: the Next.js site
+	handle {
+		reverse_proxy web:3000
+	}
+}

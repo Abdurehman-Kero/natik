@@ -1,0 +1,81 @@
+{
+  "name": "@natik/shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Code shared by the Natik web app and API: enums, formatters, error codes, schemas",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@natik/config": "workspace:*",
+    "@types/node": "24.19.2",
+    "eslint": "9.39.5",
+    "typescript": "5.9.3",
+    "vitest": "4.1.12"
+  },
+  "module": "dist/esm/index.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/esm/errors.js",
+      "require": "./dist/errors.js",
+      "default": "./dist/errors.js"
+    },
+    "./money": {
+      "types": "./dist/money.d.ts",
+      "import": "./dist/esm/money.js",
+      "require": "./dist/money.js",
+      "default": "./dist/money.js"
+    },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "import": "./dist/esm/constants.js",
+      "require": "./dist/constants.js",
+      "default": "./dist/constants.js"
+    },
+    "./dates": {
+      "types": "./dist/dates.d.ts",
+      "import": "./dist/esm/dates.js",
+      "require": "./dist/dates.js",
+      "default": "./dist/dates.js"
+    },
+    "./enums": {
+      "types": "./dist/enums.d.ts",
+      "import": "./dist/esm/enums.js",
+      "require": "./dist/enums.js",
+      "default": "./dist/enums.js"
+    },
+    "./phone": {
+      "types": "./dist/phone.d.ts",
+      "import": "./dist/esm/phone.js",
+      "require": "./dist/phone.js",
+      "default": "./dist/phone.js"
+    },
+    "./password": {
+      "types": "./dist/password.d.ts",
+      "import": "./dist/esm/password.js",
+      "require": "./dist/password.js",
+      "default": "./dist/password.js"
+    }
+  }
+}

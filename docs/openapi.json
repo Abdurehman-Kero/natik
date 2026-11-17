@@ -1,0 +1,2840 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "All dependencies are reachable" },
+          "503": { "description": "At least one dependency is down" }
+        },
+        "summary": "Liveness and dependency check (database, Redis)",
+        "tags": ["Health"]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/RegisterDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/sign-in": {
+      "post": {
+        "operationId": "AuthController_signIn",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SignInDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/sign-out": {
+      "post": {
+        "operationId": "AuthController_signOut",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/password/forgot": {
+      "post": {
+        "operationId": "AuthController_forgot",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ForgotPasswordDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/password/verify-code": {
+      "post": {
+        "operationId": "AuthController_verifyResetCode",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/VerifyResetCodeDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/password/set": {
+      "post": {
+        "operationId": "AuthController_setPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SetPasswordDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/dev/sms": {
+      "get": {
+        "operationId": "DevSmsController_latest",
+        "parameters": [
+          { "name": "to", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Development"]
+      }
+    },
+    "/api/v1/admin/announcements": {
+      "get": {
+        "operationId": "AdminAnnouncementsController_list",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      },
+      "post": {
+        "operationId": "AdminAnnouncementsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AnnouncementDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/admin/announcements/{id}": {
+      "patch": {
+        "operationId": "AdminAnnouncementsController_update",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AnnouncementDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      },
+      "delete": {
+        "operationId": "AdminAnnouncementsController_remove",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/teach/announcements": {
+      "get": {
+        "operationId": "TeachAnnouncementsController_list",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      },
+      "post": {
+        "operationId": "TeachAnnouncementsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AnnouncementDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/teach/announcements/{id}": {
+      "patch": {
+        "operationId": "TeachAnnouncementsController_update",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AnnouncementDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      },
+      "delete": {
+        "operationId": "TeachAnnouncementsController_remove",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/me/announcements": {
+      "get": {
+        "operationId": "StudentAnnouncementsController_feed",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/me/announcements/unread-count": {
+      "get": {
+        "operationId": "StudentAnnouncementsController_unread",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/me/announcements/read-all": {
+      "post": {
+        "operationId": "StudentAnnouncementsController_readAll",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/me/announcements/{id}/read": {
+      "post": {
+        "operationId": "StudentAnnouncementsController_read",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Announcements"]
+      }
+    },
+    "/api/v1/admin/sms": {
+      "get": {
+        "operationId": "AdminSmsController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "FAILED",
+              "type": "string",
+              "enum": ["FAILED", "QUEUED", "SENT"]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · SMS"]
+      }
+    },
+    "/api/v1/admin/sms/count": {
+      "get": {
+        "operationId": "AdminSmsController_count",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · SMS"]
+      }
+    },
+    "/api/v1/admin/sms/{id}/retry": {
+      "post": {
+        "operationId": "AdminSmsController_retry",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · SMS"]
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "MeController_me",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Me"]
+      },
+      "patch": {
+        "operationId": "MeController_update",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateProfileDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Me"]
+      }
+    },
+    "/api/v1/me/password": {
+      "post": {
+        "operationId": "MeController_changePassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ChangePasswordDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Me"]
+      }
+    },
+    "/api/v1/me/photo": {
+      "post": {
+        "operationId": "MeController_setPhoto",
+        "parameters": [],
+        "responses": { "201": { "description": "" } },
+        "tags": ["Me"]
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "AdminUsersController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 100, "type": "string" }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["STUDENT", "TEACHER", "ADMIN"] }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["ACTIVE", "DISABLED"] }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 50, "default": 20, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      },
+      "post": {
+        "operationId": "AdminUsersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateUserDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Users"]
+      }
+    },
+    "/api/v1/admin/users/{id}": {
+      "get": {
+        "operationId": "AdminUsersController_get",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      },
+      "patch": {
+        "operationId": "AdminUsersController_update",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateUserDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      }
+    },
+    "/api/v1/admin/users/{id}/disable": {
+      "post": {
+        "operationId": "AdminUsersController_disable",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      }
+    },
+    "/api/v1/admin/users/{id}/enable": {
+      "post": {
+        "operationId": "AdminUsersController_enable",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      }
+    },
+    "/api/v1/admin/users/{id}/erase": {
+      "post": {
+        "operationId": "AdminUsersController_erase",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/EraseDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      }
+    },
+    "/api/v1/admin/users/{id}/password-link": {
+      "post": {
+        "operationId": "AdminUsersController_passwordLink",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Users"]
+      }
+    },
+    "/api/v1/public/filters": {
+      "get": {
+        "operationId": "PublicCatalogController_filters",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/languages": {
+      "get": {
+        "operationId": "PublicCatalogController_languages",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/courses": {
+      "get": {
+        "operationId": "PublicCatalogController_list",
+        "parameters": [
+          {
+            "name": "language",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 10, "type": "string" }
+          },
+          {
+            "name": "level",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 40, "type": "string" }
+          },
+          { "name": "featured", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/free-lessons": {
+      "get": {
+        "operationId": "PublicCatalogController_freeLessons",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/lessons/{id}": {
+      "get": {
+        "operationId": "PublicCatalogController_freeLesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/courses/{slug}": {
+      "get": {
+        "operationId": "PublicCatalogController_detail",
+        "parameters": [
+          { "name": "slug", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/admin/courses": {
+      "get": {
+        "operationId": "AdminCoursesController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 100, "type": "string" }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["DRAFT", "PUBLISHED", "HIDDEN"] }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 50, "default": 20, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      },
+      "post": {
+        "operationId": "AdminCoursesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      }
+    },
+    "/api/v1/admin/courses/teachers": {
+      "get": {
+        "operationId": "AdminCoursesController_teachers",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      }
+    },
+    "/api/v1/admin/courses/{id}": {
+      "get": {
+        "operationId": "AdminCoursesController_get",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      },
+      "patch": {
+        "operationId": "AdminCoursesController_update",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      },
+      "delete": {
+        "operationId": "AdminCoursesController_remove",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      }
+    },
+    "/api/v1/admin/courses/{id}/publish": {
+      "post": {
+        "operationId": "AdminCoursesController_publish",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      }
+    },
+    "/api/v1/admin/courses/{id}/hide": {
+      "post": {
+        "operationId": "AdminCoursesController_hide",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      }
+    },
+    "/api/v1/admin/courses/{id}/teachers": {
+      "put": {
+        "operationId": "AdminCoursesController_setTeachers",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/TeachersDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Courses"]
+      }
+    },
+    "/api/v1/admin/languages": {
+      "get": {
+        "operationId": "AdminCatalogueListsController_languages",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      },
+      "post": {
+        "operationId": "AdminCatalogueListsController_createLanguage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LanguageDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      }
+    },
+    "/api/v1/admin/languages/reorder": {
+      "post": {
+        "operationId": "AdminCatalogueListsController_reorderLanguages",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      }
+    },
+    "/api/v1/admin/languages/{id}": {
+      "patch": {
+        "operationId": "AdminCatalogueListsController_updateLanguage",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LanguageDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      },
+      "delete": {
+        "operationId": "AdminCatalogueListsController_deleteLanguage",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      }
+    },
+    "/api/v1/admin/levels": {
+      "get": {
+        "operationId": "AdminCatalogueListsController_levels",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      },
+      "post": {
+        "operationId": "AdminCatalogueListsController_createLevel",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LevelDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      }
+    },
+    "/api/v1/admin/levels/reorder": {
+      "post": {
+        "operationId": "AdminCatalogueListsController_reorderLevels",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      }
+    },
+    "/api/v1/admin/levels/{id}": {
+      "patch": {
+        "operationId": "AdminCatalogueListsController_updateLevel",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LevelDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      },
+      "delete": {
+        "operationId": "AdminCatalogueListsController_deleteLevel",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Languages and levels"]
+      }
+    },
+    "/api/v1/teach/courses": {
+      "get": {
+        "operationId": "TeachController_courses",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/outline": {
+      "get": {
+        "operationId": "TeachController_outline",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/units": {
+      "post": {
+        "operationId": "TeachController_createUnit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UnitDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/units/reorder": {
+      "post": {
+        "operationId": "TeachController_reorderUnits",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/units/{id}": {
+      "patch": {
+        "operationId": "TeachController_renameUnit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UnitDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      },
+      "delete": {
+        "operationId": "TeachController_deleteUnit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/units/{id}/publish": {
+      "post": {
+        "operationId": "TeachController_publishUnit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/units/{id}/hide": {
+      "post": {
+        "operationId": "TeachController_hideUnit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/units/{id}/lessons": {
+      "post": {
+        "operationId": "TeachController_createLesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LessonCreateDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/lessons/reorder": {
+      "post": {
+        "operationId": "TeachController_reorderLessons",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LessonsReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/lessons/{id}": {
+      "get": {
+        "operationId": "TeachController_lesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      },
+      "patch": {
+        "operationId": "TeachController_updateLesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LessonUpdateDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      },
+      "delete": {
+        "operationId": "TeachController_deleteLesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/lessons/{id}/publish": {
+      "post": {
+        "operationId": "TeachController_publishLesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/lessons/{id}/hide": {
+      "post": {
+        "operationId": "TeachController_hideLesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/lessons/{id}/view": {
+      "get": {
+        "operationId": "TeachController_view",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/lessons/{id}/blocks": {
+      "post": {
+        "operationId": "TeachController_createBlock",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/BlockCreateDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/lessons/{id}/blocks/reorder": {
+      "post": {
+        "operationId": "TeachController_reorderBlocks",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/teach/blocks/{id}": {
+      "patch": {
+        "operationId": "TeachController_updateBlock",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/BlockUpdateDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach"]
+      },
+      "delete": {
+        "operationId": "TeachController_deleteBlock",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Teach"]
+      }
+    },
+    "/api/v1/files": {
+      "post": {
+        "operationId": "FilesController_upload",
+        "parameters": [],
+        "responses": { "201": { "description": "" } },
+        "tags": ["Files"]
+      }
+    },
+    "/api/v1/files/{id}": {
+      "get": {
+        "operationId": "FilesController_open",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Files"]
+      }
+    },
+    "/api/v1/videos": {
+      "post": {
+        "operationId": "VideosController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateVideoDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Videos"]
+      }
+    },
+    "/api/v1/videos/{id}": {
+      "get": {
+        "operationId": "VideosController_status",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Videos"]
+      }
+    },
+    "/api/v1/videos/{id}/upload": {
+      "post": {
+        "operationId": "VideosController_upload",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "201": { "description": "" } },
+        "tags": ["Videos"]
+      }
+    },
+    "/api/v1/videos/{id}/embed": {
+      "get": {
+        "operationId": "VideosController_embed",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Videos"]
+      }
+    },
+    "/api/v1/videos/{id}/stream": {
+      "get": {
+        "operationId": "VideosController_stream",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Videos"]
+      }
+    },
+    "/api/v1/courses/{id}/enrol": {
+      "post": {
+        "operationId": "EnrolmentsController_enrol",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Enrolments"]
+      }
+    },
+    "/api/v1/enrolments/{id}/renew": {
+      "post": {
+        "operationId": "EnrolmentsController_renew",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Enrolments"]
+      }
+    },
+    "/api/v1/me/course-state/{slug}": {
+      "get": {
+        "operationId": "EnrolmentsController_state",
+        "parameters": [
+          { "name": "slug", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Enrolments"]
+      }
+    },
+    "/api/v1/admin/enrolments": {
+      "get": {
+        "operationId": "AdminEnrolmentsController_list",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "schema": { "minLength": 1, "type": "string" }
+          },
+          {
+            "name": "studentId",
+            "required": false,
+            "in": "query",
+            "schema": { "minLength": 1, "type": "string" }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AWAITING_PAYMENT",
+                "PAYMENT_SUBMITTED",
+                "ACTIVE",
+                "COMPLETED",
+                "EXPIRED",
+                "CANCELLED"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 50, "default": 20, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Enrolments"]
+      },
+      "post": {
+        "operationId": "AdminEnrolmentsController_enrol",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AdminEnrolDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Enrolments"]
+      }
+    },
+    "/api/v1/admin/students": {
+      "get": {
+        "operationId": "AdminEnrolmentsController_students",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": { "minLength": 1, "maxLength": 60, "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Enrolments"]
+      }
+    },
+    "/api/v1/admin/enrolments/{id}/extend": {
+      "post": {
+        "operationId": "AdminEnrolmentsController_extend",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ExtendDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Enrolments"]
+      }
+    },
+    "/api/v1/admin/enrolments/{id}/renew": {
+      "post": {
+        "operationId": "AdminEnrolmentsController_renew",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Enrolments"]
+      }
+    },
+    "/api/v1/admin/enrolments/{id}/cancel": {
+      "post": {
+        "operationId": "AdminEnrolmentsController_cancel",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CancelDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Enrolments"]
+      }
+    },
+    "/api/v1/enrolments/{id}/payment": {
+      "get": {
+        "operationId": "StudentPaymentsController_info",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Payments"]
+      }
+    },
+    "/api/v1/enrolments/{id}/payments": {
+      "post": {
+        "operationId": "StudentPaymentsController_submit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "201": { "description": "" } },
+        "tags": ["Payments"]
+      }
+    },
+    "/api/v1/me/payments": {
+      "get": {
+        "operationId": "StudentPaymentsController_mine",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Payments"]
+      }
+    },
+    "/api/v1/admin/payments": {
+      "get": {
+        "operationId": "AdminPaymentsController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "SUBMITTED",
+              "type": "string",
+              "enum": ["SUBMITTED", "CONFIRMED", "REJECTED"]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 50, "default": 20, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payments"]
+      }
+    },
+    "/api/v1/admin/payments/count": {
+      "get": {
+        "operationId": "AdminPaymentsController_count",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payments"]
+      }
+    },
+    "/api/v1/admin/payments/cash": {
+      "post": {
+        "operationId": "AdminPaymentsController_cash",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CashDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Payments"]
+      }
+    },
+    "/api/v1/admin/payments/{id}/confirm": {
+      "post": {
+        "operationId": "AdminPaymentsController_confirm",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payments"]
+      }
+    },
+    "/api/v1/admin/payments/{id}/reject": {
+      "post": {
+        "operationId": "AdminPaymentsController_reject",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/RejectDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payments"]
+      }
+    },
+    "/api/v1/admin/payment-accounts": {
+      "get": {
+        "operationId": "PaymentAccountsController_list",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payment accounts"]
+      },
+      "post": {
+        "operationId": "PaymentAccountsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AccountDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Payment accounts"]
+      }
+    },
+    "/api/v1/admin/payment-accounts/order": {
+      "put": {
+        "operationId": "PaymentAccountsController_reorder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payment accounts"]
+      }
+    },
+    "/api/v1/admin/payment-accounts/{id}": {
+      "put": {
+        "operationId": "PaymentAccountsController_update",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AccountDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Payment accounts"]
+      },
+      "delete": {
+        "operationId": "PaymentAccountsController_remove",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Payment accounts"]
+      }
+    },
+    "/api/v1/me/dashboard": {
+      "get": {
+        "operationId": "LearningController_dashboard",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/me/courses": {
+      "get": {
+        "operationId": "LearningController_courses",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/learn/lessons/{id}": {
+      "get": {
+        "operationId": "LearningController_lesson",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/learn/lessons/{id}/open": {
+      "post": {
+        "operationId": "LearningController_open",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/learn/lessons/{id}/complete": {
+      "post": {
+        "operationId": "LearningController_complete",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/learn/lessons/{id}/report": {
+      "post": {
+        "operationId": "LearningController_report",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReportDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/learn/{slug}": {
+      "get": {
+        "operationId": "LearningController_outline",
+        "parameters": [
+          { "name": "slug", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning"]
+      }
+    },
+    "/api/v1/teach/lessons/{lessonId}/quiz": {
+      "post": {
+        "operationId": "QuizBuilderController_create",
+        "parameters": [
+          { "name": "lessonId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/QuizCreateDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}": {
+      "get": {
+        "operationId": "QuizBuilderController_get",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      },
+      "patch": {
+        "operationId": "QuizBuilderController_update",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/QuizSettingsDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      },
+      "delete": {
+        "operationId": "QuizBuilderController_remove",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/publish": {
+      "post": {
+        "operationId": "QuizBuilderController_publish",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/hide": {
+      "post": {
+        "operationId": "QuizBuilderController_hide",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/preview": {
+      "get": {
+        "operationId": "QuizBuilderController_preview",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/questions": {
+      "post": {
+        "operationId": "QuizBuilderController_addQuestion",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "201": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/questions/order": {
+      "put": {
+        "operationId": "QuizBuilderController_reorder",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/questions/{questionId}": {
+      "put": {
+        "operationId": "QuizBuilderController_updateQuestion",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "questionId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      },
+      "delete": {
+        "operationId": "QuizBuilderController_removeQuestion",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "questionId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Teach · Quizzes"]
+      }
+    },
+    "/api/v1/teach/marking": {
+      "get": {
+        "operationId": "MarkingController_queue",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "schema": { "minLength": 1, "type": "string" }
+          },
+          {
+            "name": "quizId",
+            "required": false,
+            "in": "query",
+            "schema": { "minLength": 1, "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Marking"]
+      }
+    },
+    "/api/v1/teach/marking/count": {
+      "get": {
+        "operationId": "MarkingController_count",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Marking"]
+      }
+    },
+    "/api/v1/teach/answers/{id}/mark": {
+      "post": {
+        "operationId": "MarkingController_mark",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/MarkDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Marking"]
+      }
+    },
+    "/api/v1/teach/quizzes/{id}/grants": {
+      "post": {
+        "operationId": "MarkingController_grant",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/GrantDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Teach · Marking"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/students/{studentId}/attempts": {
+      "get": {
+        "operationId": "MarkingController_studentAttempts",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "studentId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Marking"]
+      }
+    },
+    "/api/v1/learn/quizzes/{id}": {
+      "get": {
+        "operationId": "StudentQuizController_intro",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      }
+    },
+    "/api/v1/learn/quizzes/{id}/attempts": {
+      "get": {
+        "operationId": "StudentQuizController_history",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      },
+      "post": {
+        "operationId": "StudentQuizController_start",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      }
+    },
+    "/api/v1/learn/attempts/{id}": {
+      "get": {
+        "operationId": "StudentQuizController_attempt",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      }
+    },
+    "/api/v1/learn/attempts/{id}/answers/{questionId}": {
+      "put": {
+        "operationId": "StudentQuizController_save",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "questionId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AnswerDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      }
+    },
+    "/api/v1/learn/attempts/{id}/submit": {
+      "post": {
+        "operationId": "StudentQuizController_submit",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      }
+    },
+    "/api/v1/learn/attempts/{id}/result": {
+      "get": {
+        "operationId": "StudentQuizController_result",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Learning · Quizzes"]
+      }
+    },
+    "/api/v1/me/certificates": {
+      "get": {
+        "operationId": "MyCertificatesController_list",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Certificates"]
+      }
+    },
+    "/api/v1/me/certificates/{id}/pdf": {
+      "get": {
+        "operationId": "MyCertificatesController_pdf",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Certificates"]
+      }
+    },
+    "/api/v1/admin/certificates": {
+      "get": {
+        "operationId": "AdminCertificatesController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 80, "type": "string" }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["VALID", "CANCELLED"] }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 50, "default": 20, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Certificates"]
+      }
+    },
+    "/api/v1/admin/certificates/{id}/pdf": {
+      "get": {
+        "operationId": "AdminCertificatesController_pdf",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Certificates"]
+      }
+    },
+    "/api/v1/admin/certificates/{id}/cancel": {
+      "post": {
+        "operationId": "AdminCertificatesController_cancel",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CancelDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Certificates"]
+      }
+    },
+    "/api/v1/admin/settings/certificate": {
+      "get": {
+        "operationId": "AdminCertificatesController_settings",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Certificates"]
+      },
+      "put": {
+        "operationId": "AdminCertificatesController_saveSettings",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/SettingsDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Certificates"]
+      }
+    },
+    "/api/v1/public/contact": {
+      "post": {
+        "operationId": "PublicSiteController_contact",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ContactDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/site": {
+      "get": {
+        "operationId": "PublicSiteController_siteContent",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/faq": {
+      "get": {
+        "operationId": "PublicSiteController_faq",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/testimonials": {
+      "get": {
+        "operationId": "PublicSiteController_testimonials",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/policies/{slug}": {
+      "get": {
+        "operationId": "PublicSiteController_policy",
+        "parameters": [
+          { "name": "slug", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/teachers": {
+      "get": {
+        "operationId": "PublicSiteController_teachers",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/announcements": {
+      "get": {
+        "operationId": "PublicSiteController_announcements",
+        "parameters": [
+          { "name": "limit", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/public/certificates/{number}": {
+      "get": {
+        "operationId": "PublicSiteController_certificate",
+        "parameters": [
+          { "name": "number", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Public"]
+      }
+    },
+    "/api/v1/admin/site/{key}": {
+      "get": {
+        "operationId": "AdminSiteController_getSite",
+        "parameters": [
+          { "name": "key", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "put": {
+        "operationId": "AdminSiteController_putSite",
+        "parameters": [
+          { "name": "key", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "delete": {
+        "operationId": "AdminSiteController_resetSite",
+        "parameters": [
+          { "name": "key", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/faq": {
+      "get": {
+        "operationId": "AdminSiteController_faq",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "post": {
+        "operationId": "AdminSiteController_createFaq",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FaqDto" } } }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/faq/reorder": {
+      "post": {
+        "operationId": "AdminSiteController_reorderFaq",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/faq/{id}": {
+      "put": {
+        "operationId": "AdminSiteController_updateFaq",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FaqDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "delete": {
+        "operationId": "AdminSiteController_deleteFaq",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/testimonials": {
+      "get": {
+        "operationId": "AdminSiteController_testimonials",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "post": {
+        "operationId": "AdminSiteController_createTestimonial",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/TestimonialDto" } }
+          }
+        },
+        "responses": { "201": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/testimonials/reorder": {
+      "post": {
+        "operationId": "AdminSiteController_reorderTestimonials",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ReorderDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/testimonials/{id}": {
+      "put": {
+        "operationId": "AdminSiteController_updateTestimonial",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/TestimonialDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "delete": {
+        "operationId": "AdminSiteController_deleteTestimonial",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/policies/{slug}": {
+      "get": {
+        "operationId": "AdminSiteController_policy",
+        "parameters": [
+          { "name": "slug", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "put": {
+        "operationId": "AdminSiteController_putPolicy",
+        "parameters": [
+          { "name": "slug", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/PolicyDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/featured-courses": {
+      "get": {
+        "operationId": "AdminSiteController_featured",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      },
+      "put": {
+        "operationId": "AdminSiteController_setFeatured",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/FeaturedDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Website"]
+      }
+    },
+    "/api/v1/admin/messages": {
+      "get": {
+        "operationId": "AdminMessagesController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string", "enum": ["NEW", "CLOSED"] }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 50, "default": 20, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Messages"]
+      }
+    },
+    "/api/v1/admin/messages/count": {
+      "get": {
+        "operationId": "AdminMessagesController_count",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Messages"]
+      }
+    },
+    "/api/v1/admin/messages/{id}/close": {
+      "post": {
+        "operationId": "AdminMessagesController_close",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Messages"]
+      }
+    },
+    "/api/v1/admin/messages/{id}/reopen": {
+      "post": {
+        "operationId": "AdminMessagesController_reopen",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Messages"]
+      }
+    },
+    "/api/v1/admin/dashboard": {
+      "get": {
+        "operationId": "AdminReportsController_home",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Reports"]
+      }
+    },
+    "/api/v1/admin/reports/{type}": {
+      "get": {
+        "operationId": "AdminReportsController_report",
+        "parameters": [
+          { "name": "type", "required": true, "in": "path", "schema": { "type": "string" } },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "minLength": 1 },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 100, "default": 50, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Reports"]
+      }
+    },
+    "/api/v1/admin/reports/{type}/export": {
+      "get": {
+        "operationId": "AdminReportsController_export",
+        "parameters": [
+          { "name": "type", "required": true, "in": "path", "schema": { "type": "string" } },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "minLength": 1 },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 100, "default": 50, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Reports"]
+      }
+    },
+    "/api/v1/admin/activity": {
+      "get": {
+        "operationId": "AdminReportsController_list",
+        "parameters": [
+          {
+            "name": "group",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "SIGN_IN",
+                    "ACCOUNTS",
+                    "ENROLMENTS",
+                    "PAYMENTS",
+                    "MARKS",
+                    "CERTIFICATES",
+                    "COURSES",
+                    "OTHER"
+                  ]
+                },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "actorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "minLength": 1 },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+                { "type": "string", "const": "" }
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 100, "default": 30, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Reports"]
+      }
+    },
+    "/api/v1/admin/activity/{id}": {
+      "get": {
+        "operationId": "AdminReportsController_detail",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Admin · Reports"]
+      }
+    },
+    "/api/v1/teach/dashboard": {
+      "get": {
+        "operationId": "TeacherReportsController_home",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Progress"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/students": {
+      "get": {
+        "operationId": "TeacherReportsController_students",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 80, "type": "string" }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 100, "default": 30, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Progress"]
+      }
+    },
+    "/api/v1/teach/courses/{id}/students/export": {
+      "get": {
+        "operationId": "TeacherReportsController_export",
+        "parameters": [
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "string" } },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": { "maxLength": 80, "type": "string" }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 9007199254740991, "default": 1, "type": "integer" }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": { "minimum": 1, "maximum": 100, "default": 30, "type": "integer" }
+          }
+        ],
+        "responses": { "200": { "description": "" } },
+        "tags": ["Teach · Progress"]
+      }
+    }
+  },
+  "info": {
+    "title": "Natik API",
+    "description": "JSON API of the Natik Language Centre platform. All routes are under /api/v1. Errors always use the shape { error: { code, message, fields?, params?, requestId } }.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": { "cookie": { "type": "apiKey", "in": "cookie", "name": "natik_sid" } },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "phone": { "type": "string" },
+          "password": { "type": "string" },
+          "interestLanguageId": { "type": "string", "minLength": 1 },
+          "email": { "type": "string", "maxLength": 200 },
+          "acceptTerms": { "type": "boolean", "enum": [true] },
+          "confirmAge": { "type": "boolean", "enum": [true] }
+        },
+        "required": ["fullName", "phone", "password", "acceptTerms", "confirmAge"]
+      },
+      "SignInDto": {
+        "type": "object",
+        "properties": {
+          "phone": { "type": "string" },
+          "password": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "keepSignedIn": { "type": "boolean" }
+        },
+        "required": ["phone", "password"]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": { "phone": { "type": "string" } },
+        "required": ["phone"]
+      },
+      "VerifyResetCodeDto": {
+        "type": "object",
+        "properties": {
+          "phone": { "type": "string" },
+          "code": { "type": "string", "pattern": "^\\d{6}$" }
+        },
+        "required": ["phone", "code"]
+      },
+      "SetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string", "minLength": 20, "maxLength": 200 },
+          "newPassword": { "type": "string" }
+        },
+        "required": ["token", "newPassword"]
+      },
+      "AnnouncementDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "text": { "type": "string", "minLength": 3, "maxLength": 2000 },
+          "audience": { "type": "string", "enum": ["PUBLIC", "ALL_STUDENTS", "COURSE"] },
+          "courseId": { "type": "string", "minLength": 1 },
+          "publishAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          }
+        },
+        "required": ["title", "text", "audience"]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "email": { "type": "string", "maxLength": 200 }
+        },
+        "required": ["fullName"]
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "currentPassword": { "type": "string", "minLength": 1 },
+          "newPassword": { "type": "string" }
+        },
+        "required": ["currentPassword", "newPassword"]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "phone": { "type": "string" },
+          "email": { "type": "string", "maxLength": 200 },
+          "role": { "type": "string", "enum": ["STUDENT", "TEACHER", "ADMIN"] }
+        },
+        "required": ["fullName", "phone", "role"]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "email": { "type": "string", "maxLength": 200 },
+          "role": { "type": "string", "enum": ["STUDENT", "TEACHER", "ADMIN"] },
+          "bio": { "type": "string", "maxLength": 300 },
+          "showOnWebsite": { "type": "boolean" }
+        },
+        "required": ["fullName"]
+      },
+      "EraseDto": {
+        "type": "object",
+        "properties": { "reason": { "type": "string", "minLength": 3, "maxLength": 200 } },
+        "required": ["reason"]
+      },
+      "CourseDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+          "slug": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "languageId": { "type": "string", "minLength": 1 },
+          "levelId": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 10, "maxLength": 300 },
+          "description": {
+            "type": "object",
+            "properties": { "type": { "type": "string", "enum": ["doc"] } },
+            "required": ["type"],
+            "additionalProperties": {},
+            "nullable": true
+          },
+          "outcomes": {
+            "default": [],
+            "maxItems": 12,
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+          },
+          "durationText": { "type": "string", "maxLength": 60, "nullable": true },
+          "access": { "type": "string", "enum": ["FREE", "PAID"] },
+          "priceSantim": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 100000000,
+            "nullable": true
+          },
+          "accessDays": { "type": "integer", "minimum": 1, "maximum": 3650, "nullable": true },
+          "featured": { "type": "boolean" },
+          "imageFileId": { "type": "string", "minLength": 1, "nullable": true }
+        },
+        "required": ["title", "languageId", "levelId", "summary", "access"]
+      },
+      "TeachersDto": {
+        "type": "object",
+        "properties": {
+          "teacherIds": {
+            "maxItems": 20,
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "required": ["teacherIds"]
+      },
+      "LanguageDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 40 },
+          "code": { "type": "string", "pattern": "^[a-z]{2,3}(-[a-z0-9]{2,8})?$" },
+          "direction": { "default": "LTR", "type": "string", "enum": ["LTR", "RTL"] },
+          "active": { "type": "boolean" }
+        },
+        "required": ["name", "code"]
+      },
+      "ReorderDto": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "required": ["ids"]
+      },
+      "LevelDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "active": { "type": "boolean" }
+        },
+        "required": ["name"]
+      },
+      "UnitDto": {
+        "type": "object",
+        "properties": { "title": { "type": "string", "minLength": 2, "maxLength": 120 } },
+        "required": ["title"]
+      },
+      "LessonCreateDto": {
+        "type": "object",
+        "properties": { "title": { "type": "string", "minLength": 2, "maxLength": 120 } },
+        "required": ["title"]
+      },
+      "LessonsReorderDto": {
+        "type": "object",
+        "properties": {
+          "units": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "unitId": { "type": "string", "minLength": 1 },
+                "lessonIds": {
+                  "maxItems": 500,
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1 }
+                }
+              },
+              "required": ["unitId", "lessonIds"]
+            }
+          }
+        },
+        "required": ["units"]
+      },
+      "LessonUpdateDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+          "isFreePreview": { "type": "boolean" },
+          "downloadsAllowed": { "type": "boolean" }
+        }
+      },
+      "BlockCreateDto": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["TEXT", "VIDEO", "PDF", "AUDIO", "IMAGE"] },
+          "textJson": {
+            "type": "object",
+            "properties": { "type": { "type": "string", "enum": ["doc"] } },
+            "required": ["type"],
+            "additionalProperties": {}
+          },
+          "fileId": { "type": "string", "minLength": 1 },
+          "videoId": { "type": "string", "minLength": 1 },
+          "caption": { "type": "string", "maxLength": 200 }
+        },
+        "required": ["type"]
+      },
+      "BlockUpdateDto": {
+        "type": "object",
+        "properties": {
+          "textJson": {
+            "type": "object",
+            "properties": { "type": { "type": "string", "enum": ["doc"] } },
+            "required": ["type"],
+            "additionalProperties": {}
+          },
+          "caption": { "type": "string", "maxLength": 200, "nullable": true }
+        }
+      },
+      "CreateVideoDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 }
+        },
+        "required": ["title"]
+      },
+      "AdminEnrolDto": {
+        "type": "object",
+        "properties": {
+          "studentId": { "type": "string", "minLength": 1 },
+          "courseId": { "type": "string", "minLength": 1 }
+        },
+        "required": ["studentId", "courseId"]
+      },
+      "ExtendDto": {
+        "type": "object",
+        "properties": { "days": { "type": "integer", "minimum": 1, "maximum": 730 } },
+        "required": ["days"]
+      },
+      "CancelDto": {
+        "type": "object",
+        "properties": { "reason": { "type": "string", "minLength": 3, "maxLength": 200 } },
+        "required": ["reason"]
+      },
+      "CashDto": {
+        "type": "object",
+        "properties": {
+          "studentId": { "type": "string", "minLength": 1 },
+          "courseId": { "type": "string", "minLength": 1 },
+          "amount": { "type": "string" },
+          "paidOn": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "reference": {
+            "anyOf": [
+              { "type": "string", "maxLength": 60 },
+              { "type": "string", "const": "" }
+            ]
+          }
+        },
+        "required": ["studentId", "courseId", "amount", "paidOn"]
+      },
+      "RejectDto": {
+        "type": "object",
+        "properties": { "reason": { "type": "string", "minLength": 3, "maxLength": 80 } },
+        "required": ["reason"]
+      },
+      "AccountDto": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["BANK", "MOBILE_WALLET"] },
+          "provider": { "type": "string", "minLength": 2, "maxLength": 60 },
+          "accountName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "accountNumber": { "type": "string", "minLength": 4, "maxLength": 40 },
+          "note": {
+            "anyOf": [
+              { "type": "string", "maxLength": 120 },
+              { "type": "string", "const": "" }
+            ]
+          },
+          "active": { "default": true, "type": "boolean" }
+        },
+        "required": ["type", "provider", "accountName", "accountNumber"]
+      },
+      "ReportDto": {
+        "type": "object",
+        "properties": { "message": { "type": "string", "minLength": 5, "maxLength": 1000 } },
+        "required": ["message"]
+      },
+      "QuizCreateDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "isFinal": { "type": "boolean" }
+        },
+        "required": ["title"]
+      },
+      "QuizSettingsDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+          "instructions": {
+            "anyOf": [
+              { "type": "string", "maxLength": 1000 },
+              { "type": "string", "enum": [""] }
+            ]
+          },
+          "isFinal": { "type": "boolean" },
+          "passMarkPct": { "type": "integer", "minimum": 1, "maximum": 100 },
+          "maxAttempts": { "type": "integer", "minimum": 1, "maximum": 20, "nullable": true },
+          "timeLimitMinutes": { "type": "integer", "minimum": 1, "maximum": 300, "nullable": true },
+          "showAnswers": { "type": "boolean" }
+        },
+        "required": [
+          "title",
+          "isFinal",
+          "passMarkPct",
+          "maxAttempts",
+          "timeLimitMinutes",
+          "showAnswers"
+        ]
+      },
+      "MarkDto": {
+        "type": "object",
+        "properties": {
+          "marks": { "type": "number", "minimum": 0 },
+          "comment": {
+            "anyOf": [
+              { "type": "string", "maxLength": 1000 },
+              { "type": "string", "const": "" }
+            ]
+          }
+        },
+        "required": ["marks"]
+      },
+      "GrantDto": {
+        "type": "object",
+        "properties": { "studentId": { "type": "string", "minLength": 1 } },
+        "required": ["studentId"]
+      },
+      "AnswerDto": {
+        "type": "object",
+        "properties": {
+          "response": { "anyOf": [{ "type": "string", "maxLength": 5000 }, { "type": "boolean" }] }
+        },
+        "required": ["response"]
+      },
+      "SettingsDto": {
+        "type": "object",
+        "properties": {
+          "signatoryName": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "signatoryTitle": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "signatureFileId": { "type": "string", "minLength": 1, "nullable": true }
+        },
+        "required": ["signatoryName", "signatoryTitle"]
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 100 },
+          "phone": { "type": "string" },
+          "message": { "type": "string", "minLength": 10, "maxLength": 1000 },
+          "website": { "type": "string", "maxLength": 200 },
+          "openedAt": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["name", "phone", "message"]
+      },
+      "FaqDto": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string", "minLength": 3, "maxLength": 200 },
+          "answer": { "type": "string", "minLength": 3, "maxLength": 1500 },
+          "published": { "default": true, "type": "boolean" }
+        },
+        "required": ["question", "answer"]
+      },
+      "TestimonialDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+          "quote": { "type": "string", "minLength": 10, "maxLength": 400 },
+          "courseLabel": { "type": "string", "maxLength": 80 },
+          "published": { "default": true, "type": "boolean" }
+        },
+        "required": ["name", "quote"]
+      },
+      "PolicyDto": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 2, "maxLength": 80 },
+          "body": {
+            "type": "object",
+            "properties": { "type": { "type": "string", "enum": ["doc"] } },
+            "required": ["type"],
+            "additionalProperties": {}
+          }
+        },
+        "required": ["title", "body"]
+      },
+      "FeaturedDto": {
+        "type": "object",
+        "properties": {
+          "ids": { "maxItems": 12, "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "required": ["ids"]
+      }
+    }
+  }
+}

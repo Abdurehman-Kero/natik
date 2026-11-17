@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds
+dist/
+.next/
+out/
+build/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+
+# Generated
+apps/api/src/generated/
+
+# Env and secrets (only .env.example files are committed)
+.env
+.env.*
+!.env.example
+
+# Tests and reports
+coverage/
+playwright-report/
+test-results/
+docs/test-screenshots/
+blob-report/
+.lighthouseci/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

@@ -1,0 +1,7 @@
+{
+  "extends": "@natik/config/tsconfig/node-lib.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["src", "vitest.config.ts"]
+}

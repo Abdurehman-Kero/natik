@@ -1,0 +1,1082 @@
+// Natik Language Centre: MVP data model (plan/ARCHITECTURE.md §5).
+//
+// Conventions
+// - Every table has id, createdAt, updatedAt.
+// - Times are UTC (timestamptz) and shown in EAT. Money is integer santim (ETB × 100).
+// - Records that hold student results are never cascade-deleted (FR-ENR-009, FR-TEACH-008).
+// - Partial unique indexes use Prisma's `partialIndexes` preview feature.
+// - The activity-log guard trigger lives in SQL (prisma/migrations/*_audit_log_guard)
+//   because Prisma can't express triggers.
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums (mirrored in packages/shared/src/enums.ts) ──────────────────────
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum SessionKind {
+  PERSISTENT
+  BROWSER
+  STAFF
+}
+
+enum OtpPurpose {
+  VERIFY_PHONE
+  RESET_PASSWORD
+}
+
+enum TextDirection {
+  LTR
+  RTL
+}
+
+/// Where a block sits in the guided lesson path. Blocks without a stage are the plain "Lesson" part.
+enum LessonStage {
+  PREPARE
+  WATCH
+  REVISE
+  EXAMPLES
+}
+
+/// OPEN: every lesson can be opened. IN_ORDER: a lesson opens when the ones before it are done.
+enum LessonOrder {
+  OPEN
+  IN_ORDER
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
+enum CourseAccess {
+  FREE
+  PAID
+}
+
+enum BlockType {
+  TEXT
+  VIDEO
+  PDF
+  AUDIO
+  IMAGE
+  SLIDES
+}
+
+enum FilePurpose {
+  LESSON_PDF
+  LESSON_AUDIO
+  LESSON_IMAGE
+  COURSE_IMAGE
+  QUESTION_MEDIA
+  SITE_IMAGE
+  AVATAR
+  RECEIPT
+  CERTIFICATE
+  SIGNATURE
+  CHAT_ATTACHMENT
+  CAPTION
+  VIDEO_POSTER
+}
+
+enum VideoStatus {
+  UPLOADING
+  PROCESSING
+  READY
+  FAILED
+}
+
+enum EnrolmentStatus {
+  AWAITING_PAYMENT
+  PAYMENT_SUBMITTED
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum PaymentKind {
+  NEW
+  RENEWAL
+}
+
+enum PaymentMethod {
+  BANK
+  MOBILE_WALLET
+  CASH
+}
+
+enum PaymentStatus {
+  SUBMITTED
+  CONFIRMED
+  REJECTED
+}
+
+enum PaymentAccountType {
+  BANK
+  MOBILE_WALLET
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  FILL_BLANK
+  SHORT_ANSWER
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  WAITING_FOR_MARKING
+  GRADED
+}
+
+enum CertificateStatus {
+  VALID
+  CANCELLED
+}
+
+/// A finished course's certificate on its way: the student confirms the name, an admin approves it.
+enum CertificateRequestStatus {
+  /// The course is finished; the student has not confirmed the name to print yet.
+  AWAITING_NAME
+  /// The student sent the name; an admin checks and sends the certificate.
+  AWAITING_APPROVAL
+  /// An admin asked the student to change something (see adminNote).
+  RETURNED
+  /// Approved: the certificate was numbered and given to the student.
+  ISSUED
+}
+
+enum Audience {
+  PUBLIC
+  ALL_STUDENTS
+  COURSE
+}
+
+enum InboxMessageType {
+  CONTACT
+  PROBLEM_REPORT
+}
+
+enum InboxMessageStatus {
+  NEW
+  CLOSED
+}
+
+enum SmsStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
+// ─── Organisation ──────────────────────────────────────────────────────────
+
+/// Growth hook (SRS §8.1): every core record points at "Main Centre" for now.
+model Branch {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users         User[]
+  courses       Course[]
+  enrolments    Enrolment[]
+  payments      Payment[]
+  announcements Announcement[]
+}
+
+// ─── Accounts ──────────────────────────────────────────────────────────────
+
+model User {
+  id                 String     @id @default(cuid())
+  branchId           String
+  fullName           String
+  /// E.164 (+2519…/+2517…). Null only after personal data is erased (SRS §8.2).
+  phone              String?    @unique
+  email              String?
+  passwordHash       String?
+  role               Role       @default(STUDENT)
+  isOwner            Boolean    @default(false)
+  status             UserStatus @default(ACTIVE)
+  phoneVerifiedAt    DateTime?
+  photoFileId        String?    @unique
+  interestLanguageId String?
+  /// Teachers: short public bio, shown on the About page when showOnWebsite is true.
+  bio                String?
+  showOnWebsite      Boolean    @default(false)
+  failedSignIns      Int        @default(0)
+  lockedUntil        DateTime?
+  lastSignInAt       DateTime?
+  lastActiveAt       DateTime?
+  termsAcceptedAt    DateTime?
+  ageConfirmedAt     DateTime?
+  anonymisedAt       DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  branch           Branch     @relation(fields: [branchId], references: [id])
+  photo            FileAsset? @relation("UserPhoto", fields: [photoFileId], references: [id])
+  interestLanguage Language?  @relation(fields: [interestLanguageId], references: [id])
+
+  sessions              Session[]
+  passwordTokens        PasswordToken[]
+  teachingCourses       CourseTeacher[]
+  enrolments            Enrolment[]          @relation("EnrolmentStudent")
+  enrolmentEvents       EnrolmentEvent[]     @relation("EnrolmentEventActor")
+  paymentsSubmitted     Payment[]            @relation("PaymentSubmitter")
+  paymentsChecked       Payment[]            @relation("PaymentChecker")
+  lessonProgress        LessonProgress[]
+  quizAttempts          QuizAttempt[]
+  answersMarked         Answer[]             @relation("AnswerMarker")
+  attemptGrantsReceived AttemptGrant[]       @relation("GrantStudent")
+  attemptGrantsGiven    AttemptGrant[]       @relation("GrantGiver")
+  certificates          Certificate[]        @relation("CertificateStudent")
+  certificatesCancelled Certificate[]        @relation("CertificateCanceller")
+  certificateRequests   CertificateRequest[] @relation("CertificateRequestStudent")
+  certificateReviews    CertificateRequest[] @relation("CertificateRequestReviewer")
+  announcements         Announcement[]
+  announcementReads     AnnouncementRead[]
+  inboxMessagesSent     InboxMessage[]       @relation("InboxSender")
+  inboxMessagesClosed   InboxMessage[]       @relation("InboxCloser")
+  filesUploaded         FileAsset[]          @relation("FileUploader")
+  videosCreated         VideoAsset[]
+  chatsAsOwner          Conversation[]       @relation("ChatOwner")
+  chatsAsPeer           Conversation[]       @relation("ChatPeer")
+  chatMessages          ChatMessage[]
+
+  @@index([role, status])
+  @@index([fullName])
+}
+
+model Session {
+  id         String      @id @default(cuid())
+  userId     String
+  /// SHA-256 of the cookie token; the token itself is never stored.
+  tokenHash  String      @unique
+  kind       SessionKind
+  expiresAt  DateTime
+  lastSeenAt DateTime    @default(now())
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model OtpCode {
+  id         String     @id @default(cuid())
+  phone      String
+  purpose    OtpPurpose
+  codeHash   String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  wrongTries Int        @default(0)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([phone, purpose, createdAt])
+}
+
+/// Single-use "set your password" links sent by SMS (FR-AUTH-007, FR-ADMIN-002).
+model PasswordToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ─── Catalogue ─────────────────────────────────────────────────────────────
+
+/// Editable list (FR-CAT-001), not fixed in code.
+/// A question of the public "Find your level" check. `band` 1 = Beginner … 4 = Advanced (by level order).
+model PlacementQuestion {
+  id         String   @id @default(cuid())
+  languageId String
+  band       Int
+  position   Int      @default(0)
+  text       String
+  /// [{ id, text }]
+  options    Json
+  /// The id of the right option. Never sent to the browser before scoring.
+  correct    String
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  language Language @relation(fields: [languageId], references: [id])
+
+  @@index([languageId, active, band])
+}
+
+model Language {
+  id        String        @id @default(cuid())
+  name      String        @unique
+  /// BCP-47 code used for the content `lang` attribute, e.g. "ar", "en", "om".
+  code      String        @unique
+  direction TextDirection @default(LTR)
+  position  Int           @default(0)
+  active    Boolean       @default(true)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  courses            Course[]
+  interestedUsers    User[]
+  placementQuestions PlacementQuestion[]
+}
+
+model Level {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  position  Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses Course[]
+}
+
+model Course {
+  id               String        @id @default(cuid())
+  branchId         String
+  slug             String        @unique
+  title            String
+  languageId       String
+  levelId          String
+  summary          String
+  /// Tiptap/ProseMirror JSON.
+  description      Json?
+  outcomes         String[]
+  imageFileId      String?
+  /// Human-friendly duration, e.g. "8 weeks".
+  durationText     String?
+  access           CourseAccess  @default(FREE)
+  priceSantim      Int?
+  /// Null = unlimited access.
+  accessDays       Int?
+  status           ContentStatus @default(DRAFT)
+  featured         Boolean       @default(false)
+  featuredPosition Int?
+  lessonOrder      LessonOrder   @default(OPEN)
+  /// Paid courses: show the price on the public site, or keep it off (people ask Natik support instead).
+  showPrice        Boolean       @default(true)
+  /// Optional short video above the description on the public course page (YouTube or Vimeo link).
+  trailerUrl       String?
+  publishedAt      DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  branch   Branch     @relation(fields: [branchId], references: [id])
+  language Language   @relation(fields: [languageId], references: [id])
+  level    Level      @relation(fields: [levelId], references: [id])
+  image    FileAsset? @relation("CourseImage", fields: [imageFileId], references: [id])
+
+  teachers            CourseTeacher[]
+  units               Unit[]
+  lessons             Lesson[]
+  enrolments          Enrolment[]
+  quizzes             Quiz[]
+  certificates        Certificate[]
+  certificateRequests CertificateRequest[]
+  announcements       Announcement[]
+
+  @@index([status, languageId, levelId])
+  @@index([featured, featuredPosition])
+}
+
+model CourseTeacher {
+  courseId  String
+  teacherId String
+  createdAt DateTime @default(now())
+
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacher User   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, teacherId])
+  @@index([teacherId])
+}
+
+// ─── Content ───────────────────────────────────────────────────────────────
+
+model Unit {
+  id        String        @id @default(cuid())
+  courseId  String
+  title     String
+  position  Int
+  status    ContentStatus @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  course  Course   @relation(fields: [courseId], references: [id])
+  lessons Lesson[]
+
+  @@index([courseId, position])
+}
+
+model Lesson {
+  id               String        @id @default(cuid())
+  unitId           String
+  courseId         String
+  title            String
+  position         Int
+  status           ContentStatus @default(DRAFT)
+  isFreePreview    Boolean       @default(false)
+  description      String?
+  objectives       String[]      @default([])
+  estimatedMinutes Int?
+  /// Stays open even when the course opens lessons in order.
+  alwaysOpen       Boolean       @default(false)
+  downloadsAllowed Boolean       @default(false)
+  publishedAt      DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  unit   Unit   @relation(fields: [unitId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  blocks        LessonBlock[]
+  quiz          Quiz?
+  progress      LessonProgress[]
+  lastOpenedIn  Enrolment[]
+  inboxMessages InboxMessage[]
+
+  @@index([unitId, position])
+  @@index([courseId, status])
+}
+
+model LessonBlock {
+  id        String       @id @default(cuid())
+  lessonId  String
+  type      BlockType
+  position  Int
+  /// TEXT blocks: Tiptap/ProseMirror JSON.
+  textJson  Json?
+  fileId    String?
+  videoId   String?
+  stage     LessonStage?
+  caption   String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  lesson Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  file   FileAsset?    @relation(fields: [fileId], references: [id])
+  video  VideoAsset?   @relation(fields: [videoId], references: [id])
+  slides LessonSlide[]
+
+  @@index([lessonId, position])
+}
+
+model FileAsset {
+  id           String      @id @default(cuid())
+  purpose      FilePurpose
+  storageKey   String      @unique
+  mime         String
+  sizeBytes    Int
+  originalName String
+  isPublic     Boolean     @default(false)
+  uploadedById String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  uploadedBy User? @relation("FileUploader", fields: [uploadedById], references: [id])
+
+  userPhoto       User?         @relation("UserPhoto")
+  courseImages    Course[]      @relation("CourseImage")
+  lessonBlocks    LessonBlock[]
+  questions       Question[]
+  paymentReceipts Payment[]
+  certificates    Certificate[]
+  testimonials    Testimonial[]
+  chatMessages    ChatMessage[]
+  slideImages     LessonSlide[]
+  videoCaptions   VideoAsset[]  @relation("VideoCaption")
+  videoPosters    VideoAsset[]  @relation("VideoPoster")
+
+  @@index([purpose])
+}
+
+model VideoAsset {
+  id              String      @id @default(cuid())
+  provider        String
+  providerVideoId String
+  title           String
+  status          VideoStatus @default(UPLOADING)
+  durationSec     Int?
+  /// Set for videos on another site (YouTube, Vimeo): the embeddable address.
+  externalUrl     String?
+  captionFileId   String?
+  /// The still picture shown before the video plays (a frame of the video, or a chosen picture).
+  posterFileId    String?
+  createdById     String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  createdBy User?         @relation(fields: [createdById], references: [id])
+  caption   FileAsset?    @relation("VideoCaption", fields: [captionFileId], references: [id])
+  poster    FileAsset?    @relation("VideoPoster", fields: [posterFileId], references: [id])
+  blocks    LessonBlock[]
+
+  @@unique([provider, providerVideoId])
+}
+
+// ─── Enrolment & payments ──────────────────────────────────────────────────
+
+model Enrolment {
+  id                   String          @id @default(cuid())
+  branchId             String
+  studentId            String
+  courseId             String
+  status               EnrolmentStatus
+  statusChangedAt      DateTime        @default(now())
+  startAt              DateTime?
+  /// Null = unlimited access.
+  endAt                DateTime?
+  completedAt          DateTime?
+  progressPct          Int             @default(0)
+  lastLessonId         String?
+  lastOpenedAt         DateTime?
+  expiryReminderSentAt DateTime?
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  branch     Branch  @relation(fields: [branchId], references: [id])
+  student    User    @relation("EnrolmentStudent", fields: [studentId], references: [id])
+  course     Course  @relation(fields: [courseId], references: [id])
+  lastLesson Lesson? @relation(fields: [lastLessonId], references: [id])
+
+  events             EnrolmentEvent[]
+  payments           Payment[]
+  quizAttempts       QuizAttempt[]
+  certificates       Certificate[]
+  certificateRequest CertificateRequest?
+
+  /// One open enrolment per student and course; repeated "Enrol" taps are idempotent.
+  @@unique([studentId, courseId], map: "Enrolment_open_per_student_course_key", where: raw("status IN ('AWAITING_PAYMENT', 'PAYMENT_SUBMITTED', 'ACTIVE')"))
+  @@index([studentId, status])
+  @@index([courseId, status])
+  @@index([status, endAt])
+  @@index([status, statusChangedAt])
+}
+
+/// Change history of an enrolment (who, when, reason).
+model EnrolmentEvent {
+  id          String           @id @default(cuid())
+  enrolmentId String
+  fromStatus  EnrolmentStatus?
+  toStatus    EnrolmentStatus
+  actorId     String?
+  reason      String?
+  details     Json?
+  createdAt   DateTime         @default(now())
+
+  enrolment Enrolment @relation(fields: [enrolmentId], references: [id])
+  actor     User?     @relation("EnrolmentEventActor", fields: [actorId], references: [id])
+
+  @@index([enrolmentId, createdAt])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  branchId        String
+  enrolmentId     String
+  kind            PaymentKind   @default(NEW)
+  method          PaymentMethod
+  reference       String?
+  /// Trimmed, upper-case, no spaces: used for the duplicate check (FR-PAY-003).
+  referenceNorm   String?
+  amountSantim    Int
+  expectedSantim  Int
+  paidOn          DateTime      @db.Date
+  receiptFileId   String?
+  status          PaymentStatus @default(SUBMITTED)
+  submittedById   String
+  checkedById     String?
+  checkedAt       DateTime?
+  rejectionReason String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  branch      Branch     @relation(fields: [branchId], references: [id])
+  enrolment   Enrolment  @relation(fields: [enrolmentId], references: [id])
+  receipt     FileAsset? @relation(fields: [receiptFileId], references: [id])
+  submittedBy User       @relation("PaymentSubmitter", fields: [submittedById], references: [id])
+  checkedBy   User?      @relation("PaymentChecker", fields: [checkedById], references: [id])
+
+  /// A reference already submitted or confirmed is refused (FR-PAY-003).
+  @@unique([referenceNorm], map: "Payment_referenceNorm_active_key", where: raw("status IN ('SUBMITTED', 'CONFIRMED')"))
+  @@index([status, createdAt])
+  @@index([enrolmentId])
+}
+
+/// Natik's bank and mobile-wallet accounts shown on the payment screen (FR-PAY-001).
+model PaymentAccount {
+  id            String             @id @default(cuid())
+  type          PaymentAccountType
+  provider      String
+  accountName   String
+  accountNumber String
+  note          String?
+  position      Int                @default(0)
+  active        Boolean            @default(true)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model LessonProgress {
+  studentId      String
+  lessonId       String
+  completedAt    DateTime?
+  /// Which step of the guided lesson the student reached (0 = first).
+  stage          Int       @default(0)
+  /// Where each video stopped: { videoId: seconds }.
+  videoPositions Json?
+  lastOpenedAt   DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  student User   @relation(fields: [studentId], references: [id])
+  lesson  Lesson @relation(fields: [lessonId], references: [id])
+
+  @@id([studentId, lessonId])
+  @@index([lessonId])
+}
+
+// ─── Quizzes ───────────────────────────────────────────────────────────────
+
+model Quiz {
+  id           String        @id @default(cuid())
+  lessonId     String        @unique
+  courseId     String
+  title        String
+  instructions String?
+  isFinal      Boolean       @default(false)
+  passMarkPct  Int           @default(60)
+  /// Null = unlimited attempts.
+  maxAttempts  Int?
+  /// Null = no time limit.
+  timeLimitSec Int?
+  showAnswers  Boolean       @default(true)
+  status       ContentStatus @default(DRAFT)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  questions Question[]
+  attempts  QuizAttempt[]
+  grants    AttemptGrant[]
+
+  /// One final quiz per course (FR-QUIZ-001).
+  @@unique([courseId], map: "Quiz_one_final_per_course_key", where: { isFinal: true })
+  @@index([courseId])
+}
+
+model Question {
+  id          String       @id @default(cuid())
+  quizId      String
+  position    Int
+  type        QuestionType
+  text        String
+  mediaFileId String?
+  /// MULTIPLE_CHOICE: [{ id, text }].
+  options     Json?
+  /// Never sent to students before submission (FR-QUIZ-010).
+  correct     Json
+  marks       Decimal      @default(1) @db.Decimal(6, 2)
+  explanation String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  quiz  Quiz       @relation(fields: [quizId], references: [id])
+  media FileAsset? @relation(fields: [mediaFileId], references: [id])
+
+  answers Answer[]
+
+  @@index([quizId, position])
+}
+
+model QuizAttempt {
+  id                String        @id @default(cuid())
+  quizId            String
+  studentId         String
+  enrolmentId       String
+  number            Int
+  status            AttemptStatus @default(IN_PROGRESS)
+  startedAt         DateTime      @default(now())
+  deadlineAt        DateTime?
+  submittedAt       DateTime?
+  gradedAt          DateTime?
+  score             Decimal?      @db.Decimal(8, 2)
+  maxScore          Decimal       @db.Decimal(8, 2)
+  scorePct          Int?
+  passed            Boolean?
+  /// Questions as they were when the attempt started (edits never change past attempts).
+  questionsSnapshot Json
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  quiz      Quiz      @relation(fields: [quizId], references: [id])
+  student   User      @relation(fields: [studentId], references: [id])
+  enrolment Enrolment @relation(fields: [enrolmentId], references: [id])
+
+  answers Answer[]
+
+  @@unique([quizId, studentId, number])
+  @@index([status, deadlineAt])
+  @@index([studentId])
+}
+
+model Answer {
+  id             String    @id @default(cuid())
+  attemptId      String
+  questionId     String
+  response       Json?
+  isCorrect      Boolean?
+  marksAwarded   Decimal?  @db.Decimal(6, 2)
+  teacherComment String?
+  markedById     String?
+  markedAt       DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  attempt  QuizAttempt @relation(fields: [attemptId], references: [id])
+  question Question    @relation(fields: [questionId], references: [id])
+  markedBy User?       @relation("AnswerMarker", fields: [markedById], references: [id])
+
+  @@unique([attemptId, questionId])
+}
+
+/// Extra attempts given by a teacher (FR-QUIZ-012).
+model AttemptGrant {
+  id            String   @id @default(cuid())
+  quizId        String
+  studentId     String
+  extraAttempts Int      @default(1)
+  grantedById   String
+  createdAt     DateTime @default(now())
+
+  quiz      Quiz @relation(fields: [quizId], references: [id])
+  student   User @relation("GrantStudent", fields: [studentId], references: [id])
+  grantedBy User @relation("GrantGiver", fields: [grantedById], references: [id])
+
+  @@index([quizId, studentId])
+}
+
+// ─── Certificates ──────────────────────────────────────────────────────────
+
+model Certificate {
+  id                  String            @id @default(cuid())
+  /// NLC-YYYY-NNNNN
+  number              String            @unique
+  studentId           String
+  courseId            String
+  enrolmentId         String
+  studentNameSnapshot String
+  courseTitleSnapshot String
+  issuedAt            DateTime          @default(now())
+  status              CertificateStatus @default(VALID)
+  pdfFileId           String?
+  cancelReason        String?
+  cancelledById       String?
+  cancelledAt         DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  student     User                @relation("CertificateStudent", fields: [studentId], references: [id])
+  course      Course              @relation(fields: [courseId], references: [id])
+  enrolment   Enrolment           @relation(fields: [enrolmentId], references: [id])
+  pdf         FileAsset?          @relation(fields: [pdfFileId], references: [id])
+  cancelledBy User?               @relation("CertificateCanceller", fields: [cancelledById], references: [id])
+  request     CertificateRequest?
+
+  @@index([studentId])
+  @@index([enrolmentId])
+}
+
+/// One per finished course: the name the student wants printed, and the admin's decision.
+model CertificateRequest {
+  id                String                   @id @default(cuid())
+  enrolmentId       String                   @unique
+  studentId         String
+  courseId          String
+  /// Exactly as it will be printed. Empty until the student confirms it.
+  nameOnCertificate String?
+  status            CertificateRequestStatus @default(AWAITING_NAME)
+  submittedAt       DateTime?
+  /// Why an admin sent it back, shown to the student.
+  adminNote         String?
+  reviewedById      String?
+  reviewedAt        DateTime?
+  certificateId     String?                  @unique
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+
+  enrolment   Enrolment    @relation(fields: [enrolmentId], references: [id])
+  student     User         @relation("CertificateRequestStudent", fields: [studentId], references: [id])
+  course      Course       @relation(fields: [courseId], references: [id])
+  reviewedBy  User?        @relation("CertificateRequestReviewer", fields: [reviewedById], references: [id])
+  certificate Certificate? @relation(fields: [certificateId], references: [id])
+
+  @@index([status, submittedAt])
+  @@index([studentId])
+}
+
+model CertificateCounter {
+  year Int @id
+  last Int @default(0)
+}
+
+// ─── Communication & website ───────────────────────────────────────────────
+
+model Announcement {
+  id        String   @id @default(cuid())
+  branchId  String
+  title     String
+  /// Tiptap/ProseMirror JSON.
+  body      Json
+  audience  Audience
+  courseId  String?
+  authorId  String
+  publishAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  branch Branch  @relation(fields: [branchId], references: [id])
+  course Course? @relation(fields: [courseId], references: [id])
+  author User    @relation(fields: [authorId], references: [id])
+
+  reads AnnouncementRead[]
+
+  @@index([audience, publishAt])
+  @@index([courseId, publishAt])
+}
+
+model AnnouncementRead {
+  userId         String
+  announcementId String
+  readAt         DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  announcement Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, announcementId])
+}
+
+/// Contact-form messages and "Report a problem" (FR-WEB-004, FR-LEARN-012, FR-ADMIN-007).
+model InboxMessage {
+  id         String             @id @default(cuid())
+  type       InboxMessageType
+  name       String
+  phone      String?
+  message    String
+  userId     String?
+  lessonId   String?
+  status     InboxMessageStatus @default(NEW)
+  closedById String?
+  closedAt   DateTime?
+  /// When an admin first opened the Messages page with this message in it (it stops counting as unread).
+  seenAt     DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  user     User?   @relation("InboxSender", fields: [userId], references: [id])
+  lesson   Lesson? @relation(fields: [lessonId], references: [id])
+  closedBy User?   @relation("InboxCloser", fields: [closedById], references: [id])
+
+  @@index([status, createdAt])
+  @@index([type, status])
+}
+
+/// Editable website text blocks, keyed e.g. "home.hero" (FR-WEB-005).
+model SiteContent {
+  key         String   @id
+  value       Json
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  position  Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  quote       String
+  courseLabel String?
+  photoFileId String?
+  position    Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  photo FileAsset? @relation(fields: [photoFileId], references: [id])
+}
+
+model PolicyPage {
+  /// "privacy" | "terms"
+  slug      String   @id
+  title     String
+  /// Tiptap/ProseMirror JSON.
+  body      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Key-value settings, e.g. "certificate.signatory".
+model Setting {
+  key         String   @id
+  value       Json
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SmsMessage {
+  id         String    @id @default(cuid())
+  to         String
+  template   String
+  body       String
+  status     SmsStatus @default(QUEUED)
+  attempts   Int       @default(0)
+  providerId String?
+  lastError  String?
+  sentAt     DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([status, createdAt])
+}
+
+/// Read-only activity log (FR-REP-003/004). UPDATE and DELETE are blocked by a
+/// database trigger. actorId has no foreign key so rows outlive any account.
+model AuditLog {
+  id         BigInt   @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String
+  details    Json?
+  ip         String?
+
+  @@index([createdAt])
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId])
+  @@index([action, createdAt])
+}
+
+enum ConversationKind {
+  STUDENT_ADMIN
+  STUDENT_TEACHER
+  TEACHER_ADMIN
+}
+
+enum ChatMessageKind {
+  TEXT
+  IMAGE
+  FILE
+  VOICE
+}
+
+/// A one-to-one chat. `owner` is the student (or the teacher in a TEACHER_ADMIN chat); `peer` is the
+/// teacher in a STUDENT_TEACHER chat. Admin chats have no peer: any admin answers for "the Natik team".
+model Conversation {
+  id              String           @id @default(cuid())
+  kind            ConversationKind
+  ownerId         String
+  peerId          String?
+  lastMessageAt   DateTime         @default(now())
+  lastMessageText String?
+  ownerReadAt     DateTime         @default(now())
+  peerReadAt      DateTime         @default(now())
+  adminReadAt     DateTime         @default(now())
+  /// "Clear history" and "Delete chat" hide older messages for one side only.
+  ownerClearedAt  DateTime?
+  peerClearedAt   DateTime?
+  adminClearedAt  DateTime?
+  /// Goes up when a message is deleted or a chat is cleared, so open chats reload.
+  revision        Int              @default(0)
+  createdAt       DateTime         @default(now())
+
+  owner    User          @relation("ChatOwner", fields: [ownerId], references: [id])
+  peer     User?         @relation("ChatPeer", fields: [peerId], references: [id])
+  messages ChatMessage[]
+
+  @@index([ownerId, lastMessageAt])
+  @@index([peerId, lastMessageAt])
+  @@index([kind, lastMessageAt])
+}
+
+model ChatMessage {
+  id             String          @id @default(cuid())
+  conversationId String
+  senderId       String
+  fromAdmin      Boolean         @default(false)
+  kind           ChatMessageKind
+  body           String?
+  fileId         String?
+  durationSec    Int?
+  createdAt      DateTime        @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id])
+  file         FileAsset?   @relation(fields: [fileId], references: [id])
+
+  @@index([conversationId, createdAt])
+}
+
+/// One slide of a SLIDES block: a title, some text, an optional picture and a few key words.
+model LessonSlide {
+  id          String   @id @default(cuid())
+  blockId     String
+  position    Int
+  title       String
+  body        String?
+  imageFileId String?
+  keywords    String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  block LessonBlock @relation(fields: [blockId], references: [id], onDelete: Cascade)
+  image FileAsset?  @relation(fields: [imageFileId], references: [id])
+
+  @@index([blockId, position])
+}

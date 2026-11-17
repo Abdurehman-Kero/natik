@@ -1,0 +1,401 @@
+{
+  "common": {
+    "loading": "Fe'aa jira…",
+    "saving": "Olkaa'aa jira…",
+    "saved": "Olkaa'ameera",
+    "close": "Cufi",
+    "cancel": "Dhiisi",
+    "confirm": "Mirkaneessi",
+    "continue": "Itti fufi",
+    "back": "Duubatti",
+    "next": "Itti aanu",
+    "previous": "Kan duraa",
+    "more": "Dabalata",
+    "moreActions": "Tarkaanfiiwwan dabalataa",
+    "clear": "Qulqulleessi",
+    "copy": "Waraabi",
+    "copied": "Waraabameera",
+    "optional": "Filannoo",
+    "free": "Bilisa",
+    "tryAgain": "Ammas yaali",
+    "seeAll": "Hunda ilaali",
+    "comingSoon": "Dhiyootti ni dhufa"
+  },
+  "nav": {
+    "language": "Afaan",
+    "skipToContent": "Gara qabiyyee ijoo darbi",
+    "mainNavigation": "Tarree guddaa",
+    "openMenu": "Tarree bani",
+    "closeMenu": "Tarree cufi",
+    "collapseSidebar": "Tarree cinaa walitti qabi",
+    "expandSidebar": "Tarree cinaa balaleffadhu",
+    "notifications": "Beeksisawwan",
+    "unread": "kan hin dubbifamne",
+    "accountMenu": "Tarree herrega",
+    "signOut": "Ba'i",
+    "public": {
+      "courses": "Koorsoota",
+      "freeLessons": "Barnoota bilisaa",
+      "about": "Waa'ee keenya",
+      "contact": "Nu quunnamaa",
+      "signIn": "Seeni",
+      "register": "Galmaa'i",
+      "dashboard": "Gabatee",
+      "help": "Gargaarsa"
+    },
+    "student": {
+      "home": "Mana",
+      "myCourses": "Koorsoota koo",
+      "courses": "Koorsoota",
+      "certificates": "Waraqaa ragaa",
+      "profile": "Piroofaayilii",
+      "browse": "Koorsoota barbaadi",
+      "announcements": "Beeksisawwan",
+      "payments": "Kaffaltii koo",
+      "chat": "Ergaawwan"
+    },
+    "teacher": {
+      "dashboard": "Gabatee",
+      "courses": "Koorsoota koo",
+      "marking": "Sirreessuu",
+      "announcements": "Beeksisawwan",
+      "profile": "Piroofaayilii",
+      "chat": "Ergaawwan"
+    },
+    "signingOut": "Ba'aa jira",
+    "areaAdmin": "Bulchaa",
+    "areaTeacher": "Barsiisaa",
+    "viewSite": "Weebsaayitii ilaali"
+  },
+  "footer": {
+    "contactHeading": "Nu quunnamaa",
+    "followHeading": "Nu hordofaa",
+    "linksHeading": "Qorachuu",
+    "legalHeading": "Hidhata barbaachisaa",
+    "tagline": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo barsiisota Naatiik wajjin baradhaa.",
+    "courses": "Koorsoota",
+    "freeLessons": "Barnoota bilisaa",
+    "about": "Waa'ee keenya",
+    "news": "Oduu",
+    "contact": "Nu quunnamaa",
+    "faq": "Gaaffilee yeroo baay'ee gaafataman",
+    "privacy": "Hubachiisa iccitii",
+    "terms": "Haala fayyadama",
+    "verify": "Waraqaa ragaa mirkaneessi",
+    "register": "Herrega banadhu",
+    "signIn": "Seeni",
+    "noDetails": "Ergaa nuuf ergaa; dhiyootti deebii isiniif kennina.",
+    "copyright": "© {year} Wiirtuu Afaanii Naatiik",
+    "findLevel": "Sadarkaa kee beeki",
+    "teachers": "Barsiisota",
+    "help": "Wiirtuu gargaarsaa"
+  },
+  "brand": {
+    "centre": "Wiirtuu Afaanii",
+    "fullName": "Wiirtuu Afaanii Naatiik",
+    "languages": "Arabiffa · Ingiliffa · Afaan Oromoo",
+    "homeLink": "Wiirtuu Afaanii Naatiik, mana",
+    "homeSuffix": ", mana"
+  },
+  "support": {
+    "title": "Waa'ee kaffaltii gaaffii qabduu?",
+    "text": "Gareen Naatiik gargaaruuf qophiidha; nuuf barreessaa.",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "chat": "Haasaa"
+  },
+  "freeLessons": {
+    "title": "Barnoota bilisaa",
+    "subtitle": "Barnoota fakkeenyaa herrega malee banuu dandeessan.",
+    "emptyTitle": "Barnoonni bilisaa dhufaa jira",
+    "emptyText": "Barnoonni fakkeenyaa dhiyootti as ni mul'ata. Hanga sanaatti waan barsiisnu ilaalaa.",
+    "browse": "Koorsoota barbaadi",
+    "register": "Herrega bilisaa banadhu",
+    "benefitsTitle": "Maal eegdu",
+    "benefits": [
+      "Barnoota gabaabaa viidiyoon, dubbisaa fi sagaleen qophaa'e",
+      "Galmeessuun yookaan kaffaltiin hin barbaachisu",
+      "Bilbila kamiin iyyuu ni hojjata"
+    ],
+    "watch": "Ilaali",
+    "enjoyedTitle": "Isinii mi'aa'aa?",
+    "enjoyedText": "Galmaa'uuf fi barachuu itti fufuuf herrega bilisaa banadhu.",
+    "seeCourse": "Koorsicha ilaali",
+    "signIn": "Seeni"
+  },
+  "placement": {
+    "title": "Sadarkaa kee beeki",
+    "subtitle": "Gaaffilee muraasa deebisaa. Eessaa jalqabuu akka qabdan isinitti agarsiifna. Herrega hin barbaachisu.",
+    "chooseLanguage": "Afaan kam barachuu barbaaddu?",
+    "questionOf": "Gaaffii {n} kan {total}",
+    "options": "Deebiiwwan",
+    "back": "Duubatti",
+    "yourResult": "Bu'aan kee",
+    "startAt": "{level} irraa jalqabi",
+    "startAtBeginning": "Jalqaba irraa jalqabi",
+    "score": "{total} keessaa {score} sirriitti deebiftan.",
+    "resultNote": "Kun qajeelfama saffisaa malee qormaata miti. Koorsii feetan kamiyyuu filachuu dandeessu.",
+    "noCourses": "Sadarkaa kanaaf ammaaf koorsiin hin jiru. Koorsoota hunda ilaalaa.",
+    "seeCourses": "Koorsoota hunda ilaali",
+    "again": "Ammas yaali",
+    "unavailableTitle": "Qormaanni sadarkaa ammaaf hin qophoofne",
+    "unavailableText": "Maaloo koorsoota ilaalaa yookaan nu quunnamaa; filachuuf isin gargaarra."
+  },
+  "home": {
+    "heroEyebrow": "Wiirtuu Afaanii Naatiik",
+    "heroTitle": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo baradhu",
+    "heroSubtitle": "Barnoota ifa ta'e barsiisota Naatiik irraa. Bilbila keessanitti, saffisa keessaniin baradhaa.",
+    "browseCourses": "Koorsoota barbaadi",
+    "tryFreeLesson": "Barnoota bilisaa yaali",
+    "trust": {
+      "languages": "Arabiffa, Ingiliffa fi Afaan Oromoo",
+      "free": "Barnoota fakkeenyaa bilisaa",
+      "certificates": "Waraqaa ragaa mirkaneeffamuu danda'u"
+    },
+    "languagesTitle": "Afaan filadhu",
+    "languagesText": "Afaan dubbachuu barbaaddan irraa jalqabaa.",
+    "courseCount": "{count, plural, other {Koorsoota #}}",
+    "comingSoon": "Dhiyootti ni dhufa",
+    "featuredTitle": "Koorsoota filatamoo",
+    "allCourses": "Koorsoota hunda",
+    "howTitle": "Akkamitti hojjata",
+    "steps": [
+      {
+        "title": "Herrega banadhu",
+        "text": "Maqaa kee, lakkoofsa bilbilaa fi jecha icciitii. Daqiiqaa tokko qofa fudhata."
+      },
+      {
+        "title": "Koorsii filadhu",
+        "text": "Koorsoonni bilisaa battaluma ni banamu. Kanneen kaffalamaniif erga kaffaltiin mirkanaa'ee booda."
+      },
+      {
+        "title": "Baradhu, waraqaa ragaa argadhu",
+        "text": "Ilaali, dubbisi, dhaggeeffadhu, qormaata fudhadhu. Koorsii yeroo xumurtu waraqaa ragaa argatta."
+      }
+    ],
+    "payTitle": "Waa'ee kaffaltii gaaffii qabduu?",
+    "payText": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik WhatsApp, Telegram yookaan haasaa irratti gaafadhu; isin qajeelchina.",
+    "whyTitle": "Maaliif Naatiik",
+    "why": [
+      {
+        "title": "Afaan sadii, bakka tokko",
+        "text": "Koorsoonni Arabiffaa, Ingiliffaa fi Afaan Oromoo barsiisota Naatiik irraa."
+      },
+      {
+        "title": "Bilbilaaf kan hojjetame",
+        "text": "Fuulli salphaan interneetii suuta jedhuun iyyuu ariifatee bana. Barsiisaan yoo eeyyame PDF fi sagalee buusuu ni dandeessa."
+      },
+      {
+        "title": "Yaada dhugaa",
+        "text": "Qormaanni ofumaan sirreeffama. Barsiisonni deebii barreeffamaa kee dubbisanii yaada kennu."
+      },
+      {
+        "title": "Waraqaa ragaa mirkaneeffamuu danda'u",
+        "text": "Koorsii yeroo xumurtu nama kamiyyuu lakkoofsa isaatiin toora interneetiin mirkaneessuu danda'a."
+      }
+    ],
+    "freeTitle": "Osoo hin galmaa'in yaali",
+    "freeText": "Barnoota fakkeenyaa bilisaa bani. Herrega hin barbaachisu.",
+    "freeCta": "Barnoota bilisaa ilaali",
+    "testimonialsTitle": "Barattoonni maal jedhu",
+    "newsTitle": "Oduu dhiyoo",
+    "allNews": "Oduu hunda",
+    "faqTitle": "Gaaffii qabduu? Deebii qabna",
+    "allFaq": "Gaaffilee hunda ilaali",
+    "ctaTitle": "Jalqabuuf qophiidhaa?",
+    "ctaText": "Herrega bilisaa banaatii koorsii jalqabaa har'a makami.",
+    "ctaRegister": "Herrega bilisaa banadhu",
+    "ctaContact": "Nu quunnamaa",
+    "allFreeLessons": "Barnoota bilisaa hunda",
+    "findLevel": "Eessaa jalqabuu akka qabdan hin beektuu? Sadarkaa kee beeki",
+    "flowTitle": "Barnoonni akkamitti deema",
+    "flow": [
+      { "title": "Ilaali", "text": "Viidiyoo gabaabaa yeroo hedduu deebi'ee ilaaluu dandeessan." },
+      { "title": "Qoradhu", "text": "Barnoota hundaaf suuraa, fakkeenya fi jechoota ijoo." },
+      {
+        "title": "Qormaata fudhadhu",
+        "text": "Waan baratte ofii kee qori; bu'aa kee battaluma argadhu."
+      },
+      { "title": "Waraqaa ragaa argadhu", "text": "Koorsii xumuradhu, waraqaa ragaa kee buusi." }
+    ],
+    "pathTitle": "Daandii kee jalqabaa hanga olaanaatti",
+    "pathText": "Sadarkaa siif mijaa'e irraa jalqabi, yeroo qophooftu ol ba'i.",
+    "seeCoursesAt": "Koorsoota ilaali",
+    "teachersTitle": "Barsiisota keenya beekaa",
+    "allTeachers": "Barsiisota hunda",
+    "statLearners": "Barattoota",
+    "statCourses": "Koorsoota",
+    "statLessons": "Barnoota",
+    "statLanguages": "Afaanota",
+    "communityTitle": "Hawaasa keenyatti makamaa",
+    "communityText": "Oduu, gorsa bilisaa fi deebii saffisaa gareen Naatiik irraa argadhaa.",
+    "joinTelegram": "Chaanaalii Telegram keenyatti makamaa",
+    "askWhatsapp": "WhatsApp irratti nu gaafadhaa",
+    "installTitle": "Naatiik bilbila keessan irratti dabalaa",
+    "installText": "Barnoota akka appii fuula jalqabaa bilbilaa irraa banaa.",
+    "installCta": "Fuula jalqabaatti dabali",
+    "findLevelButton": "Sadarkaa kee beeki",
+    "openFreeLesson": "Barnoota bilisaa ilaali: {title}",
+    "languagesEyebrow": "Afaanota",
+    "exploreLanguage": "Koorsoota qoradhu",
+    "coursesEyebrow": "Koorsoota",
+    "coursesTitle": "Har'a barachuu jalqabi",
+    "coursesText": "Koorsoonni bilisaa battaluma ni banamu. Piremiyeemiif kaffaltii ji'aa waa'ee gareen Naatiik gaafadhu.",
+    "tabFree": "Bilisa",
+    "tabPremium": "Piremiyeemii",
+    "seeAllFree": "Koorsoota bilisaa hunda ilaali",
+    "seeAllPremium": "Koorsoota piremiyeemii hunda ilaali",
+    "howEyebrow": "Jalqabuu",
+    "freeEyebrow": "Barnoota bilisaa",
+    "whyEyebrow": "Maaliif Naatiik",
+    "testimonialsEyebrow": "Barattoota",
+    "newsEyebrow": "Oduu",
+    "faqEyebrow": "Gaaffilee yeroo baay'ee gaafataman",
+    "flowEyebrow": "Barnoota keessatti",
+    "pathEyebrow": "Daandii kee",
+    "teachersEyebrow": "Barsiisota",
+    "communityEyebrow": "Hawaasa",
+    "sliderPrev": "Yaada kan duraa",
+    "sliderNext": "Yaada itti aanu",
+    "sliderPause": "Sararuu dhaabi",
+    "sliderPlay": "Sararuu eegali"
+  },
+  "courses": {
+    "title": "Koorsoota",
+    "subtitle": "Arabiffa, Ingiliffa yookaan Afaan Oromoo keessaa koorsii sirrii argadhu.",
+    "all": "Hunda",
+    "language": "Afaan",
+    "level": "Sadarkaa",
+    "anyLevel": "Sadarkaa kamiyyuu",
+    "found": "{count, plural, other {Koorsoota #}}",
+    "emptyTitle": "Koorsiin hin argamne",
+    "emptyText": "Afaan yookaan sadarkaa biraa yaali.",
+    "clear": "Calleessaa balleessi",
+    "noneTitle": "Koorsoonni dhufaa jiru",
+    "noneText": "Koorsoonni haaraan dhiyootti as ni mul'atu. Qophaa'uuf herrega banadhu.",
+    "weeks": "Yeroo",
+    "free": "Bilisa",
+    "overview": "Waa'ee koorsii kanaa",
+    "learnTitle": "Maal baratta",
+    "outlineTitle": "Qabiyyee koorsii",
+    "outlineEmpty": "Koorsiin yeroo qophaa'u tarreen barnootaa as ni mul'ata.",
+    "freePreview": "Ilaalcha bilisaa",
+    "teacherTitle": "Barsiisaa kee",
+    "teachersTitle": "Barsiisota kee",
+    "access": "Yeroo seensaa",
+    "accessDays": "Guyyaa {days}",
+    "accessUnlimited": "Yeroo daangaa malee",
+    "price": "Gatii",
+    "registerToEnrol": "Galmaa'uuf herrega banadhu",
+    "haveAccount": "Herrega qabduu?",
+    "signedInNote": "Galmeen dhiyootti ni banama.",
+    "backToCourses": "Koorsoota hunda",
+    "lessonsCount": "{count, plural, other {Barnoota #}}",
+    "quickFacts": "Gabaabduman",
+    "aboutTitle": "Waa'ee koorsii kanaa",
+    "signIn": "Seeni",
+    "watchTrailer": "Beeksisa ilaali",
+    "inOrderNote": "Barnoonni tokko tokkoon ni banama",
+    "relatedTitle": "Koorsoota kan biraa afaan kana",
+    "kindAll": "Hunda",
+    "kindFree": "Bilisa",
+    "kindPremium": "Piremiyeemii",
+    "freeGroupTitle": "Koorsoota bilisaa",
+    "freeGroupText": "Battaluma ni banamu. Herrega banaatii har'a barachuu jalqabi.",
+    "premiumGroupTitle": "Koorsoota piremiyeemii",
+    "premiumGroupText": "Ji'aan ji'aan kaffalama. Waa'ee kaffaltii gareen Naatiik WhatsApp, Telegram yookaan haasaa irratti gaafadhu.",
+    "kindNav": "Gosa koorsii",
+    "priceOnRequest": "Bal'inaan gaafadhu",
+    "premiumCourse": "Koorsii piremiyeemii",
+    "payQuestionTitle": "Waa'ee kaffaltii gaaffii qabduu?",
+    "payQuestionText": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik gaafadhu; isin qajeelchina.",
+    "clearFilters": "Calleessaa balleessi"
+  },
+  "help": {
+    "title": "Wiirtuu gargaarsaa",
+    "subtitle": "Naatiik wajjin barachuuf deebii saffisaa fi qajeelfama tarkaanfii tarkaanfiidhaan.",
+    "startEyebrow": "Asii jalqabi",
+    "startTitle": "Maaliin gargaarsa barbaaddu?",
+    "startText": "Mata duree tokko filadhu; gara iddoo sirrii si geessina.",
+    "topics": [
+      {
+        "title": "Herrega banadhu",
+        "text": "Maqaa kee, lakkoofsa bilbilaa fi jecha icciitii. Daqiiqaa tokko qofa fudhata.",
+        "cta": "Herrega banadhu"
+      },
+      {
+        "title": "Barnoota bilisaa yaali",
+        "text": "Herrega malee barnoota fakkeenyaa bani.",
+        "cta": "Barnoota bilisaa ilaali"
+      },
+      {
+        "title": "Koorsii filadhu",
+        "text": "Afaan fi sadarkaa hunda keessatti koorsoota bilisaa fi piremiyeemii.",
+        "cta": "Koorsoota barbaadi"
+      },
+      {
+        "title": "Sadarkaa kee hin beektuu?",
+        "text": "Gaaffilee muraasa deebisi; eessaa jalqabuu akka qabdu sitti agarsiifna.",
+        "cta": "Sadarkaa kee beeki"
+      },
+      {
+        "title": "Waraqaa ragaa mirkaneessi",
+        "text": "Dhugaa ta'uu isaa ilaaluuf lakkoofsa waraqaa ragaa galchi.",
+        "cta": "Waraqaa ragaa mirkaneessi"
+      },
+      {
+        "title": "Jecha icciitii irraanfatteettaa?",
+        "text": "Haaraa kaa'uuf ergaa barreeffamaa siif ergina.",
+        "cta": "Jecha icciitii jijjiiri"
+      },
+      {
+        "title": "Gaaffilee kaffaltii",
+        "text": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik gaafadhu.",
+        "cta": "Nu quunnamaa"
+      },
+      {
+        "title": "Bilbila irratti barachuu",
+        "text": "Naatiik fuula jalqabaa bilbilaa irratti dabali, bakka kamittuu bari.",
+        "cta": "Gaaffilee dubbisi"
+      }
+    ],
+    "guidesEyebrow": "Qajeelfama",
+    "guidesTitle": "Qajeelfama tarkaanfii tarkaanfiidhaan",
+    "guides": [
+      {
+        "q": "Akkamitti galmaa'a?",
+        "a": "Galmaa'i cuqaasi, maqaa kee, lakkoofsa bilbilaa fi jecha icciitii galchi, haala fayyadamaa fudhadhu, achiis herrega banadhu cuqaasi. Battaluma ni seenta."
+      },
+      {
+        "q": "Koorsii bilisaa akkamitti jalqaba?",
+        "a": "Fuula koorsii bani, bilisaan galmaa'i cuqaasi. Barnoonni jalqabaa battaluma ni banama; yeroo barattu hunda guddina kee olkaa'ama."
+      },
+      {
+        "q": "Koorsii piremiyeemii akkamitti makama?",
+        "a": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik WhatsApp, Telegram yookaan haasaa weebsaayitii kana irratti barreessi. Kaffaltii ibsu, koorsii kees baniif."
+      },
+      {
+        "q": "Barnoonni, suuraan fi qormaanni akkamitti hojjata?",
+        "a": "Barnoonni hundi tarkaanfii akka suuraa, viidiyoo fi shaakala qaba. Itti fufuuf Tarkaanfii itti aanu cuqaasi. Qormaanni ofumaan sirreeffama, bu'aa kees agarsiisa. Deebii barreeffamaa gabaabaa barsiisaan kee sirreessa."
+      },
+      {
+        "q": "Waraqaa ragaa koo akkamitti argadha?",
+        "a": "Barnoota hunda xumuri, qormaata dhumaas darbi. Waraqaan ragaa kee Waraqaa ragaa jala ni mul'ata, akka PDF buusuu dandeessa. Nama kamiyyuu lakkoofsa isaatiin mirkaneessuu danda'a."
+      },
+      {
+        "q": "Jecha icciitii koo irraanfadheera. Maal gochuu qaba?",
+        "a": "Seeni cuqaasi, achii Jecha icciitii irraanfadheera cuqaasi. Lakkoofsa bilbilaa kee galchi; jecha icciitii haaraa filachuuf ergaa barreeffamaa sitti ergina."
+      },
+      {
+        "q": "Barsiisaa koo yookaan gareen Naatiik akkamitti quunnama?",
+        "a": "Kutaa barataa kee keessatti Ergaawwan bani, haasaa jalqabi. Barreeffama, suuraa, faayilii fi ergaa sagalee erguu dandeessa."
+      },
+      {
+        "q": "Naatiik bilbila kootti akkamitti fayyadama?",
+        "a": "Naatiik biraawuzara bilbila kee irratti ni hojjata. Chrome yookaan Safari keessatti Fuula jalqabaatti dabali fayyadamuun akka appii eegi."
+      }
+    ],
+    "supportTitle": "Ammayyuu gargaarsa barbaaddu?",
+    "supportText": "Gareen keenya gargaaruuf gammachuun qophiidha. WhatsApp, Telegram yookaan haasaa irratti nuuf barreessaa."
+  }
+}

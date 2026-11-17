@@ -1,0 +1,9 @@
+{
+  "extends": "@natik/config/tsconfig/nestjs.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": "./",
+    "types": ["node", "multer"]
+  },
+  "include": ["src", "prisma", "prisma.config.ts", "vitest.config.ts", "vitest.int.config.ts"]
+}

@@ -1,0 +1,50 @@
+# Example production layout (finalised in M8 with Natik's chosen host).
+# PostgreSQL and Redis should be managed services with daily backups (NFR-REL-002);
+# their URLs come from the environment, never from this file.
+#
+#   docker compose -f docker/compose.prod.example.yml --env-file .env.production up -d
+name: natik-prod
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ['80:80', '443:443']
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?set SITE_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on: [web, api]
+
+  web:
+    image: natik-web:${VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      NEXT_PUBLIC_APP_URL: https://${SITE_DOMAIN}
+      API_INTERNAL_URL: http://api:4000
+
+  api:
+    image: natik-api:${VERSION:-latest}
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      RUN_WORKER_IN_API: 'false'
+
+  worker:
+    image: natik-api:${VERSION:-latest}
+    restart: unless-stopped
+    env_file: .env.production
+    command: ['node', 'dist/worker.js']
+    healthcheck:
+      disable: true
+
+  # Run before each deploy: docker compose run --rm migrate
+  migrate:
+    image: natik-migrate:${VERSION:-latest}
+    profiles: ['migrate']
+    env_file: .env.production
+
+volumes:
+  caddy-data:
