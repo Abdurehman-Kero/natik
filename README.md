@@ -89,6 +89,7 @@ plan/            Implementation plan, architecture and design system
 
 | Document                                                                                        | What it is                                                                      |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| [`docs/PILOT-HOSTING.md`](docs/PILOT-HOSTING.md)                                                | Put a pilot online on Render + Vercel, and move to Natik's own server later     |
 | [`docs/RUNBOOKS.md`](docs/RUNBOOKS.md)                                                          | Deploy, roll back, backup and restore, rotate secrets, add an admin, failed SMS |
 | [`docs/ADMIN-GUIDE.md`](docs/ADMIN-GUIDE.md) · [`docs/TEACHER-GUIDE.md`](docs/TEACHER-GUIDE.md) | One task per section, for staff                                                 |
 | [`docs/TRACEABILITY.md`](docs/TRACEABILITY.md)                                                  | Which tests prove each acceptance test (AT-01…16)                               |

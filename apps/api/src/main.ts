@@ -15,8 +15,8 @@ async function bootstrap(): Promise<void> {
 
   const config = app.get(AppConfigService);
 
-  // Behind the reverse proxy / Cloudflare: trust the first hop for client IPs.
-  app.set('trust proxy', 1);
+  // Behind the reverse proxy(ies): believe this many hops about the client's address.
+  app.set('trust proxy', config.get('TRUST_PROXY_HOPS'));
   app.disable('x-powered-by');
   app.use(
     helmet({

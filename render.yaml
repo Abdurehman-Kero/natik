@@ -1,0 +1,121 @@
+# Render Blueprint for the PILOT: the API (and its background worker), PostgreSQL and Redis on Render.
+# The website itself runs on Vercel (see docs/PILOT-HOSTING.md).
+#
+# How to use: Render dashboard → New → Blueprint → pick this repository. Render asks for the values
+# marked `sync: false` once. Plan names are Render's current ones; if the dashboard reports an unknown
+# value, pick the plan there and keep the rest.
+#
+# Pilot choices (change them for production):
+#   APP_ENV=staging       real cookies (Secure), search engines kept away, but the built-in checks for
+#                         "no sample video storage / real SMS" that production enforces are relaxed.
+#   RUN_WORKER_IN_API     the SMS queue runs inside the API, so one service is enough.
+#   TRUST_PROXY_HOPS=2    Vercel sits in front of Render; use 1 if the website runs on Render too.
+
+databases:
+  - name: natik-db
+    # `free` databases are deleted 30 days after creation (+14 days grace): fine for a first look,
+    # not for a pilot with real students. This is the smallest paid size.
+    plan: 0.1c-256mb
+    postgresMajorVersion: '17'
+    databaseName: natik
+    user: natik
+    region: frankfurt
+    # Reachable from the Render services only. To run migrations from your own computer (see the guide),
+    # temporarily add your IP here in the dashboard (Access Control).
+    ipAllowList: []
+
+services:
+  - type: keyvalue
+    name: natik-redis
+    # `free` is 25 MB with no saving to disk: enough for rate limits and the SMS queue in a pilot.
+    plan: free
+    region: frankfurt
+    # The SMS queue (BullMQ) needs Redis to keep its jobs instead of evicting them.
+    maxmemoryPolicy: noeviction
+    # Internal connections only.
+    ipAllowList: []
+
+  - type: web
+    name: natik-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    # Smallest paid web size. Printing certificates starts a headless browser; if that runs out of
+    # memory, move up one size.
+    plan: 0.5c-512mb
+    region: frankfurt
+    healthCheckPath: /api/v1/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ENV
+        value: staging
+      # Render sends traffic to port 10000 by default.
+      - key: API_PORT
+        value: '10000'
+      # The website's public address (the Vercel URL, or your own domain). Used in SMS links.
+      - key: APP_URL
+        sync: false
+      - key: TRUST_PROXY_HOPS
+        value: '2'
+      - key: RUN_WORKER_IN_API
+        value: 'true'
+      - key: LOG_LEVEL
+        value: info
+      - key: DATABASE_URL
+        fromDatabase:
+          name: natik-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: natik-redis
+          property: connectionString
+      # Mixed into stored SMS-code hashes. Generated once; never change it afterwards.
+      - key: OTP_PEPPER
+        generateValue: true
+      # SMS: `console` sends nothing (codes cannot reach anyone). Switch to `afromessage` and add
+      # AFROMESSAGE_TOKEN before real people need password resets or "set your password" links.
+      - key: SMS_PROVIDER
+        value: console
+      - key: SMS_SENDER
+        value: Natik
+      # Private file storage: any S3-compatible bucket (Cloudflare R2 recommended, see the guide).
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_FORCE_PATH_STYLE
+        value: 'true'
+      # Lesson videos: `local` stores them in the bucket (fine for a pilot, up to 100 MB each);
+      # production uses Bunny Stream.
+      - key: VIDEO_PROVIDER
+        value: local
+
+  # ── Only if the website cannot go on Vercel (for example uploads above 4.5 MB fail there) ──────────
+  # Remove the leading "# " of the block below, set TRUST_PROXY_HOPS to '1' above, and skip Vercel.
+  #
+  # - type: web
+  #   name: natik-web
+  #   runtime: docker
+  #   dockerfilePath: ./apps/web/Dockerfile
+  #   dockerContext: .
+  #   plan: 0.5c-512mb
+  #   region: frankfurt
+  #   healthCheckPath: /
+  #   autoDeployTrigger: commit
+  #   envVars:
+  #     - key: APP_ENV
+  #       value: staging
+  #     - key: NEXT_PUBLIC_APP_URL
+  #       sync: false
+  #     # The API's private address on Render: http://natik-api:10000
+  #     - key: API_INTERNAL_URL
+  #       value: http://natik-api:10000

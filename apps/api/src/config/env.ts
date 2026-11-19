@@ -6,6 +6,12 @@ export const envSchema = z.object({
   APP_ENV: z.enum(['local', 'test', 'staging', 'production']).default('local'),
   API_PORT: z.coerce.number().int().min(1).max(65535).default(4000),
   APP_URL: z.url().default('http://localhost:3000'),
+  /**
+   * How many proxies sit in front of the API and may be believed about the visitor's address (it is
+   * what the rate limits and the activity log use). 1 = one reverse proxy (Caddy, Cloudflare or Render
+   * alone). 2 = Vercel in front of Render, as in the pilot setup. 0 = none.
+   */
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(1),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   DATABASE_URL: z
     .string({ error: 'DATABASE_URL is required' })
