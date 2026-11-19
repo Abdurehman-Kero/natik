@@ -3,7 +3,12 @@
 import { Avatar as AvatarPrimitive } from 'radix-ui';
 import { cn } from '@/lib/cn';
 
-const sizes = { sm: 'size-8 text-xs', md: 'size-10 text-sm', lg: 'size-14 text-lg' } as const;
+const sizes = {
+  sm: 'size-8 text-xs',
+  md: 'size-10 text-sm',
+  lg: 'size-14 text-lg',
+  xl: 'size-24 text-3xl',
+} as const;
 
 /** "Abdi Kedir" → "AK" */
 export function initials(name: string): string {

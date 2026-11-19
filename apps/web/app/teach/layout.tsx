@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ClientMessages } from '@/components/client-messages';
 import { StaffShell } from '@/components/layout/shells';
 import { apiFetch } from '@/lib/api/server';
 import { requireRole } from '@/lib/auth';
@@ -16,25 +17,35 @@ export default async function TeacherLayout({ children }: { children: ReactNode 
   const user = await requireRole(['TEACHER', 'ADMIN'], '/teach');
   const shellUser = { name: user.fullName, photoUrl: user.photoUrl };
   if (user.role === 'ADMIN') {
-    const [messages, payments, marking, chat] = await Promise.all([
+    const [messages, payments, marking, chat, groups] = await Promise.all([
       count('/admin/messages/count'),
       count('/admin/payments/count'),
       count('/teach/marking/count'),
       count('/chat/unread-count'),
+      count('/groups/unread-count'),
     ]);
     return (
-      <StaffShell area="admin" user={shellUser} badges={{ messages, payments, marking, chat }}>
-        {children}
-      </StaffShell>
+      <ClientMessages area="teacher">
+        <StaffShell
+          area="admin"
+          user={shellUser}
+          badges={{ messages, payments, marking, chat, groups }}
+        >
+          {children}
+        </StaffShell>
+      </ClientMessages>
     );
   }
-  const [marking, chat] = await Promise.all([
+  const [marking, chat, groups] = await Promise.all([
     count('/teach/marking/count'),
     count('/chat/unread-count'),
+    count('/groups/unread-count'),
   ]);
   return (
-    <StaffShell area="teacher" user={shellUser} badges={{ marking, chat }}>
-      {children}
-    </StaffShell>
+    <ClientMessages area="teacher">
+      <StaffShell area="teacher" user={shellUser} badges={{ marking, chat, groups }}>
+        {children}
+      </StaffShell>
+    </ClientMessages>
   );
 }

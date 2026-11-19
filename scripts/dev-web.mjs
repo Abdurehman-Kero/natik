@@ -10,10 +10,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT ?? '3000';
 const isWindows = process.platform === 'win32';
 
-const next = spawn(isWindows ? 'pnpm.cmd' : 'pnpm', ['exec', 'next', 'dev', '--port', port], {
+const next = spawn(`${isWindows ? 'pnpm.cmd' : 'pnpm'} exec next dev --port ${port}`, {
   cwd: path.resolve(here, '../apps/web'),
   stdio: 'inherit',
-  shell: isWindows,
+  shell: true,
 });
 next.on('exit', (code) => process.exit(code ?? 0));
 
@@ -29,7 +29,8 @@ if (process.env.NO_WARM !== '1') {
       await new Promise((r) => setTimeout(r, 2000));
     }
     spawn(process.execPath, [path.join(here, 'warm-routes.mjs'), `http://localhost:${port}`], {
-      stdio: 'inherit',
+      // Quiet: the pages open in the background without listing every one in the terminal.
+      stdio: 'ignore',
     });
   };
   void warm();

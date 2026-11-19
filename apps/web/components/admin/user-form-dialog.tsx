@@ -86,7 +86,7 @@ export function UserFormDialog({ open, onOpenChange, user, actor }: UserFormDial
           ...(roleLocked ? {} : { role }),
           ...(role === 'TEACHER' ? { bio, showOnWebsite } : {}),
         }
-      : { fullName, phone, email: email || undefined, role };
+      : { fullName, phone, email, role };
     const { data, errors: found } = validate(schema, payload);
     setErrors(found);
     if (!data) return;
@@ -151,7 +151,6 @@ export function UserFormDialog({ open, onOpenChange, user, actor }: UserFormDial
           ) : null}
           <TextField
             label={ta('email')}
-            optional
             type="email"
             autoComplete="off"
             value={email}

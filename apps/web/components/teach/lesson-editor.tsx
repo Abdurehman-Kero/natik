@@ -14,6 +14,7 @@ import {
   ImagePlus,
   Link2,
   Loader2,
+  Paperclip,
   Plus,
   Presentation,
   RotateCcw,
@@ -63,7 +64,7 @@ type SaveState = 'saved' | 'dirty' | 'saving' | 'error';
 
 interface Pending {
   key: string;
-  kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'VIDEO';
+  kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE' | 'VIDEO';
   file: File;
   progress: number;
   error?: string;
@@ -79,6 +80,7 @@ const BLOCK_ICON: Record<BlockKind, typeof Type> = {
   AUDIO: AudioLines,
   IMAGE: ImageIcon,
   SLIDES: Presentation,
+  FILE: Paperclip,
 };
 
 const FILE_RULES = {
@@ -93,7 +95,16 @@ const FILE_RULES = {
     limit: UPLOAD_LIMITS.image,
     accept: 'image/jpeg,image/png,image/webp',
   },
+  /** PowerPoint, Word and Excel: students download them. */
+  FILE: {
+    purpose: 'LESSON_FILE',
+    limit: UPLOAD_LIMITS.document,
+    accept: [...UPLOAD_LIMITS.document.extensions, ...UPLOAD_LIMITS.document.mimeTypes].join(','),
+  },
 } as const;
+
+/** "2026-11-20" for a date field, from what the API sends. */
+const toDateInput = (value: string | null) => (value ? value.slice(0, 10) : '');
 
 const VIDEO_ACCEPT = 'video/mp4,video/webm,video/quicktime,.mp4,.mov,.webm';
 
@@ -120,7 +131,7 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
   const router = useRouter();
 
   const [title, setTitle] = useState(initial.title);
-  const [isFreePreview, setIsFreePreview] = useState(initial.isFreePreview);
+  const [sessionDate, setSessionDate] = useState(toDateInput(initial.sessionDate));
   const [downloadsAllowed, setDownloadsAllowed] = useState(initial.downloadsAllowed);
   const [status, setStatus] = useState(initial.status);
   const [blocks, setBlocks] = useState<EditorBlock[]>(initial.blocks);
@@ -143,7 +154,7 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
   // The newest values for saving; handlers update it (reading state in a timer would see old values).
   const latest = useRef({
     title: initial.title,
-    isFreePreview: initial.isFreePreview,
+    sessionDate: toDateInput(initial.sessionDate),
     downloadsAllowed: initial.downloadsAllowed,
   });
 
@@ -185,7 +196,8 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
       method: 'PATCH',
       json: {
         title: body.title.trim(),
-        isFreePreview: body.isFreePreview,
+        // Noon in Addis Ababa, so the date never shifts a day whatever the device's time zone.
+        sessionDate: body.sessionDate ? `${body.sessionDate}T12:00:00+03:00` : null,
         downloadsAllowed: body.downloadsAllowed,
       },
     });
@@ -332,7 +344,7 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
 
   // ── Uploads ──────────────────────────────────────────────────────────
 
-  function checkFile(kind: 'PDF' | 'AUDIO' | 'IMAGE', file: File): string | null {
+  function checkFile(kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE', file: File): string | null {
     const rule = FILE_RULES[kind];
     if (file.size > rule.limit.maxBytes) {
       return tf('tooLarge', { size: bytesToMb(file.size), max: bytesToMb(rule.limit.maxBytes) });
@@ -341,7 +353,7 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
   }
 
   async function runFileUpload(item: Pending) {
-    const kind = item.kind as 'PDF' | 'AUDIO' | 'IMAGE';
+    const kind = item.kind as 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE';
     patchPending(item.key, { error: undefined, progress: 0 });
     const handle = uploadFile<UploadedFile>(
       '/files',
@@ -367,7 +379,7 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
     }
   }
 
-  function addFile(kind: 'PDF' | 'AUDIO' | 'IMAGE', file: File) {
+  function addFile(kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE', file: File) {
     const problem = checkFile(kind, file);
     if (problem) {
       toast.error(problem);
@@ -752,7 +764,8 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
                     </div>
                   ) : null}
 
-                  {(block.type === 'PDF' || block.type === 'AUDIO') && block.file ? (
+                  {(block.type === 'PDF' || block.type === 'AUDIO' || block.type === 'FILE') &&
+                  block.file ? (
                     <p className="flex items-center gap-3">
                       <span className="min-w-0 flex-1 truncate font-medium text-ink">
                         {block.file.name}
@@ -904,13 +917,15 @@ export function LessonEditor({ initial }: { initial: EditorLesson }) {
               <CardTitle>{t('settings')}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-5">
-              <Switch
-                label={t('freePreview')}
-                description={t('freePreviewHint')}
-                checked={isFreePreview}
-                onCheckedChange={(value) => {
-                  setIsFreePreview(value);
-                  latest.current = { ...latest.current, isFreePreview: value };
+              <TextField
+                type="date"
+                label={t('sessionDate')}
+                hint={t('sessionDateHint')}
+                optional
+                value={sessionDate}
+                onChange={(e) => {
+                  setSessionDate(e.target.value);
+                  latest.current = { ...latest.current, sessionDate: e.target.value };
                   markMetaDirty();
                 }}
               />
@@ -1129,7 +1144,7 @@ function AddBlockBar({
   onText: () => void;
   onSlides: () => void;
   onVideoLink: () => void;
-  onFile: (kind: 'PDF' | 'AUDIO' | 'IMAGE', file: File) => void;
+  onFile: (kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE', file: File) => void;
   onVideo: (file: File) => void;
   t: ReturnType<typeof useTranslations<'lessonEditor'>>;
 }) {
@@ -1137,17 +1152,19 @@ function AddBlockBar({
     PDF: useRef<HTMLInputElement>(null),
     AUDIO: useRef<HTMLInputElement>(null),
     IMAGE: useRef<HTMLInputElement>(null),
+    FILE: useRef<HTMLInputElement>(null),
     VIDEO: useRef<HTMLInputElement>(null),
   };
   const chips: { key: BlockKind; icon: typeof Type; onClick: () => void }[] = [
     { key: 'TEXT', icon: Type, onClick: onText },
     { key: 'VIDEO', icon: Video, onClick: () => refs.VIDEO.current?.click() },
     { key: 'PDF', icon: FileText, onClick: () => refs.PDF.current?.click() },
+    { key: 'FILE', icon: Paperclip, onClick: () => refs.FILE.current?.click() },
     { key: 'AUDIO', icon: AudioLines, onClick: () => refs.AUDIO.current?.click() },
     { key: 'IMAGE', icon: ImageIcon, onClick: () => refs.IMAGE.current?.click() },
     { key: 'SLIDES', icon: Presentation, onClick: onSlides },
   ];
-  const input = (kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'VIDEO', accept: string) => (
+  const input = (kind: 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE' | 'VIDEO', accept: string) => (
     <input
       ref={refs[kind]}
       type="file"
@@ -1185,6 +1202,7 @@ function AddBlockBar({
       {input('PDF', FILE_RULES.PDF.accept)}
       {input('AUDIO', FILE_RULES.AUDIO.accept)}
       {input('IMAGE', FILE_RULES.IMAGE.accept)}
+      {input('FILE', FILE_RULES.FILE.accept)}
       {input('VIDEO', VIDEO_ACCEPT)}
     </div>
   );

@@ -2,6 +2,8 @@ import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { ChatModule } from './chat/chat.module';
+import { PeopleModule } from './people/people.module';
+import { GroupsModule } from './groups/groups.module';
 import { CertificatesModule } from './certificates/certificates.module';
 import { ContentModule } from './content/content.module';
 import { EnrolmentsModule } from './enrolments/enrolments.module';
@@ -26,6 +28,8 @@ export const FEATURE_MODULES = [
   QuizzesModule,
   CertificatesModule,
   ChatModule,
+  PeopleModule,
+  GroupsModule,
   NotificationsModule,
   SiteModule,
   ReportsModule,

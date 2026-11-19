@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectNoHorizontalScroll, expectNoSeriousA11yIssues, newPhone } from './helpers';
+import { expectNoHorizontalScroll, expectNoSeriousA11yIssues, newContact } from './helpers';
 
 const unique = () => Math.random().toString(36).slice(2, 8).toUpperCase();
 
@@ -7,7 +7,7 @@ async function registerStudent(page: Page) {
   const res = await page.request.post('/api/v1/auth/register', {
     data: {
       fullName: `Area Student ${unique()}`,
-      phone: newPhone(),
+      ...newContact(),
       password: 'Passw0rd123',
       acceptTerms: true,
       confirmAge: true,
@@ -32,8 +32,8 @@ test.describe('student area', () => {
     await expectNoSeriousA11yIssues(page);
 
     // Filtering stays on the same page.
-    await page.getByLabel('Language', { exact: true }).selectOption({ label: 'English' });
-    await expect(page).toHaveURL(/\/browse\?language=en/);
+    await page.getByRole('searchbox', { name: 'Search courses…' }).fill('everyday');
+    await expect(page).toHaveURL(/\/browse\?q=everyday/);
 
     await page
       .getByRole('link', { name: /Everyday English/ })
@@ -41,7 +41,9 @@ test.describe('student area', () => {
       .click();
     await expect(page).toHaveURL(/\/browse\/everyday-english$/);
     await expect(page.getByRole('heading', { level: 1, name: 'Everyday English' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Enrol free' })).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('button', { name: 'Request to join' })).toBeVisible({
+      timeout: 15_000,
+    });
     await expect(page.getByRole('link', { name: 'Register' })).toHaveCount(0);
     await expectNoHorizontalScroll(page);
     await expectNoSeriousA11yIssues(page);

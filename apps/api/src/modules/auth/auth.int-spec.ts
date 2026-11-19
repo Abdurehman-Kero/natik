@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { createHarness, type Harness, randomPhone } from '../../test/harness';
+import { createHarness, type Harness, randomEmail, randomPhone } from '../../test/harness';
 
 /** AT-02 and AT-03: register, verify, sign in, lockout, reset and sign out (needs PostgreSQL + Redis). */
 describe('accounts and sign-in', () => {
@@ -14,9 +14,10 @@ describe('accounts and sign-in', () => {
     await h.resetLimits();
   });
 
-  const registerBody = (phone: string) => ({
+  const registerBody = (phone: string, email: string = randomEmail()) => ({
     fullName: 'Abdi Kedir',
     phone,
+    email,
     password: 'Passw0rd123',
     acceptTerms: true,
     confirmAge: true,
@@ -44,6 +45,49 @@ describe('accounts and sign-in', () => {
         .post('/api/v1/auth/sign-in')
         .send({ phone, password: 'Passw0rd123' })
         .expect(200);
+    });
+
+    it('signs in with the email, in any letter case, and shows a clear answer for a wrong one', async () => {
+      const phone = randomPhone();
+      const email = randomEmail();
+      await h.client().post('/api/v1/auth/register').send(registerBody(phone, email)).expect(201);
+      await h
+        .client()
+        .post('/api/v1/auth/sign-in')
+        .send({ email: email.toUpperCase(), password: 'Passw0rd123' })
+        .expect(200);
+      const wrong = await h
+        .client()
+        .post('/api/v1/auth/sign-in')
+        .send({ email, password: 'not-the-password' })
+        .expect(401);
+      expect(wrong.body.error.code).toBe('INVALID_CREDENTIALS');
+      // Nothing to sign in with: the form says what is missing.
+      const none = await h
+        .client()
+        .post('/api/v1/auth/sign-in')
+        .send({ password: 'Passw0rd123' })
+        .expect(400);
+      expect(Object.keys(none.body.error.fields)).toContain('email');
+    });
+
+    it('needs an email to register, and one email belongs to one account', async () => {
+      const { email: _omit, ...withoutEmail } = registerBody(randomPhone());
+      const missing = await h.client().post('/api/v1/auth/register').send(withoutEmail).expect(400);
+      expect(Object.keys(missing.body.error.fields)).toContain('email');
+
+      const email = randomEmail();
+      await h
+        .client()
+        .post('/api/v1/auth/register')
+        .send(registerBody(randomPhone(), email))
+        .expect(201);
+      const again = await h
+        .client()
+        .post('/api/v1/auth/register')
+        .send(registerBody(randomPhone(), email.toUpperCase()))
+        .expect(409);
+      expect(again.body.error.code).toBe('EMAIL_ALREADY_REGISTERED');
     });
 
     it('accepts the number in any Ethiopian format and stores one form', async () => {
@@ -218,6 +262,35 @@ describe('accounts and sign-in', () => {
       expect(again.body.error.code).toBe('OTP_TOO_SOON');
     });
 
+    it('resets with the email: the code is texted to the phone on the account', async () => {
+      const user = await h.makeUser({});
+      await h.client().post('/api/v1/auth/password/forgot').send({ email: user.email }).expect(200);
+      const code = await h.lastCode(user.phone);
+      const verified = await h
+        .client()
+        .post('/api/v1/auth/password/verify-code')
+        .send({ email: user.email, code })
+        .expect(200);
+      expect(verified.body.token).toBeTruthy();
+    });
+
+    it('answers the same for a known and an unknown email, and texts nothing for the unknown one', async () => {
+      const user = await h.makeUser({});
+      const known = await h
+        .client()
+        .post('/api/v1/auth/password/forgot')
+        .send({ email: user.email });
+      const stranger = randomEmail();
+      const unknown = await h
+        .client()
+        .post('/api/v1/auth/password/forgot')
+        .send({ email: stranger });
+      expect(known.status).toBe(200);
+      expect(unknown.status).toBe(200);
+      expect(unknown.body).toEqual(known.body);
+      expect(await h.prisma.smsMessage.count({ where: { to: `email:${stranger}` } })).toBe(0);
+    });
+
     it('answers the same for known and unknown numbers', async () => {
       const user = await h.makeUser({});
       const known = await h
@@ -300,7 +373,7 @@ describe('accounts and sign-in', () => {
 
       await phone
         .patch('/api/v1/me')
-        .send({ fullName: 'Abdi K.', email: 'abdi@example.com' })
+        .send({ fullName: 'Abdi K.', email: randomEmail() })
         .expect(200);
       const wrong = await phone
         .post('/api/v1/me/password')

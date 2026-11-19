@@ -3,7 +3,8 @@
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export type CountKey = 'chat' | 'messages' | 'payments' | 'marking' | 'certificates';
+export type CountKey =
+  'chat' | 'messages' | 'payments' | 'marking' | 'certificates' | 'enrolments' | 'groups';
 export type Counts = Partial<Record<CountKey, number>>;
 
 const ENDPOINT: Record<CountKey, string> = {
@@ -12,6 +13,8 @@ const ENDPOINT: Record<CountKey, string> = {
   payments: '/api/v1/admin/payments/count',
   marking: '/api/v1/teach/marking/count',
   certificates: '/api/v1/admin/certificate-requests/count',
+  enrolments: '/api/v1/admin/enrolments/requests/count',
+  groups: '/api/v1/groups/unread-count',
 };
 const EVENT = 'natik:counts';
 const EVERY_MS = 15_000;

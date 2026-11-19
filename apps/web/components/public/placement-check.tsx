@@ -18,7 +18,15 @@ type Language = { name: string; code: string; direction: 'LTR' | 'RTL' };
  * starting level with real courses. The answers are marked on the server, so nothing here can be
  * read from the page. No account is needed.
  */
-export function PlacementCheck({ languages }: { languages: Language[] }) {
+export function PlacementCheck({
+  languages,
+  embedded = false,
+}: {
+  languages: Language[];
+  /** Inside a dialog: no card around it. */
+  embedded?: boolean;
+}) {
+  const flat = embedded ? 'max-w-none border-0 p-0 shadow-none md:p-0' : '';
   const t = useTranslations('placement');
   const errorMessage = useErrorMessage();
   const [check, setCheck] = useState<PlacementCheck | null>(null);
@@ -81,7 +89,12 @@ export function PlacementCheck({ languages }: { languages: Language[] }) {
 
   if (result) {
     return (
-      <Card className="mx-auto flex max-w-2xl flex-col items-center gap-5 p-6 text-center md:p-8">
+      <Card
+        className={cn(
+          'mx-auto flex max-w-2xl flex-col items-center gap-5 p-6 text-center md:p-8',
+          flat,
+        )}
+      >
         <p className="text-muted">{t('yourResult')}</p>
         <h2 className="text-2xl font-bold md:text-4xl">
           {result.level ? t('startAt', { level: result.level }) : t('startAtBeginning')}
@@ -126,7 +139,7 @@ export function PlacementCheck({ languages }: { languages: Language[] }) {
     const question = check.questions[index]!;
     const rtl = check.language.direction === 'RTL';
     return (
-      <Card className="mx-auto flex max-w-2xl flex-col gap-5 p-5 md:p-8">
+      <Card className={cn('mx-auto flex max-w-2xl flex-col gap-5 p-5 md:p-8', flat)}>
         <ProgressBar
           value={Math.round((index / check.questions.length) * 100)}
           size="sm"
@@ -182,7 +195,9 @@ export function PlacementCheck({ languages }: { languages: Language[] }) {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4">
-      <h2 className="text-center text-xl font-semibold">{t('chooseLanguage')}</h2>
+      {embedded ? null : (
+        <h2 className="text-center text-xl font-semibold">{t('chooseLanguage')}</h2>
+      )}
       <ul className="grid gap-3 sm:grid-cols-3">
         {languages.map((language) => (
           <li key={language.code}>

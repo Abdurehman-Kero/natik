@@ -9,13 +9,13 @@ test.describe('home page', () => {
       page.getByRole('heading', { level: 1, name: 'Learn Arabic, English & Afaan Oromo' }),
     ).toBeVisible();
     await expect(page.getByRole('link', { name: 'Browse courses' }).first()).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Try a free lesson' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Find your level' }).first()).toBeVisible();
 
     for (const heading of [
       'Choose a language',
       'How it works',
       'Why Natik',
-      'Try before you register',
+      'Learn week by week',
       'Questions? We have answers',
       'Ready to start?',
     ]) {
@@ -32,7 +32,7 @@ test.describe('home page', () => {
     await page.goto('/');
     const hero = page.locator('section').first();
     await expect(hero.getByRole('link', { name: 'Browse courses' })).toBeVisible();
-    await expect(hero.getByRole('link', { name: 'Try a free lesson' })).toBeVisible();
+    await expect(hero.getByRole('button', { name: 'Find your level' })).toBeVisible();
     await expect(hero.getByText('Certificates you can verify')).toBeVisible();
     // the photo really loaded (not a broken image)
     await expect
@@ -65,25 +65,23 @@ test.describe('home page', () => {
     const question = page.getByRole('button', { name: 'How do I register?' });
     await question.scrollIntoViewIfNeeded();
     await question.click();
-    await expect(page.getByText('There is no code to wait for.')).toBeVisible();
+    await expect(
+      page.getByText('Then ask to join a course and the Natik team accepts you.'),
+    ).toBeVisible();
     await question.click();
-    await expect(page.getByText('There is no code to wait for.')).toBeHidden();
+    await expect(
+      page.getByText('Then ask to join a course and the Natik team accepts you.'),
+    ).toBeHidden();
   });
 
   test('the footer has links, policies and contact details', async ({ page }) => {
     await page.goto('/');
     const footer = page.getByRole('contentinfo');
-    for (const name of [
-      'Courses',
-      'Free lessons',
-      'About',
-      'FAQ',
-      'Privacy notice',
-      'Terms of use',
-      'Verify a certificate',
-    ]) {
+    for (const name of ['Courses', 'About', 'FAQ', 'Privacy notice', 'Terms of use']) {
       await expect(footer.getByRole('link', { name })).toBeVisible();
     }
+    await expect(footer.getByRole('button', { name: 'Verify a certificate' })).toBeVisible();
+    await expect(footer.getByRole('button', { name: 'Take a tour' })).toBeVisible();
     await expect(footer.getByRole('link', { name: 'Contact us' })).toBeVisible();
   });
 });
@@ -92,7 +90,6 @@ test.describe('public pages', () => {
   const pages = [
     ['/about', 'About Natik'],
     ['/courses', 'Courses'],
-    ['/free-lessons', 'Free lessons'],
     ['/news', 'News'],
     ['/contact', 'Contact us'],
     ['/faq', 'Frequently asked questions'],
@@ -148,24 +145,39 @@ test.describe('courses', () => {
 
   test('visitors can filter by language and level, and clear the filters', async ({ page }) => {
     await page.goto('/courses');
-    await expect(page.getByText(/\d+ courses?/)).toBeVisible();
+    await expect(page.getByText(/\d+ courses?/).first()).toBeVisible();
 
-    await page
-      .getByRole('main')
-      .getByLabel('Language', { exact: true })
-      .selectOption({ label: 'Afaan Oromo' });
+    // The filters are a column on large screens and a drawer behind "Filters" on phones.
+    async function tick(group: string, name: RegExp) {
+      const drawerButton = page.getByRole('button', { name: /^Filters/ });
+      const inDrawer = await drawerButton.isVisible();
+      if (inDrawer) await drawerButton.click();
+      const scope = inDrawer ? page.getByRole('dialog') : page.getByRole('complementary');
+      await scope.getByRole('group', { name: group }).getByRole('checkbox', { name }).click();
+      if (inDrawer) await page.getByRole('dialog').getByRole('button', { name: /^Show/ }).click();
+    }
+
+    await tick('Language', /Afaan Oromo/);
     await expect(page).toHaveURL(/language=om/);
     await expect(page.getByRole('link', { name: /Afaan Oromo Basics/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Arabic for Beginners/ })).toBeHidden();
 
     // a combination with no match explains itself and offers a way out (FR-CAT-006)
-    await page
-      .getByRole('main')
-      .getByLabel('Level', { exact: true })
-      .selectOption({ label: 'Advanced' });
+    await tick('Level', /Advanced/);
     await expect(page.getByRole('heading', { name: 'No courses match' })).toBeVisible();
-    await page.getByRole('link', { name: 'Clear filters' }).click();
+    await page.getByRole('button', { name: 'Clear filters' }).click();
     await expect(page).toHaveURL(/\/courses$/);
+    await expect(page.getByRole('link', { name: /Arabic for Beginners/ }).first()).toBeVisible();
+  });
+
+  test('typing in the course search narrows the list as you type', async ({ page }) => {
+    await page.goto('/courses');
+    const box = page.getByRole('searchbox', { name: 'Search courses…' });
+    await box.fill('afaan');
+    await expect(page.getByRole('link', { name: /Afaan Oromo Basics/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Arabic for Beginners/ })).toBeHidden();
+    await box.fill('zzzz');
+    await expect(page.getByRole('heading', { name: 'No courses match' })).toBeVisible();
   });
 
   test('a course page shows what you learn and an easy way to register', async ({ page }) => {
@@ -175,11 +187,14 @@ test.describe('courses', () => {
     ).toBeVisible();
     // Premium courses show no amount: visitors are pointed to Natik support instead.
     await expect(page.getByText('Premium course').first()).toBeVisible();
-    await expect(page.locator('main')).not.toContainText('ETB');
+    // (The related courses further down can be other courses with a public price.)
+    await expect(page.getByRole('complementary')).not.toContainText('ETB');
     await expect(page.getByRole('link', { name: 'WhatsApp' }).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: "What you'll learn" })).toBeVisible();
+    // Registering opens a dialog on the same page, so the visitor never loses their place.
     await page.getByRole('link', { name: 'Register to enrol' }).click();
-    await expect(page).toHaveURL(/\/register\?next=%2Fcourses%2Farabic-for-beginners/);
+    await expect(page.getByRole('dialog', { name: 'Create your free account' })).toBeVisible();
+    await expect(page).toHaveURL(/\/courses\/arabic-for-beginners$/);
     await expectNoHorizontalScroll(page);
   });
 
@@ -232,7 +247,7 @@ test.describe('contact and certificates', () => {
   test('an unknown certificate number says so in plain words', async ({ page }) => {
     await page.goto('/verify');
     await page.getByLabel('Certificate number').fill('NLC-2099-00000');
-    await page.getByRole('button', { name: 'Verify' }).click();
+    await page.getByRole('button', { name: 'Verify', exact: true }).click();
     await expect(
       page.getByRole('alert').filter({ hasText: "We couldn't find this number" }),
     ).toBeVisible();

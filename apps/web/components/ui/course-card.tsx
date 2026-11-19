@@ -1,5 +1,6 @@
 import { ArrowRight, BookOpen, Crown } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import Link from '@/components/ui/link';
 import { cn } from '@/lib/cn';
 
@@ -34,6 +35,7 @@ export function CourseCard({
   className,
   showBadge = true,
 }: CourseCardProps) {
+  const t = useTranslations('courses');
   const facts = [language, level, duration].filter(Boolean);
   return (
     <Link
@@ -50,6 +52,7 @@ export function CourseCard({
             alt=""
             fill
             sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+            quality={60}
             className="card-hover-image object-cover"
           />
         ) : (
@@ -68,7 +71,7 @@ export function CourseCard({
             )}
           >
             {isFree ? null : <Crown className="size-3.5 text-accent" aria-hidden />}
-            {isFree ? 'Free' : 'Premium'}
+            {isFree ? t('kindFree') : t('kindPremium')}
           </span>
         ) : null}
       </div>
@@ -99,7 +102,7 @@ export function CourseCard({
             {priceLabel}
           </p>
           <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
-            View
+            {t('view')}
             <ArrowRight
               className="size-4 transition group-hover:translate-x-1 rtl:rotate-180"
               aria-hidden

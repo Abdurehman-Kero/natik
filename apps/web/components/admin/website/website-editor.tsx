@@ -9,7 +9,7 @@ import { PageHeader } from '@/components/ui/layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ItemsTab } from './items-tab';
 import { type PolicyState, PoliciesTab } from './policies-tab';
-import { AboutTab, ContactTab, FeaturedTab, HomeTab } from './text-tabs';
+import { AboutTab, ContactTab, FeaturedTab, HelpTab, HomeTab } from './text-tabs';
 
 interface FaqRow {
   id: string;
@@ -22,6 +22,8 @@ interface TestimonialRow {
   name: string;
   quote: string;
   courseLabel: string | null;
+  photoFileId: string | null;
+  photoUrl: string | null;
   published: boolean;
 }
 
@@ -29,6 +31,7 @@ export interface WebsiteEditorProps {
   home: Record<string, string | undefined>;
   about: Record<string, string | undefined>;
   contact: Record<string, string | undefined>;
+  help: Record<string, string | undefined>;
   faq: FaqRow[];
   testimonials: TestimonialRow[];
   policies: Record<'privacy' | 'terms', PolicyState>;
@@ -44,6 +47,7 @@ const PAGE_FOR_TAB: Record<string, string> = {
   testimonials: '/',
   policies: '/privacy',
   contact: '/contact',
+  help: '/guide',
 };
 
 /** Admin › Website: every public text and list, edited without a developer (FR-WEB-005). */
@@ -72,6 +76,7 @@ export function WebsiteEditor(props: WebsiteEditorProps) {
           <TabsTrigger value="testimonials">{t('tabs.testimonials')}</TabsTrigger>
           <TabsTrigger value="policies">{t('tabs.policies')}</TabsTrigger>
           <TabsTrigger value="contact">{t('tabs.contact')}</TabsTrigger>
+          <TabsTrigger value="help">{t('tabs.help')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="home" className="flex flex-col gap-6">
@@ -132,6 +137,13 @@ export function WebsiteEditor(props: WebsiteEditorProps) {
               { name: 'courseLabel', label: t('courseLabel'), optional: true, maxLength: 80 },
             ]}
             blank={{ name: '', quote: '', courseLabel: '' }}
+            photo={{
+              label: t('testimonialPhoto'),
+              hint: t('testimonialPhotoHint'),
+              add: t('addPhoto'),
+              replace: t('replacePhoto'),
+              remove: t('removePhoto'),
+            }}
             titleOf={(item) => item.name}
             summaryOf={(item) => `“${item.quote}”`}
             copy={{
@@ -157,6 +169,10 @@ export function WebsiteEditor(props: WebsiteEditorProps) {
 
         <TabsContent value="contact">
           <ContactTab initial={props.contact} />
+        </TabsContent>
+
+        <TabsContent value="help">
+          <HelpTab initial={props.help} />
         </TabsContent>
       </Tabs>
     </>

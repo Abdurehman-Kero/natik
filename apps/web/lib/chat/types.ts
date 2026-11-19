@@ -1,6 +1,8 @@
 export interface ChatListItem {
   id: string;
   kind: 'STUDENT_ADMIN' | 'STUDENT_TEACHER' | 'TEACHER_ADMIN';
+  /** The other person (null for the Natik team in a student's or teacher's chat). */
+  personId: string | null;
   title: string;
   subtitle: string;
   avatarUrl: string | null;
@@ -33,6 +35,7 @@ export interface ChatMessage {
 export interface ChatThreadData {
   conversation: {
     id: string;
+    personId: string | null;
     title: string;
     subtitle: string;
     avatarUrl: string | null;

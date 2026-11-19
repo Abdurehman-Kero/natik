@@ -1,8 +1,9 @@
 import { getTranslations } from 'next-intl/server';
 import { FaqAccordion, type FaqItem } from '@/components/public/faq-accordion';
+import { NextSteps } from '@/components/public/next-steps';
 import { PageHero } from '@/components/public/page-hero';
 import { PublicSection } from '@/components/public/section';
-import { LinkButton } from '@/components/ui/button';
+import { ToolButton } from '@/components/public/site-tool-links';
 import { type PublicFaqItem, publicFetch } from '@/lib/api/public';
 
 export async function generateMetadata() {
@@ -45,9 +46,10 @@ export default async function FaqPage() {
         <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-primary-soft p-8 text-center">
           <h2 className="text-xl font-semibold">{t('stillTitle')}</h2>
           <p className="text-ink/80">{t('stillText')}</p>
-          <LinkButton href="/contact">{t('stillCta')}</LinkButton>
+          <ToolButton tool="contact">{t('stillCta')}</ToolButton>
         </div>
       </PublicSection>
+      <NextSteps items={['courses', 'level']} />
     </>
   );
 }

@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start --port 3000",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "messages:scan": "node scripts/client-messages.mjs",
+    "lint": "node scripts/client-messages.mjs --check && eslint .",
     "e2e": "playwright test",
     "e2e:install": "playwright install chromium"
   },

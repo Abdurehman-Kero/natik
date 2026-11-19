@@ -9,7 +9,7 @@ import {
 import { AnnouncementsService } from './announcements.service';
 import { AdminSmsController } from './admin-sms.controller';
 import { AfroMessageSmsProvider } from './sms/afromessage-provider';
-import { DevSmsController } from './sms/dev-sms.controller';
+import { DevAccountsController, DevSmsController } from './sms/dev-sms.controller';
 import { ConsoleSmsProvider, SmsProvider } from './sms/sms-provider';
 import { SmsService } from './sms/sms.service';
 
@@ -18,6 +18,7 @@ import { SmsService } from './sms/sms.service';
   imports: [QueueModule],
   controllers: [
     DevSmsController,
+    DevAccountsController,
     AdminAnnouncementsController,
     TeachAnnouncementsController,
     StudentAnnouncementsController,

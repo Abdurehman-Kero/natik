@@ -29,7 +29,10 @@ export class PublicSiteService {
    * get the same "thanks" without anything being stored.
    */
   async contact(input: ContactInput, ip: string | null): Promise<void> {
-    await this.limiter.assert(`contact-ip:${ip}`, 5, 3600);
+    // Many people on a mobile network share one address, so the address limit is generous; what stops
+    // spam is the limit per phone number (5 messages an hour each).
+    await this.limiter.assert(`contact-ip:${ip}`, 40, 3600);
+    await this.limiter.assert(`contact-phone:${normalizePhone(input.phone)}`, 5, 3600);
     const elapsed = input.openedAt ? Date.now() - input.openedAt : null;
     const looksLikeBot =
       Boolean(input.website) ||

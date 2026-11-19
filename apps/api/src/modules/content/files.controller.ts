@@ -39,9 +39,11 @@ const uploadBodySchema = z.object({
     'LESSON_PDF',
     'LESSON_AUDIO',
     'LESSON_IMAGE',
+    'LESSON_FILE',
     'COURSE_IMAGE',
     'QUESTION_MEDIA',
     'SIGNATURE',
+    'SITE_IMAGE',
   ]),
   courseId: z.string().min(1).max(60).optional(),
 });
@@ -112,6 +114,28 @@ export class FilesController {
       return;
     }
 
+    // Pictures on the public website (a student's photo next to their quote) are public once used;
+    // before that only admins can see them, in the editor.
+    if (file.purpose === 'SITE_IMAGE') {
+      const used =
+        (await this.prisma.testimonial.findFirst({
+          where: { photoFileId: id, published: true },
+          select: { id: true },
+        })) ??
+        // A teacher's photo on the website (set by an admin).
+        (await this.prisma.user.findFirst({
+          where: { photoFileId: id, role: 'TEACHER', showOnWebsite: true, status: 'ACTIVE' },
+          select: { id: true },
+        }));
+      if (!used && actor?.role !== 'ADMIN')
+        throw new AppException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      const { body, contentType } = await this.storage.read(file.storageKey);
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Cache-Control', used ? 'public, max-age=86400' : 'private, max-age=60');
+      res.send(body);
+      return;
+    }
+
     if (file.purpose === 'VIDEO_POSTER') {
       const { body, contentType } = await this.storage.read(file.storageKey);
       res.setHeader('Content-Type', contentType);
@@ -152,6 +176,19 @@ export class FilesController {
         disposition: wantsDownload
           ? `attachment; filename*=UTF-8''${safeName}`
           : `inline; filename*=UTF-8''${safeName}`,
+        cache: 'private, max-age=300',
+      });
+      return;
+    }
+
+    // PowerPoint, Word and Excel: students who can open the session download them (they can't be
+    // shown inside the page).
+    if (file.purpose === 'LESSON_FILE') {
+      await this.media.assertCanOpenFile(actor, file);
+      const stored = await this.storage.stream(file.storageKey, req.headers.range);
+      await pipeStored(res, stored, {
+        contentType: file.mime,
+        disposition: `attachment; filename*=UTF-8''${encodeURIComponent(file.originalName)}`,
         cache: 'private, max-age=300',
       });
       return;
@@ -205,7 +242,8 @@ export class FilesController {
       return;
     }
 
-    // Chat attachments: the two people in that chat, and admins for chats with the Natik team.
+    // Chat attachments: the two people in that chat, admins for chats with the Natik team, and the
+    // members of a course group for files shared there.
     if (file.purpose === 'CHAT_ATTACHMENT') {
       const message = actor
         ? await this.prisma.chatMessage.findFirst({
@@ -213,7 +251,18 @@ export class FilesController {
             select: { conversation: { select: { kind: true, ownerId: true, peerId: true } } },
           })
         : null;
-      if (!actor || !message || !canOpenConversation(actor, message.conversation)) {
+      // A file in a course group: everyone in that group may open it.
+      const inGroup =
+        actor && !message
+          ? await this.prisma.groupMessage.findFirst({
+              where: { fileId: id },
+              select: { courseId: true },
+            })
+          : null;
+      const allowed = inGroup
+        ? (await this.access.courseGroupRole(actor, inGroup.courseId)) !== null
+        : !!actor && !!message && canOpenConversation(actor, message.conversation);
+      if (!actor || (!message && !inGroup) || !allowed) {
         throw new AppException('NOT_FOUND', HttpStatus.NOT_FOUND);
       }
       const wantsDownload = download === '1' || download === 'true';

@@ -1,11 +1,11 @@
 # M8: Quality, Security & Launch
 
-|                |                           |
-| -------------- | ------------------------- |
+|                |                                            |
+| -------------- | ------------------------------------------ |
 | **Status**     | 🟡 Code side done; launch steps need Natik |
-| **Depends on** | M7 confirmed              |
-| **Unlocks**    | Go-live + 90-day warranty |
-| **Size**       | Large                     |
+| **Depends on** | M7 confirmed                               |
+| **Unlocks**    | Go-live + 90-day warranty                  |
+| **Size**       | Large                                      |
 
 ## Goal
 
@@ -130,4 +130,5 @@ Prove the MVP meets every Must requirement, harden it, and go live with backups,
 - **Permission matrix** (`src/test/permission-matrix.int-spec.ts`): finds every API route automatically and asks it as a visitor, student, teacher and admin. A visitor must get 401, a role that isn't allowed must get 403, and nothing may crash. It found one real bug (retrying an unknown SMS gave a server error; now "not found") and now guards every future route.
 - **Handover pack** in `docs/`: runbooks (deploy, rollback, backup and restore drill, rotate secrets, add an admin, failed SMS, and four common situations), admin and teacher guides, the AT traceability table, and the exported `openapi.json`.
 - **Already in place from earlier milestones:** security headers, rate limits, private files with magic-byte checks, activity log guarded by the database, Lighthouse budgets in CI, accessibility scan on every new screen at four sizes.
+- **Speed re-check after the 2026-11 redesign (Lighthouse CI, phone, slow 4G):** the richer public pages had grown to about 345 kB of scripts (budget 256 kB) and the course list had an LCP of 4.9 s (budget 4.5 s). Fixed: the sign-in dialog and the quick dialogs (search, message, verify, find your level) now load on the visitor's first touch or key press instead of with the page; the first two course pictures load at once; translations are sent per area. Result: scripts **about 290 kB**, LCP **2.7–3.7 s** on all three budgeted pages. **Still open:** scripts are about 35 kB over the 256 kB limit, mostly the Radix menus in the header (Help menu, language switcher, phone menu). Options: replace those three menus with lighter hand-made ones, or raise the limit to 300 kB. Total blocking time (a warning, target 0.3 s) is 1.1–2.9 s on this simulated slow phone.
 - **Needs Natik or real infrastructure (cannot be done from the code):** accounts for domain, hosting, database, storage, SMS and video; staging and production environments; Cloudflare; managed backups and the **restore drill**; Sentry and uptime alerts; the **k6 load test** and **OWASP ZAP scan** (both run against staging); real-device checks (Android, iPhone, desktop browsers) and the 3–5 person usability test; loading Natik's launch courses and teachers; removing the development sign-in dropdown; replacing sample payment accounts and quotes; slimming the API image (about 970 MB, target 300 MB); Natik's 10-day acceptance test; training; the 90-day warranty set-up.

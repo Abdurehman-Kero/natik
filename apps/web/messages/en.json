@@ -66,7 +66,17 @@
       "browse": "Browse courses",
       "announcements": "Announcements",
       "payments": "My payments",
-      "chat": "Messages"
+      "chat": "Messages",
+      "courseGroups": "Course groups",
+      "explore": "Explore",
+      "groupsShort": "Groups",
+      "groupLearn": "Learn",
+      "groupAccount": "My account",
+      "menuTitle": "Your menu",
+      "viewProfile": "View my profile",
+      "howItWorks": "How this works",
+      "tourHint": "A 30-second guide",
+      "help": "Help"
     },
     "teacher": {
       "dashboard": "Dashboard",
@@ -74,7 +84,9 @@
       "marking": "Marking",
       "announcements": "Announcements",
       "profile": "Profile",
-      "chat": "Messages"
+      "chat": "Messages",
+      "courseGroups": "Course groups",
+      "help": "Help"
     },
     "admin": {
       "groups": {
@@ -100,12 +112,24 @@
       "activity": "Activity log",
       "settings": "Settings",
       "certificates": "Certificates",
-      "chat": "Chats"
+      "chat": "Chats",
+      "courseGroups": "Course groups"
     },
     "signingOut": "Signing out",
     "areaAdmin": "Admin",
     "areaTeacher": "Teacher",
-    "viewSite": "View website"
+    "viewSite": "View website",
+    "quickNavigation": "Quick navigation",
+    "staff": {
+      "home": "Home",
+      "courses": "Courses",
+      "marking": "Marking",
+      "groups": "Groups",
+      "messages": "Messages",
+      "enrolments": "Enrolments",
+      "payments": "Payments",
+      "more": "More"
+    }
   },
   "footer": {
     "contactHeading": "Contact",
@@ -138,7 +162,7 @@
     "tryFreeLesson": "Try a free lesson",
     "trust": {
       "languages": "Arabic, English and Afaan Oromo",
-      "free": "Free sample lessons",
+      "free": "New sessions every week",
       "certificates": "Certificates you can verify"
     },
     "languagesTitle": "Choose a language",
@@ -181,12 +205,20 @@
       {
         "title": "Certificates you can verify",
         "text": "Finish a course and anyone can check your certificate online with its number."
+      },
+      {
+        "title": "New sessions every week",
+        "text": "Recorded sessions, PDFs and slides reach you as your teacher adds them. You never fall behind."
+      },
+      {
+        "title": "A class to learn with",
+        "text": "Every course has its own group chat with your teacher and classmates, like a real classroom."
       }
     ],
     "freeTitle": "Try before you register",
     "freeText": "Open a free sample lesson. No account needed.",
     "freeCta": "See free lessons",
-    "testimonialsTitle": "Students say",
+    "testimonialsTitle": "What our students say",
     "newsTitle": "Latest news",
     "allNews": "All news",
     "faqTitle": "Questions? We have answers",
@@ -236,9 +268,9 @@
     "openFreeLesson": "Watch the free lesson: {title}",
     "languagesEyebrow": "Languages",
     "exploreLanguage": "Explore courses",
-    "coursesEyebrow": "Courses",
-    "coursesTitle": "Start learning today",
-    "coursesText": "Free courses open at once. For premium courses, ask the Natik team about monthly payment.",
+    "coursesEyebrow": "What you can do",
+    "coursesTitle": "See what you can do on Natik",
+    "coursesText": "One platform. Free and premium courses, and teachers who care.",
     "tabFree": "Free",
     "tabPremium": "Premium",
     "seeAllFree": "See all free courses",
@@ -246,7 +278,7 @@
     "howEyebrow": "Getting started",
     "freeEyebrow": "Free lessons",
     "whyEyebrow": "Why Natik",
-    "testimonialsEyebrow": "Students",
+    "testimonialsEyebrow": "Real stories",
     "newsEyebrow": "News",
     "faqEyebrow": "FAQ",
     "flowEyebrow": "Inside a lesson",
@@ -256,7 +288,70 @@
     "sliderPrev": "Previous quote",
     "sliderNext": "Next quote",
     "sliderPause": "Pause slideshow",
-    "sliderPlay": "Play slideshow"
+    "sliderPlay": "Play slideshow",
+    "weeklyEyebrow": "How a course runs",
+    "weeklyTitle": "Learn week by week",
+    "weeklyText": "Ask to join a course and the Natik team accepts you. Then every week brings new sessions with your teacher.",
+    "weeklyPoints": [
+      "Up to 3 sessions a week, each recorded on video",
+      "The PDF, slides and notes of every session",
+      "New sessions reach you as soon as they are added"
+    ],
+    "tabTeachers": "Teachers",
+    "testimonialsText": "Real stories from our community.",
+    "sliderDot": "Show quote {n} of {total}",
+    "audience": {
+      "eyebrow": "One platform for everyone",
+      "title": "Find your place on Natik",
+      "cards": [
+        {
+          "label": "For new learners",
+          "title": "Not sure where to start? We will help you",
+          "stat": "languages",
+          "points": [
+            "A free level check, no account needed",
+            "Courses from beginner to advanced",
+            "Look around before you join"
+          ],
+          "cta": "Find your level"
+        },
+        {
+          "label": "For students",
+          "title": "Learn every week with a teacher who knows you",
+          "stat": "courses",
+          "points": [
+            "Weekly sessions with video, PDF and slides",
+            "A group chat with your class",
+            "A certificate you can verify"
+          ],
+          "cta": "Start learning"
+        },
+        {
+          "label": "For teachers",
+          "title": "Teach the way you like, we handle the rest",
+          "stat": "teachers",
+          "points": [
+            "Add sessions, slides and notes each week",
+            "Chat with your students in their group",
+            "Mark quizzes and give feedback"
+          ],
+          "cta": "Teach with Natik"
+        },
+        {
+          "label": "For everyone",
+          "title": "Questions? The Natik team is one message away",
+          "stat": "sessions",
+          "points": [
+            "Answers on WhatsApp, Telegram and chat",
+            "Help with payment and joining",
+            "Check any certificate online"
+          ],
+          "cta": "Read the answers"
+        }
+      ]
+    },
+    "statsEyebrow": "Natik in numbers",
+    "statsTitle": "A learning community that keeps growing"
   },
   "account": {
     "signInTitle": "Welcome back",
@@ -291,7 +386,8 @@
       "ACTIVE": "Active",
       "COMPLETED": "Completed",
       "EXPIRED": "Expired",
-      "CANCELLED": "Cancelled"
+      "CANCELLED": "Cancelled",
+      "AWAITING_APPROVAL": "Waiting for approval"
     },
     "payment": {
       "SUBMITTED": "Under review",
@@ -382,7 +478,7 @@
     "INTERNAL_ERROR": "Something went wrong on our side. Please try again.",
     "SERVICE_UNAVAILABLE": "This service is temporarily unavailable. Please try again soon.",
     "NETWORK": "We can't reach Natik right now. Check your connection and try again.",
-    "INVALID_CREDENTIALS": "Phone number or password is incorrect.",
+    "INVALID_CREDENTIALS": "Email or password is incorrect.",
     "ACCOUNT_LOCKED": "Too many attempts. Try again in 15 minutes or reset your password.",
     "COURSE_ACCESS_DENIED": "You don't have access to this course yet.",
     "PAYMENT_UNDER_REVIEW": "Your payment is being checked. You'll get an SMS when your access is ready.",
@@ -410,7 +506,8 @@
     "NO_ATTEMPTS_LEFT": "You have used all your attempts for this quiz.",
     "QUIZ_NOT_READY": "Some details are missing before this quiz can be published.",
     "ATTEMPT_CLOSED": "This attempt has already been submitted.",
-    "CERTIFICATE_NOT_READY": "Your certificate is being prepared. Try again in a minute."
+    "CERTIFICATE_NOT_READY": "Your certificate is being prepared. Try again in a minute.",
+    "EMAIL_ALREADY_REGISTERED": "This email already has an account."
   },
   "pages": {
     "soonText": "This page opens in an upcoming update.",
@@ -453,7 +550,12 @@
       "signInInstead": "Sign in",
       "resetInstead": "Reset password",
       "termsPre": "I'm 16 or older and accept the",
-      "termsAnd": "and"
+      "termsAnd": "and",
+      "subtitle": "Enter your information to create a free account.",
+      "personalInfo": "Personal information",
+      "accountInfo": "Account information",
+      "passwordMismatch": "The two passwords are not the same.",
+      "emailTaken": "This email already has an account."
     },
     "signIn": {
       "title": "Welcome back",
@@ -462,14 +564,16 @@
       "cta": "Sign in",
       "newHere": "New here?",
       "create": "Create an account",
-      "locked": "Too many attempts. Try again in 15 minutes or reset your password."
+      "locked": "Too many attempts. Try again in 15 minutes or reset your password.",
+      "subtitle": "Enter your email and password to continue."
     },
     "forgot": {
       "title": "Reset password",
       "steps": {
         "phone": "Phone",
         "code": "Code",
-        "password": "Password"
+        "password": "Password",
+        "email": "Email"
       },
       "phoneText": "We'll text you a code.",
       "sendCode": "Send code",
@@ -481,7 +585,8 @@
       "doneTitle": "Password saved",
       "doneText": "You can sign in now.",
       "goSignIn": "Sign in",
-      "sentNote": "If this number has an account, a code is on its way."
+      "sentNote": "If this email has an account, a code is on its way by SMS.",
+      "emailText": "Enter the email you signed up with. We'll text a code to the phone number on your account."
     },
     "setPassword": {
       "title": "Set your password",
@@ -498,7 +603,17 @@
       "resendIn": "Resend code in {time}",
       "resend": "Resend code",
       "resent": "New code sent"
-    }
+    },
+    "firstName": "First name",
+    "lastName": "Last name",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "chooseOne": "Choose…",
+    "country": "Country",
+    "chooseCountry": "Select country",
+    "city": "City or town",
+    "confirmPassword": "Confirm password"
   },
   "profile": {
     "title": "Profile",
@@ -525,7 +640,12 @@
       "TEACHER": "Teacher",
       "ADMIN": "Admin"
     },
-    "paymentHistory": "Payment history"
+    "paymentHistory": "Payment history",
+    "location": "Location",
+    "country": "Country",
+    "city": "City or town",
+    "gender": "Gender",
+    "notSet": "Not set"
   },
   "users": {
     "title": "Users",
@@ -568,14 +688,27 @@
       "name": "Name",
       "phone": "Phone",
       "role": "Role",
-      "status": "Status"
+      "status": "Status",
+      "location": "Location"
     },
     "erase": "Delete personal data",
     "eraseTitle": "Delete personal data?",
     "eraseText": "{name}'s name, phone, email and photo are removed and they are signed out. Their results are kept without their name, and their certificates still verify. This can't be undone.",
     "eraseCta": "Delete personal data",
     "eraseReason": "Reason",
-    "erasedToast": "Personal data deleted"
+    "erasedToast": "Personal data deleted",
+    "country": "Country",
+    "allCountries": "All countries",
+    "viewDetails": "View details",
+    "detailsTitle": "Person details",
+    "joined": "Joined",
+    "lastSeen": "Last signed in",
+    "gender": "Gender",
+    "city": "City or town",
+    "location": "Location",
+    "email": "Email",
+    "phone": "Phone",
+    "notSet": "Not set"
   },
   "devSms": {
     "title": "Development SMS inbox",
@@ -633,7 +766,7 @@
     "overview": "About this course",
     "learnTitle": "What you'll learn",
     "outlineTitle": "Course outline",
-    "outlineEmpty": "The lesson list will appear here once the course is ready.",
+    "outlineEmpty": "The weekly sessions will be listed here as they are added.",
     "freePreview": "Free preview",
     "teacherTitle": "Your teacher",
     "teachersTitle": "Your teachers",
@@ -664,7 +797,54 @@
     "premiumCourse": "Premium course",
     "payQuestionTitle": "Questions about payment?",
     "payQuestionText": "Premium courses are paid monthly. Ask the Natik team and we will guide you.",
-    "clearFilters": "Clear"
+    "clearFilters": "Clear",
+    "weekN": "Week {n}",
+    "sessionN": "Session {n}",
+    "sessionsCount": "{count, plural, one {# session} other {# sessions}}",
+    "weeksAndSessions": "{weeks, plural, one {# week} other {# weeks}} · {sessions, plural, one {# session} other {# sessions}}",
+    "weeklyNote": "New sessions are added every week.",
+    "membersOnly": "Videos, PDFs and slides open after you join and the Natik team accepts you.",
+    "searchPlaceholder": "Search a course, language or level",
+    "filters": "Filters",
+    "filtersTitle": "Filter courses",
+    "priceFilter": "Price",
+    "priceMin": "Min",
+    "priceMax": "Max",
+    "priceUnder": "Under ETB {max}",
+    "priceBetween": "ETB {min} to {max}",
+    "priceOver": "ETB {min} and more",
+    "showResults": "Show {count, plural, one {# course} other {# courses}}",
+    "viewCourse": "View course",
+    "levelLabel": "Level: {level}",
+    "searchCourses": "Search courses…",
+    "view": "View",
+    "tabOverview": "Overview",
+    "tabContent": "Content",
+    "tabInstructor": "Instructor",
+    "includesTitle": "This course includes",
+    "includeDuration": "Duration",
+    "includeSessions": "Sessions",
+    "includeCertificate": "Certificate when you finish",
+    "includeAccess": "Access",
+    "includeLanguage": "Language",
+    "includeLevel": "Level",
+    "includeDevices": "Mobile and desktop",
+    "includeGroup": "Course group chat",
+    "shareTitle": "Share this course",
+    "share": "Share",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "howTitle": "How it works here",
+    "howSteps": [
+      "Ask to join this course",
+      "The Natik team accepts you",
+      "Study every week and chat with your class"
+    ],
+    "contentCount": "{weeks, plural, one {# week} other {# weeks}} · {sessions, plural, one {# session} other {# sessions}}",
+    "instructorTitle": "Instructor",
+    "similarTitle": "Similar courses",
+    "previous": "Previous",
+    "next": "Next"
   },
   "freeLessons": {
     "title": "Free lessons",
@@ -721,11 +901,11 @@
     "items": [
       {
         "q": "How do I register?",
-        "a": "Tap Register and enter your name, phone number and a password. You can start right away. There is no code to wait for."
+        "a": "Tap Join free and enter your name, email, phone number and a password. Then ask to join a course and the Natik team accepts you."
       },
       {
         "q": "Are the courses free?",
-        "a": "Some courses and sample lessons are free. Others have a price, shown on the course page in Ethiopian Birr (ETB)."
+        "a": "Some courses are free and others have a price, shown on the course page in Ethiopian Birr (ETB). Every course needs the Natik team to accept you."
       },
       {
         "q": "How do I pay for a course?",
@@ -745,7 +925,7 @@
       },
       {
         "q": "Do I get a certificate?",
-        "a": "Yes. Finish every lesson and pass the final quiz (the pass mark is 70%). Your certificate can be downloaded and checked online by anyone with its number."
+        "a": "Yes. Finish the course and pass the final quiz (the pass mark is 70%). You confirm the name for your certificate and the Natik team approves it. Then you can download it, and anyone can check it online with its number."
       },
       {
         "q": "How long do I have access?",
@@ -761,7 +941,7 @@
       },
       {
         "q": "Which language is the website in?",
-        "a": "The website is in English. Course lessons are in Arabic, English or Afaan Oromo, and Arabic is shown right to left."
+        "a": "You can read the website in English, Amharic, Afaan Oromo or Somali: use the language button at the top. Course lessons are in Arabic, English or Afaan Oromo, and Arabic is shown right to left."
       }
     ]
   },
@@ -787,7 +967,7 @@
       {
         "h": "What we collect",
         "p": [
-          "Your name, phone number and password (stored only as a secure hash). Optionally your email and photo.",
+          "Your name, email address, phone number and password (stored only as a secure hash). Optionally your photo, gender, country and city.",
           "Your learning activity: lessons completed, quiz answers and results, and certificates.",
           "Payment details you send us for a course: the method, reference, amount, date and an optional receipt photo. We never ask for card numbers, wallet PINs or bank passwords.",
           "Messages you send through the contact form."
@@ -857,7 +1037,7 @@
       {
         "h": "Courses and access",
         "p": [
-          "Registering does not open any course. Free courses open when you enrol. Paid courses open after we confirm your payment.",
+          "Registering does not open any course. Ask to join a course and the Natik team accepts you. Paid courses also open after we confirm your payment.",
           "Access lasts for the period shown on the course page. Courses are for your own personal learning."
         ]
       },
@@ -1020,11 +1200,11 @@
       "content": "Content",
       "teachers": "Teachers"
     },
-    "contentCounts": "{units, plural, one {# unit} other {# units}} · {lessons, plural, one {# lesson} other {# lessons}}",
-    "contentHint": "Units, lessons, videos, PDFs and audio are built in the content editor.",
+    "contentCounts": "{units, plural, one {# week} other {# weeks}} · {lessons, plural, one {# session} other {# sessions}}",
+    "contentHint": "Weeks, sessions, video links, PDFs, PowerPoint and notes are added in the content editor.",
     "openContentEditor": "Open content editor",
     "assignTeachers": "Teachers",
-    "assignHint": "Assigned teachers can build and publish this course's lessons.",
+    "assignHint": "Assigned teachers add this course's weekly sessions and materials.",
     "noTeachers": "No teachers yet",
     "noTeachersText": "Create a user with the Teacher role first.",
     "goToUsers": "Go to users",
@@ -1043,7 +1223,14 @@
     "orderInOrder": "One after another",
     "lessonOrderHint": "\"One after another\" opens a lesson only when the lessons before it are done. A teacher can mark a lesson \"always open\".",
     "showPrice": "Show the price on the public website",
-    "showPriceHint": "Turn off if payment is arranged with Natik support. Visitors then see \"Premium\" and can ask the team on WhatsApp, Telegram or chat."
+    "showPriceHint": "Turn off if payment is arranged with Natik support. Visitors then see \"Premium\" and can ask the team on WhatsApp, Telegram or chat.",
+    "publishNow": "Publish on the website now",
+    "publishNowHint": "Visitors see the course introduction at once. Turn off to keep it a draft.",
+    "createdPublished": "Course created and published on the website.",
+    "draftBannerTitle": "This course is not on the website yet",
+    "draftBannerText": "It is a draft. Publish it so visitors can see its introduction and ask to join.",
+    "ongoing": "New sessions are still being added",
+    "ongoingHint": "Turn off when the last week is added. Until then students can’t finish the course or get a certificate."
   },
   "teach": {
     "dashboardTitle": "Dashboard",
@@ -1051,18 +1238,18 @@
     "dashboardSubtitle": "Your courses",
     "noCourses": "No courses yet",
     "noCoursesText": "When an admin assigns you to a course, it appears here.",
-    "lessonsLive": "{live} of {total} lessons live",
+    "lessonsLive": "{live} of {total} sessions live",
     "students": "{count, plural, =0 {No students} one {# student} other {# students}}"
   },
   "outline": {
     "free": "Free",
     "myCourses": "My courses",
-    "addUnit": "Add unit",
+    "addUnit": "Add week",
     "editSettings": "Edit course settings",
     "settingsByAdmin": "Price and access are set by an admin",
-    "empty": "No units yet",
-    "emptyText": "Start with a unit, then add lessons to it.",
-    "unit": "Unit {number}",
+    "empty": "No weeks yet",
+    "emptyText": "Start with Week 1, then add its sessions (up to 3 a week).",
+    "unit": "Week {number}",
     "unitActions": "Actions for {title}",
     "rename": "Rename",
     "hide": "Hide",
@@ -1072,39 +1259,40 @@
     "moveDown": "Move down",
     "delete": "Delete",
     "noBlocks": "Empty",
-    "freePreview": "Free preview",
     "lessonActions": "Actions for {title}",
     "edit": "Edit",
     "preview": "Preview",
-    "moveToUnit": "Move to another unit",
-    "addLesson": "Add lesson",
-    "unitTitle": "Unit title",
-    "lessonTitle": "Lesson title",
+    "moveToUnit": "Move to another week",
+    "addLesson": "Add session",
+    "unitTitle": "Week title",
+    "lessonTitle": "Session title",
     "add": "Add",
     "save": "Save",
-    "unitAdded": "Unit added.",
-    "unitPublished": "Unit published.",
-    "unitHidden": "Unit hidden.",
-    "lessonPublished": "Lesson published.",
-    "lessonHidden": "Lesson hidden.",
-    "lessonMoved": "Lesson moved.",
+    "unitAdded": "Week added.",
+    "unitPublished": "Week published.",
+    "unitHidden": "Week hidden.",
+    "lessonPublished": "Session published. Students see it now.",
+    "lessonHidden": "Session hidden.",
+    "lessonMoved": "Session moved.",
     "deleted": "Deleted.",
-    "deleteUnitTitle": "Delete this unit?",
-    "deleteUnitText": "The unit and its draft lessons will be removed. This can't be undone.",
-    "deleteLessonTitle": "Delete this lesson?",
-    "deleteLessonText": "This draft lesson will be removed. This can't be undone.",
-    "rulesNote": "Published units and lessons can be hidden but not deleted, so student results are kept.",
+    "deleteUnitTitle": "Delete this week?",
+    "deleteUnitText": "The week and its draft sessions will be removed. This can't be undone.",
+    "deleteLessonTitle": "Delete this session?",
+    "deleteLessonText": "This draft session will be removed. This can't be undone.",
+    "rulesNote": "Published weeks and sessions can be hidden but not deleted, so student results are kept.",
     "dragHandle": "Drag to reorder",
     "chooseUnit": "Move to",
-    "move": "Move"
+    "move": "Move",
+    "sessionsOf": "{count} of {max} sessions",
+    "weekFull": "This week is full: add the next session to a new week."
   },
   "lessonEditor": {
-    "pageTitle": "Edit lesson",
-    "previewTitle": "Lesson preview",
-    "previewBanner": "Preview: this is how students see the lesson.",
+    "pageTitle": "Edit session",
+    "previewTitle": "Session preview",
+    "previewBanner": "Preview: this is how students see the session.",
     "backToEditor": "Back to editor",
-    "lessonTitle": "Lesson title",
-    "titleRequired": "Add a lesson title.",
+    "lessonTitle": "Session title",
+    "titleRequired": "Add a session title.",
     "saving": "Saving…",
     "unsaved": "Not saved yet",
     "saved": "Saved",
@@ -1113,22 +1301,23 @@
     "publish": "Publish",
     "publishAgain": "Publish again",
     "hide": "Hide",
-    "liveNotice": "This lesson is live. Changes go live as soon as they are saved.",
+    "liveNotice": "This session is live: students see it. Changes go live as soon as they are saved.",
     "notReady": "Before publishing:",
-    "emptyTitle": "This lesson is empty",
+    "emptyTitle": "This session is empty",
     "emptyText": "Add text, a video, a PDF, audio or a picture below.",
     "block": {
-      "TEXT": "Text",
+      "TEXT": "Notes",
       "VIDEO": "Video",
       "PDF": "PDF",
       "AUDIO": "Audio",
       "IMAGE": "Picture",
-      "SLIDES": "Slides"
+      "SLIDES": "Slides",
+      "FILE": "PowerPoint / Word"
     },
     "moveUp": "Move up",
     "moveDown": "Move down",
     "removeBlock": "Remove",
-    "textLabel": "Lesson text",
+    "textLabel": "Notes",
     "imageCaption": "Describe the picture",
     "imageCaptionHint": "Read aloud for people who cannot see it.",
     "videoSending": "Uploading…",
@@ -1142,18 +1331,16 @@
     "retry": "Retry",
     "cancelUpload": "Cancel upload",
     "videoUploadFailed": "The video could not be uploaded. Check your connection and retry.",
-    "publishedToast": "Lesson published.",
-    "hiddenToast": "Lesson hidden.",
-    "settings": "Lesson settings",
-    "freePreview": "Free preview",
-    "freePreviewHint": "Anyone can open this lesson without signing in.",
+    "publishedToast": "Session published. Students see it now.",
+    "hiddenToast": "Session hidden.",
+    "settings": "Session settings",
     "allowDownloads": "Allow downloads",
     "allowDownloadsHint": "Students can save PDFs and audio. Videos can never be downloaded.",
     "removeTitle": "Remove this block?",
-    "removeText": "It is removed from the lesson. This can't be undone.",
-    "addBlock": "Add to this lesson",
+    "removeText": "It is removed from the session. This can't be undone.",
+    "addBlock": "Add to this session",
     "quizTitle": "Quiz",
-    "quizAddHint": "Add questions students answer to complete this lesson.",
+    "quizAddHint": "Add questions students answer to complete this session.",
     "quizName": "Quiz name",
     "quizNameDefault": "Quiz",
     "quizFinalChoice": "This is the final quiz for the course",
@@ -1198,9 +1385,9 @@
       "save": "Save slide"
     },
     "videoLink": {
-      "chip": "Video link",
+      "chip": "YouTube link",
       "title": "Add a video by link",
-      "text": "Paste a YouTube or Vimeo link. The video stays on that site and plays in the lesson.",
+      "text": "Paste the YouTube (or Vimeo) link of the recorded session. It plays inside the session.",
       "urlLabel": "Video link",
       "titleLabel": "Title",
       "warning": "Videos on other sites can be removed by their owners. For lessons you want to keep, upload the video instead.",
@@ -1218,7 +1405,9 @@
     "posterHas": "Picture shown before the video plays.",
     "posterNone": "A picture from the video is added automatically.",
     "posterChange": "Change picture",
-    "posterSaved": "Picture saved."
+    "posterSaved": "Picture saved.",
+    "sessionDate": "Session date",
+    "sessionDateHint": "When the session takes place. Students see upcoming sessions with their date."
   },
   "lessonView": {
     "playVideo": "Play video: {title}",
@@ -1241,7 +1430,7 @@
     "previousPage": "Previous",
     "nextPage": "Next",
     "pageOf": "Page {page} of {total}",
-    "empty": "This lesson has no content yet.",
+    "empty": "This session has no content yet.",
     "playbackSpeed": "Speed",
     "captions": "Captions",
     "slides": "Slides",
@@ -1261,7 +1450,8 @@
       "WATCH": "Watch",
       "REVISE": "Revise",
       "EXAMPLES": "Examples"
-    }
+    },
+    "downloadFile": "Download {name}"
   },
   "editor": {
     "toolbar": "Text formatting",
@@ -1353,7 +1543,8 @@
       "faq": "FAQ",
       "testimonials": "Testimonials",
       "policies": "Policies",
-      "contact": "Contact"
+      "contact": "Contact",
+      "help": "Help videos"
     },
     "moveUp": "Move up",
     "moveDown": "Move down",
@@ -1419,10 +1610,21 @@
     "resetDone": "Back to the standard wording.",
     "telegramChannel": "Telegram channel",
     "telegramContact": "Telegram contact",
-    "telegramContactHint": "Who people can message on Telegram, for example @Natikfluency."
+    "telegramContactHint": "Who people can message on Telegram, for example @Natikfluency.",
+    "testimonialPhoto": "Photo",
+    "testimonialPhotoHint": "A square picture of the student. Without one, their initials are shown.",
+    "addPhoto": "Add photo",
+    "replacePhoto": "Replace photo",
+    "removePhoto": "Remove photo",
+    "helpTitle": "Help videos",
+    "helpHint": "A video for students and one for teachers that shows how to use Natik from start to finish. Upload it to YouTube (unlisted is fine) and paste the link here.",
+    "studentVideo": "Student video",
+    "studentVideoHint": "Shown in the Help tab of every student. A YouTube or Vimeo link.",
+    "teacherVideo": "Teacher video",
+    "teacherVideoHint": "Shown in the Help tab of every teacher."
   },
   "courseButton": {
-    "enrolFree": "Enrol free",
+    "enrolFree": "Request to join",
     "payAndEnrol": "Pay and enrol",
     "paymentUnderReview": "Payment under review",
     "continueLearning": "Continue learning",
@@ -1430,7 +1632,11 @@
     "openEditor": "Open editor",
     "enrolled": "You're enrolled. Happy learning!",
     "renewed": "Your access is open again.",
-    "checking": "Checking your course…"
+    "checking": "Checking your course…",
+    "requestToJoin": "Request to join",
+    "requestSent": "Request sent. The Natik team will accept you soon.",
+    "waitingApproval": "Waiting for approval",
+    "waitingApprovalHint": "The Natik team checks every request. You get an SMS when you are accepted."
   },
   "blocked": {
     "NOT_ENROLLED": {
@@ -1457,7 +1663,12 @@
       "text": "This enrolment was cancelled.",
       "button": "Contact us"
     },
-    "viewCourse": "View course"
+    "viewCourse": "View course",
+    "AWAITING_APPROVAL": {
+      "title": "Waiting for approval",
+      "text": "The Natik team checks every request to join. You get an SMS as soon as you are accepted.",
+      "button": "Back to my dashboard"
+    }
   },
   "studentHome": {
     "title": "Home",
@@ -1483,7 +1694,29 @@
     "resultWaiting": "Waiting for marking",
     "certificateReadyTitle": "Your certificate is almost ready",
     "certificateReadyText": "You finished {course}. Confirm the name to print on your certificate.",
-    "certificateReadyButton": "Confirm my name"
+    "certificateReadyButton": "Confirm my name",
+    "newSessionsTitle": "New sessions",
+    "new": "New",
+    "start": {
+      "title": "Let's get you started",
+      "text": "Three simple steps. We will guide you.",
+      "steps": [
+        {
+          "title": "Choose a course",
+          "text": "Look through the free and premium courses.",
+          "cta": "Explore courses"
+        },
+        {
+          "title": "Ask to join",
+          "text": "Tap “Request to join” on a course. The Natik team accepts you and we send you a message."
+        },
+        {
+          "title": "Learn and chat",
+          "text": "New sessions arrive every week. Ask questions in your course group."
+        }
+      ],
+      "tour": "Show me around"
+    }
   },
   "myCourses": {
     "title": "My courses",
@@ -1502,26 +1735,26 @@
   "learn": {
     "back": "Back to course",
     "continue": "Continue: {lesson}",
-    "lessonsDone": "{done} of {total} lessons",
+    "lessonsDone": "{done} of {total} sessions",
     "percentDone": "{value}% done",
-    "readOnly": "You finished this course. You can still read every lesson.",
+    "readOnly": "You finished this course. You can still open every session.",
     "unitCount": "{done}/{total}",
     "stateDone": "Done",
     "stateCurrent": "Where you are",
     "stateTodo": "Not started",
-    "noLessons": "Lessons will appear here soon.",
+    "noLessons": "The first sessions will appear here soon.",
     "contents": "Contents",
     "contentsTitle": "Course contents",
-    "lessonOf": "Lesson {n} of {total}",
-    "previous": "Previous lesson",
-    "next": "Next lesson",
+    "lessonOf": "Session {n} of {total}",
+    "previous": "Previous session",
+    "next": "Next session",
     "markComplete": "Mark as complete",
     "completed": "Completed",
-    "completedToast": "Lesson complete!",
+    "completedToast": "Session complete!",
     "courseCompletedTitle": "Course complete!",
-    "courseCompletedText": "You finished every lesson. Well done.",
+    "courseCompletedText": "You finished every session. Well done.",
     "quizRequired": "Pass the quiz to complete",
-    "problemLine": "Problem with this lesson?",
+    "problemLine": "Problem with this session?",
     "reportIt": "Report it",
     "reportTitle": "Report a problem",
     "reportHint": "Tell us what went wrong. We'll look into it.",
@@ -1529,19 +1762,23 @@
     "reportSend": "Send report",
     "reportSent": "Thanks. We got your report.",
     "backToCourse": "Course outline",
-    "unavailableTitle": "This lesson isn't available",
+    "unavailableTitle": "This session isn't available",
     "unavailableText": "It may have been moved or hidden.",
     "takeQuiz": "Take the quiz",
     "quizPassed": "Quiz passed",
-    "stateLocked": "Locked: finish the earlier lessons first",
+    "stateLocked": "Locked: finish the earlier sessions first",
     "minutesShort": "{n} min",
     "hideOutline": "Hide outline",
     "showOutline": "Show outline",
     "previousStep": "Previous step",
     "nextStep": "Next step",
-    "lockedTitle": "Finish the earlier lesson first",
-    "lockedText": "This course opens lessons in order. Complete \"{title}\" to open this one.",
-    "lockedGo": "Go to that lesson"
+    "lockedTitle": "Finish the earlier session first",
+    "lockedText": "This course opens sessions in order. Complete \"{title}\" to open this one.",
+    "lockedGo": "Go to that session",
+    "weekN": "Week {n}",
+    "new": "New",
+    "upcomingTitle": "Coming next",
+    "ongoingNote": "New sessions are added every week. You will see them here as soon as they are added."
   },
   "pay": {
     "title": "Pay and enrol",
@@ -1655,7 +1892,10 @@
     "cashReference": "Receipt number",
     "cashReferenceHint": "From your receipt book, if you use one.",
     "noPaidCourses": "There are no paid courses yet.",
-    "pageOf": "Page {page} of {total}"
+    "pageOf": "Page {page} of {total}",
+    "receiptTitle": "Receipt",
+    "receiptOpen": "Open in a new tab",
+    "receiptPdf": "PDF receipt"
   },
   "studentPicker": {
     "label": "Student",
@@ -1704,7 +1944,18 @@
     "cancelled": "Enrolment cancelled",
     "chooseCourse": "Choose a course",
     "publishedOnly": "Only published courses can be chosen.",
-    "total": "{count, plural, one {# enrolment} other {# enrolments}}"
+    "total": "{count, plural, one {# enrolment} other {# enrolments}}",
+    "approve": "Accept",
+    "approveLabel": "Accept {name}",
+    "approved": "{name} is accepted.",
+    "decline": "Decline",
+    "declined": "Request declined.",
+    "declineTitle": "Decline this request?",
+    "declineText": "{name} sees your reason and can ask again later.",
+    "declineReason": "Reason (the student sees it)",
+    "requestsTitle": "{count, plural, one {# student asks to join} other {# students ask to join}}",
+    "requestsText": "Accept them to open the course, or decline with a reason.",
+    "requestsOpen": "Review"
   },
   "paymentAccounts": {
     "title": "Payment accounts",
@@ -2276,15 +2527,15 @@
     "topics": [
       {
         "title": "Create an account",
-        "text": "Your name, phone number and a password. It takes a minute.",
+        "text": "Your name, email, phone number and a password. It takes a minute.",
         "href": "/register",
         "cta": "Create account"
       },
       {
-        "title": "Try a free lesson",
-        "text": "Open a sample lesson without an account.",
-        "href": "/free-lessons",
-        "cta": "See free lessons"
+        "title": "Join a course",
+        "text": "Press \"Request to join\" on a course. The Natik team accepts you and every session opens.",
+        "href": "/courses",
+        "cta": "Browse courses"
       },
       {
         "title": "Choose a course",
@@ -2328,11 +2579,11 @@
     "guides": [
       {
         "q": "How do I register?",
-        "a": "Press Register, type your name, phone number and a password, accept the terms and press Create account. You are signed in straight away."
+        "a": "Press Register, type your name, email, phone number and a password, accept the terms and press Create account. You are signed in straight away."
       },
       {
-        "q": "How do I start a free course?",
-        "a": "Open the course page and press Enrol free. The first lesson opens at once and your progress is saved every time you learn."
+        "q": "How do I join a course?",
+        "a": "Open the course page and press \"Request to join\" (or \"Pay and enrol\" for a paid course). The Natik team checks every request and accepts you; you get an SMS, and every session of the course opens: videos, PDFs, slides and notes."
       },
       {
         "q": "How do I join a premium course?",
@@ -2348,7 +2599,7 @@
       },
       {
         "q": "I forgot my password. What now?",
-        "a": "Press Sign in, then Forgot password. Enter your phone number and we send a text message so you can choose a new password."
+        "a": "Press Sign in, then Forgot password. Enter your email and we text a code to the phone number on your account, so you can choose a new password."
       },
       {
         "q": "How can I talk to my teacher or the Natik team?",
@@ -2361,5 +2612,398 @@
     ],
     "supportTitle": "Still need help?",
     "supportText": "Our team is happy to help. Message us on WhatsApp, Telegram or in the chat."
+  },
+  "groups": {
+    "title": "Course groups",
+    "listLabel": "Your course groups",
+    "back": "Back to groups",
+    "noGroups": "No groups yet",
+    "noGroupsText": "Every course has a group chat. Once you are accepted into a course, its group appears here.",
+    "noMessages": "No messages yet",
+    "pick": "Choose a group",
+    "pickText": "Open a course group to read and write to your classmates and teacher.",
+    "courseGroup": "Course group",
+    "showMembers": "Show members",
+    "memberCount": "{count, plural, one {# member} other {# members}}",
+    "members": "Members",
+    "membersText": "Everyone in this course: the teachers, the Natik team and the students.",
+    "teachers": "Teachers",
+    "team": "Natik team",
+    "students": "Students",
+    "roleTeacher": "Teacher",
+    "roleTeam": "Natik team",
+    "emptyTitle": "Start the conversation",
+    "emptyText": "Ask a question, share what you learned, or say hello. Your classmates and teacher will see it.",
+    "loadEarlier": "Show earlier messages",
+    "notLoaded": "That message is further up. Show earlier messages first.",
+    "deleted": "This message was deleted",
+    "edited": "edited",
+    "pinned": "Pinned",
+    "pinnedMessage": "Pinned message",
+    "pin": "Pin to top",
+    "unpin": "Unpin",
+    "pinnedToast": "Message pinned.",
+    "unpinned": "Message unpinned.",
+    "reply": "Reply",
+    "replyingTo": "Replying to {name}",
+    "cancelReply": "Cancel reply",
+    "edit": "Edit",
+    "editTitle": "Edit your message",
+    "editLabel": "Message",
+    "saveEdit": "Save",
+    "cancel": "Cancel",
+    "react": "React",
+    "reactionLabel": "{emoji} from {count, plural, one {# person} other {# people}}",
+    "messageMenu": "Message options",
+    "deleteTitle": "Delete this message?",
+    "deleteMine": "It is removed for everyone in the group.",
+    "deleteOthers": "You are removing someone else’s message for everyone in the group.",
+    "tooBig": "This file is too big. The maximum is 60 MB for a video and 20 MB for other files.",
+    "unavailableTitle": "You can't open this group",
+    "unavailableText": "Only students who are accepted into the course, its teachers and the Natik team are in its group."
+  },
+  "site": {
+    "nav": {
+      "courses": "Courses",
+      "level": "Find your level",
+      "teachers": "Teachers",
+      "about": "About",
+      "help": "Help",
+      "more": "Help and more",
+      "news": "News",
+      "faq": "Questions and answers",
+      "helpCentre": "Help centre",
+      "contact": "Message the team",
+      "verify": "Verify a certificate",
+      "home": "Home",
+      "menuHint": "Everything on Natik",
+      "breadcrumb": "You are here"
+    },
+    "header": {
+      "search": "Search",
+      "searchLabel": "Search courses",
+      "tour": "Take a tour",
+      "join": "Join free",
+      "signIn": "Sign in"
+    },
+    "search": {
+      "title": "Search courses",
+      "placeholder": "Search a course, language or level",
+      "empty": "No course matches “{query}”.",
+      "emptyHint": "Try another word, or look at every course.",
+      "all": "See all courses",
+      "popular": "Popular courses",
+      "quick": "Quick links",
+      "tip": "Press / to search from any page",
+      "count": "{count, plural, one {# course} other {# courses}}",
+      "free": "Free",
+      "premium": "Premium",
+      "loading": "Loading courses…",
+      "failed": "The courses could not load. Please try again."
+    },
+    "auth": {
+      "signInTitle": "Welcome back",
+      "signInText": "Sign in to continue your lessons.",
+      "registerTitle": "Create your free account",
+      "registerText": "It takes a minute. Then ask to join any course.",
+      "signInTab": "Sign in",
+      "registerTab": "Register",
+      "switchLabel": "Sign in or register",
+      "welcomeBack": "Welcome back!",
+      "welcomeNew": "Your account is ready. Welcome to Natik!"
+    },
+    "tour": {
+      "offerTitle": "New to Natik?",
+      "offerText": "Take a 30-second tour of how learning works here.",
+      "offerStart": "Show me",
+      "offerSkip": "No thanks",
+      "step": "Step {n} of {total}",
+      "next": "Next",
+      "back": "Back",
+      "done": "Finish",
+      "skip": "Skip tour",
+      "close": "Close tour",
+      "steps": {
+        "welcome": {
+          "title": "Welcome to Natik",
+          "text": "Learn Arabic, English and Afaan Oromo with Natik's own teachers. Here is how to find your way around."
+        },
+        "browse": {
+          "title": "Find your course",
+          "text": "Courses, teachers, your level check and help are all in this menu."
+        },
+        "search": {
+          "title": "Search in one tap",
+          "text": "Type a course, language or level and open it straight away."
+        },
+        "language": {
+          "title": "Your language",
+          "text": "Switch the whole website to English, Amharic, Afaan Oromo or Somali any time."
+        },
+        "account": {
+          "title": "Your account",
+          "text": "Register for free, or sign in to carry on where you stopped."
+        },
+        "journey": {
+          "title": "How learning works",
+          "text": "Four simple steps from your first click to your certificate."
+        }
+      },
+      "journey": [
+        "Ask to join a course",
+        "The Natik team accepts you",
+        "Learn week by week and chat with your class",
+        "Finish and receive your certificate"
+      ],
+      "createAccount": "Create free account",
+      "browseCourses": "Browse courses",
+      "restartHint": "You can take the tour again any time from the help button.",
+      "studentOfferTitle": "First time here?",
+      "studentOfferText": "Take a 30-second tour of your learning space."
+    },
+    "message": {
+      "title": "Message the team",
+      "text": "Ask us anything. We reply by phone or message."
+    },
+    "flow": {
+      "levelTitle": "Not sure where to start?",
+      "levelText": "Answer a few questions and we suggest your level.",
+      "levelCta": "Find your level",
+      "joinTitle": "Ready to start learning?",
+      "joinText": "Create a free account, then ask to join the course you like.",
+      "joinCta": "Create free account",
+      "questionTitle": "Still have a question?",
+      "questionText": "The Natik team is happy to help.",
+      "questionCta": "Message the team",
+      "next": "Next step"
+    },
+    "course": {
+      "stickyFree": "Free course",
+      "askQuestion": "Ask a question",
+      "share": "Share",
+      "shared": "Link copied",
+      "jump": {
+        "about": "About",
+        "outline": "Outline",
+        "teacher": "Teacher"
+      },
+      "joinBar": "Join this course"
+    },
+    "hero": {
+      "searchPlaceholder": "Search a course, language or level",
+      "chipsLabel": "Popular languages",
+      "trusted": "Join {count, plural, one {# learner} other {# learners}} already learning",
+      "searchCta": "Search"
+    },
+    "journey": {
+      "eyebrow": "From first click to certificate",
+      "title": "How it works",
+      "steps": [
+        {
+          "title": "Create your account",
+          "text": "Your name, phone and a password. It takes a minute."
+        },
+        {
+          "title": "Ask to join a course",
+          "text": "Pick a course. The Natik team accepts you, and for premium courses confirms your payment."
+        },
+        {
+          "title": "Study every week",
+          "text": "New recorded sessions, PDFs and slides arrive every week. Chat with your class and teacher."
+        },
+        {
+          "title": "Get your certificate",
+          "text": "Finish the course, confirm your name, and receive a certificate anyone can verify."
+        }
+      ]
+    },
+    "footer": {
+      "quick": "Quick help",
+      "tour": "Take a tour",
+      "message": "Message the team",
+      "verify": "Verify a certificate",
+      "level": "Find your level",
+      "sitemap": "Sitemap",
+      "legal": "Legal"
+    },
+    "next": {
+      "title": "What would you like to do next?",
+      "level": {
+        "title": "Find your level",
+        "text": "Answer a few questions and we suggest where to start."
+      },
+      "courses": {
+        "title": "Browse courses",
+        "text": "Free and premium courses in three languages."
+      },
+      "join": {
+        "title": "Create a free account",
+        "text": "Then ask to join the course you like."
+      },
+      "message": {
+        "title": "Message the team",
+        "text": "Ask about courses, payment or anything else."
+      },
+      "tour": {
+        "title": "Take a tour",
+        "text": "See how learning works here in 30 seconds."
+      },
+      "teachers": {
+        "title": "Meet the teachers",
+        "text": "The people who will teach you."
+      }
+    },
+    "studentTour": {
+      "steps": {
+        "welcome": {
+          "title": "Welcome to your learning space",
+          "text": "Everything for your courses is in one place. Here is where to find it."
+        },
+        "menu": {
+          "title": "Your menu",
+          "text": "Tap here any time to open every page: courses, groups, messages, payments and certificates."
+        },
+        "tabs": {
+          "title": "Quick tabs",
+          "text": "Jump between your home, courses, groups and messages with one tap."
+        },
+        "bell": {
+          "title": "News from your teachers",
+          "text": "New announcements appear here with a small dot."
+        },
+        "account": {
+          "title": "Your account",
+          "text": "Change your name, photo or password, or sign out."
+        },
+        "finish": {
+          "title": "Ready to learn?",
+          "text": "Three steps and you are in."
+        }
+      },
+      "list": [
+        "Open Explore and choose a course",
+        "Ask to join. The Natik team accepts you",
+        "Study each week and chat with your class"
+      ],
+      "browse": "Explore courses"
+    },
+    "bottom": {
+      "label": "Quick navigation"
+    }
+  },
+  "guide": {
+    "title": "Help",
+    "tabVideo": "Video",
+    "tabWritten": "Written guide",
+    "noVideoTitle": "The video is coming soon",
+    "noVideoText": "The Natik team has not added it yet. The written guide has every step, and the team is happy to answer any question.",
+    "askTeam": "Message the Natik team",
+    "stuckTitle": "Still stuck?",
+    "stuckText": "Write to the Natik team in your messages. We reply as soon as we can.",
+    "student": {
+      "subtitle": "Learn how to use Natik, from your first sign in to your certificate.",
+      "videoTitle": "How to use Natik: a guide for students",
+      "videoText": "This video shows the whole journey in a few minutes. You can also read the steps in the Written guide.",
+      "steps": [
+        {
+          "title": "Create your account and sign in",
+          "text": "Register with your name, email, phone number and a password. Next time, sign in with the same email and password. If you forget the password, use \"Forgot password\" and we send a code by text message."
+        },
+        {
+          "title": "Find a course",
+          "text": "Open Explore to see the free and premium courses. Use the filters and the search box, or take the free level check to see where to start. Tap a course to read what you will learn and who the teacher is."
+        },
+        {
+          "title": "Ask to join",
+          "text": "Tap \"Request to join\" on the course. The Natik team accepts you and we send you a text message. Premium courses also need a payment: pay in the way shown, send us the reference number, and we confirm it."
+        },
+        {
+          "title": "Learn week by week",
+          "text": "Open the course from My courses. Each week has up to three sessions with a recorded video, a PDF, slides and notes. New sessions are marked \"New\". Open a session, watch, read, then tap \"Mark as complete\"."
+        },
+        {
+          "title": "Talk with your class",
+          "text": "Every course has a group chat in Course groups. Ask a question, send a photo, a voice message or a file, and help your classmates. Your teacher is in the group too."
+        },
+        {
+          "title": "Take the quizzes",
+          "text": "Quizzes check what you learned. Answer all the questions and submit. Most are marked at once; written answers are marked by your teacher. The pass mark is shown before you start."
+        },
+        {
+          "title": "Message the team and read the news",
+          "text": "Use Messages to write to the Natik team or your teacher. Announcements show news for everyone and for your courses. A small dot shows when there is something new."
+        },
+        {
+          "title": "Get your certificate",
+          "text": "When you finish a course and pass the final quiz, confirm the name to print on your certificate. The Natik team checks it and sends it to you. You can download it as a PDF, and anyone can check it online with its number."
+        },
+        {
+          "title": "Your account and language",
+          "text": "In Profile you can change your photo, name, country and password. Use the language button at the top to read Natik in English, Amharic, Afaan Oromo, Tigrigna or Somali."
+        }
+      ]
+    },
+    "teacher": {
+      "subtitle": "Learn how to run your course on Natik, from adding sessions to talking with students.",
+      "videoTitle": "How to use Natik: a guide for teachers",
+      "videoText": "This video shows how to add sessions, answer students and mark quizzes. You can also read the steps in the Written guide.",
+      "steps": [
+        {
+          "title": "Sign in and open your courses",
+          "text": "Sign in with your email and password. My courses lists the courses the Natik team has given you. Only an admin can create a course or change its price; you add the lessons."
+        },
+        {
+          "title": "Add weeks and sessions",
+          "text": "Open a course and its Content tab. Add a week, then add up to three sessions in it. Give each session a title and a date. Courses grow week by week, so you add new sessions as the weeks go by."
+        },
+        {
+          "title": "Put the material in each session",
+          "text": "Paste the YouTube link of your recorded lesson, attach a PDF, a PowerPoint or Word file, and write notes. Publish the session and your students get it at once, with a \"New\" mark and a message in the course group."
+        },
+        {
+          "title": "Create quizzes",
+          "text": "Add a quiz to a session or to the end of the course. Choose the question types, the pass mark and the number of attempts. Publish it when it is ready."
+        },
+        {
+          "title": "Mark written answers",
+          "text": "Marking lists the answers that wait for you. Read each one, give marks and write a short comment. The student sees the result and your comment."
+        },
+        {
+          "title": "See your students",
+          "text": "In a course, the Students tab shows who is accepted and how far each person has got. Use it to find students who need a little help."
+        },
+        {
+          "title": "Talk with the class",
+          "text": "Your course has a group chat. Answer questions, pin an important message, and remove anything that does not belong. Use Announcements to tell all your students something important."
+        },
+        {
+          "title": "Certificates",
+          "text": "When a student finishes, they confirm their name and the Natik team approves the certificate. You do not need to do anything for that."
+        },
+        {
+          "title": "Need help?",
+          "text": "Write to the Natik team in Messages at any time. Use the language button at the top to read Natik in your language."
+        }
+      ]
+    }
+  },
+  "people": {
+    "title": "Profile",
+    "openProfile": "Open {name}'s profile",
+    "loadFailed": "This profile could not be opened.",
+    "about": "About",
+    "teaches": "Teaches",
+    "sharedCourses": "Courses you share",
+    "from": "From",
+    "contact": "Contact",
+    "contactHint": "Only the Natik team can see this.",
+    "message": "Send message",
+    "editMine": "Edit my profile",
+    "memberSince": "Member since {date}",
+    "role": {
+      "STUDENT": "Student",
+      "TEACHER": "Teacher",
+      "ADMIN": "Natik team"
+    }
   }
 }

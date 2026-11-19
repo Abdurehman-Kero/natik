@@ -1,3 +1,4 @@
+import { NEW_SESSION_DAYS } from '@natik/shared';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { AccessPolicy } from '../../common/access/access-policy';
 import { courseDenial } from '../../common/access/course-denial';
@@ -29,7 +30,7 @@ export class LearningService {
   // ── Student home ──────────────────────────────────────────────────────
 
   async dashboard(student: SessionUser) {
-    const [courses, news, results, certificates, toConfirm] = await Promise.all([
+    const [courses, news, results, certificates, toConfirm, fresh] = await Promise.all([
       this.myCourses(student),
       this.announcements.studentSummary(student.id),
       this.recentResults(student.id),
@@ -53,6 +54,27 @@ export class LearningService {
         orderBy: { completedAt: 'desc' },
         take: 3,
         select: { id: true, course: { select: { title: true } } },
+      }),
+      // Sessions added in the last few days to courses the student is in, not opened yet.
+      this.prisma.lesson.findMany({
+        where: {
+          status: 'PUBLISHED',
+          unit: { status: 'PUBLISHED' },
+          course: {
+            status: 'PUBLISHED',
+            enrolments: { some: { studentId: student.id, status: 'ACTIVE' } },
+          },
+          publishedAt: { gt: new Date(Date.now() - NEW_SESSION_DAYS * 86_400_000) },
+          progress: { none: { studentId: student.id } },
+        },
+        orderBy: { publishedAt: 'desc' },
+        take: 5,
+        select: {
+          id: true,
+          title: true,
+          sessionDate: true,
+          course: { select: { slug: true, title: true } },
+        },
       }),
     ]);
     // "Continue learning" is the most recently opened course that is still open.
@@ -81,6 +103,13 @@ export class LearningService {
         courseTitle: c.courseTitleSnapshot,
       })),
       certificatesToConfirm: toConfirm.map((e) => ({ id: e.id, courseTitle: e.course.title })),
+      newSessions: fresh.map((l) => ({
+        id: l.id,
+        title: l.title,
+        sessionDate: l.sessionDate,
+        courseSlug: l.course.slug,
+        courseTitle: l.course.title,
+      })),
     };
   }
 
@@ -247,13 +276,20 @@ export class LearningService {
           lessons: {
             where: { status: 'PUBLISHED' },
             orderBy: { position: 'asc' },
-            select: { id: true, title: true, alwaysOpen: true, estimatedMinutes: true },
+            select: {
+              id: true,
+              title: true,
+              alwaysOpen: true,
+              estimatedMinutes: true,
+              sessionDate: true,
+              publishedAt: true,
+            },
           },
         },
       }),
       this.prisma.course.findUniqueOrThrow({
         where: { id: courseId },
-        select: { lessonOrder: true },
+        select: { lessonOrder: true, ongoing: true },
       }),
     ]);
     const lessonIds = units.flatMap((u) => u.lessons.map((l) => l.id));
@@ -264,6 +300,22 @@ export class LearningService {
         })
       : [];
     const doneIds = new Set(done.map((d) => d.lessonId));
+    // "New": added in the last few days and not opened yet.
+    const recentIds = units
+      .flatMap((u) => u.lessons)
+      .filter(
+        (l) =>
+          l.publishedAt && l.publishedAt.getTime() > Date.now() - NEW_SESSION_DAYS * 86_400_000,
+      )
+      .map((l) => l.id);
+    const opened = recentIds.length
+      ? await this.prisma.lessonProgress.findMany({
+          where: { studentId, lessonId: { in: recentIds } },
+          select: { lessonId: true },
+        })
+      : [];
+    const openedIds = new Set(opened.map((o) => o.lessonId));
+    const newIds = new Set(recentIds.filter((id) => !openedIds.has(id)));
     const continueLessonId = await this.progress.continueLessonId(enrolment);
 
     // In a course that opens lessons in order, a lesson is locked until every earlier one is done.
@@ -296,12 +348,34 @@ export class LearningService {
           title: l.title,
           state: state(l.id),
           minutes: l.estimatedMinutes,
+          sessionDate: l.sessionDate,
+          isNew: newIds.has(l.id),
         })),
       }));
+    // Sessions planned but not added yet: shown with their date so students know what comes next.
+    const upcoming = courseRow.ongoing
+      ? await this.prisma.lesson.findMany({
+          where: {
+            courseId,
+            status: 'DRAFT',
+            sessionDate: { gte: new Date(Date.now() - 86_400_000) },
+          },
+          orderBy: { sessionDate: 'asc' },
+          take: 6,
+          select: { id: true, title: true, sessionDate: true, unit: { select: { title: true } } },
+        })
+      : [];
     const continueLesson =
       outlineUnits.flatMap((u) => u.lessons).find((l) => l.id === continueLessonId) ?? null;
     return {
       units: outlineUnits,
+      ongoing: courseRow.ongoing,
+      upcoming: upcoming.map((l) => ({
+        id: l.id,
+        title: l.title,
+        weekTitle: l.unit.title,
+        sessionDate: l.sessionDate,
+      })),
       totals: { done: doneIds.size, total: lessonIds.length },
       continueLesson: continueLesson
         ? { id: continueLesson.id, title: continueLesson.title }

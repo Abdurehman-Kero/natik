@@ -17,6 +17,7 @@ export async function generateMetadata() {
 
 const REASONS: BlockedReason[] = [
   'NOT_ENROLLED',
+  'AWAITING_APPROVAL',
   'AWAITING_PAYMENT',
   'PAYMENT_UNDER_REVIEW',
   'EXPIRED',

@@ -52,7 +52,16 @@
       "browse": "Raadi koorsooyin",
       "announcements": "Ogeysiisyo",
       "payments": "Lacag-bixintayda",
-      "chat": "Fariimo"
+      "chat": "Fariimo",
+      "courseGroups": "Kooxaha koorsooyinka",
+      "explore": "Baar",
+      "groupsShort": "Kooxo",
+      "groupLearn": "Baro",
+      "groupAccount": "Akoonkayga",
+      "menuTitle": "Liiskaaga",
+      "viewProfile": "Eeg profile-kayga",
+      "howItWorks": "Sida ay u shaqeyso",
+      "tourHint": "Hage 30 ilbiriqsi ah"
     },
     "teacher": {
       "dashboard": "Dashboard",
@@ -60,12 +69,51 @@
       "marking": "Sixitaan",
       "announcements": "Ogeysiisyo",
       "profile": "Profile",
-      "chat": "Fariimo"
+      "chat": "Fariimo",
+      "courseGroups": "Kooxaha koorsooyinka"
     },
     "signingOut": "Waa laga baxayaa",
     "areaAdmin": "Maamule",
     "areaTeacher": "Macallin",
-    "viewSite": "Arag bogga"
+    "viewSite": "Arag bogga",
+    "admin": {
+      "groups": {
+        "overview": "Guudmar",
+        "people": "Dad",
+        "learning": "Waxbarasho",
+        "money": "Lacag",
+        "communication": "Isgaarsiin",
+        "website": "Websaydh",
+        "insights": "Aragtiyo",
+        "system": "Nidaam"
+      },
+      "dashboard": "Dashboard",
+      "users": "Isticmaalayaal",
+      "enrolments": "Diiwaangelin",
+      "courses": "Koorsooyin",
+      "marking": "Qiimeyn",
+      "payments": "Lacag-bixinno la hubinayo",
+      "announcements": "Ogeysiisyo",
+      "messages": "Fariimo",
+      "website": "Nuxurka websaydhka",
+      "reports": "Warbixinno",
+      "activity": "Diiwaanka dhaqdhaqaaqa",
+      "settings": "Dejinno",
+      "certificates": "Shahaadooyin",
+      "chat": "Sheekaysi",
+      "courseGroups": "Kooxaha koorsooyinka"
+    },
+    "quickNavigation": "Hagitaan degdeg ah",
+    "staff": {
+      "home": "Hoyga",
+      "courses": "Koorsooyin",
+      "marking": "Qiimeyn",
+      "groups": "Kooxo",
+      "messages": "Fariimo",
+      "enrolments": "Diiwaangelin",
+      "payments": "Lacag-bixinno",
+      "more": "Intaa dheer"
+    }
   },
   "footer": {
     "contactHeading": "Nala soo xiriir",
@@ -95,7 +143,9 @@
     "fullName": "Xarunta Luuqadaha Natik",
     "languages": "Carabi · Ingiriisi · Afaan Oromo",
     "homeLink": "Xarunta Luuqadaha Natik, bogga hore",
-    "homeSuffix": ", bogga hore"
+    "homeSuffix": ", bogga hore",
+    "name": "Natik",
+    "wordmark": "NATIK"
   },
   "support": {
     "title": "Su'aal ma ka haysaa lacag-bixinta?",
@@ -192,12 +242,20 @@
       {
         "title": "Shahaadooyin la xaqiijin karo",
         "text": "Marka aad koorso dhammayso, qof kasta wuxuu shahaadadaada ku xaqiijin karaa lambarkeeda online."
+      },
+      {
+        "title": "Casharro cusub toddobaad kasta",
+        "text": "Casharrada la duubay, PDF-yada iyo sliidhyada ayaa kuu soo gaadha marka macallinkaagu daro. Marnaba dib kuma dhacdo."
+      },
+      {
+        "title": "Fasal aad la barato",
+        "text": "Koorso kastaa wuxuu leeyahay sheeko kooxeed u gaar ah oo macallinkaaga iyo asxaabtaada fasalka ah, sida fasal dhab ah."
       }
     ],
     "freeTitle": "Tijaabi ka hor intaadan diiwaangelin",
     "freeText": "Fur cashar tijaabo ah oo bilaash ah. Akoon looma baahna.",
     "freeCta": "Arag casharrada bilaashka ah",
-    "testimonialsTitle": "Waxa ardaydu yidhaahdaan",
+    "testimonialsTitle": "Wixii ardaydeenu yidhaahdaan",
     "newsTitle": "Wararkii ugu dambeeyay",
     "allNews": "Dhammaan wararka",
     "faqTitle": "Su'aal ma haysaa? Jawaab baan haynaa",
@@ -214,12 +272,18 @@
         "title": "Daawo",
         "text": "Casharro fiidiyoow ah oo gaagaaban oo aad mar kasta dib u daawan karto."
       },
-      { "title": "Baro", "text": "Sliid, tusaalayaal iyo ereyo muhiim ah cashar kasta." },
+      {
+        "title": "Baro",
+        "text": "Sliid, tusaalayaal iyo ereyo muhiim ah cashar kasta."
+      },
       {
         "title": "Qaado imtixaan",
         "text": "Isku day waxa aad barateen oo isla markiiba arag natiijadaada."
       },
-      { "title": "Hel shahaado", "text": "Dhammaystir koorsada oo soo deji shahaadadaada." }
+      {
+        "title": "Hel shahaado",
+        "text": "Dhammaystir koorsada oo soo deji shahaadadaada."
+      }
     ],
     "pathTitle": "Jidkaaga ka bilaabma bilowga ilaa heer sare",
     "pathText": "Ka bilow heerka kuu habboon, kor ugu soco marka aad diyaar tahay.",
@@ -241,9 +305,9 @@
     "openFreeLesson": "Arag casharka bilaashka ah: {title}",
     "languagesEyebrow": "Luqadood",
     "exploreLanguage": "Baar koorsooyinka",
-    "coursesEyebrow": "Koorsooyin",
-    "coursesTitle": "Bilow barashada maanta",
-    "coursesText": "Koorsooyinka bilaashka ah isla markiiba way furmaan. Koorsooyinka premium ee lacagta bishii weydii kooxda Natik.",
+    "coursesEyebrow": "Waxa aad samayn karto",
+    "coursesTitle": "Eeg waxa aad ku samayn karto Natik",
+    "coursesText": "Hal madal. Koorsooyin bilaash ah iyo premium ah, iyo macallimiin daryeela.",
     "tabFree": "Bilaash",
     "tabPremium": "Premium",
     "seeAllFree": "Arag dhammaan koorsooyinka bilaashka ah",
@@ -251,17 +315,80 @@
     "howEyebrow": "Bilaabidda",
     "freeEyebrow": "Casharro bilaash ah",
     "whyEyebrow": "Maxay Natik u tahay",
-    "testimonialsEyebrow": "Arday",
+    "testimonialsEyebrow": "Sheekooyin run ah",
     "newsEyebrow": "Wararka",
     "faqEyebrow": "Su'aalaha inta badan la weydiiyo",
     "flowEyebrow": "Casharka gudihiisa",
     "pathEyebrow": "Jidkaaga",
     "teachersEyebrow": "Macallimiin",
     "communityEyebrow": "Bulsho",
-    "sliderPrev": "Fikirkii hore",
-    "sliderNext": "Fikirka xiga",
+    "sliderPrev": "Faallada hore",
+    "sliderNext": "Faallada xigta",
     "sliderPause": "Jooji sliidhka",
-    "sliderPlay": "Daaji sliidhka"
+    "sliderPlay": "Daaji sliidhka",
+    "weeklyEyebrow": "Sida koorsadu u socoto",
+    "weeklyTitle": "Toddobaad ka toddobaad bar",
+    "weeklyText": "Weydii inaad koorso ku biirto, kooxda Natik way ku aqbashaa. Kadibna toddobaad kasta waxaa yimaada casharro cusub macallinkaaga la socda.",
+    "weeklyPoints": [
+      "Ilaa 3 cashar toddobaadkii, mid walbana video ahaan loo duubay",
+      "PDF-ka, sliidhyada iyo qoraallada cashar kasta",
+      "Casharro cusub waxay kuu soo gaadhaan isla marka lagu daro"
+    ],
+    "tabTeachers": "Macallimiin",
+    "testimonialsText": "Sheekooyin run ah oo ka yimid bulshadeenna.",
+    "sliderDot": "Muuji faallada {n} ee {total}",
+    "audience": {
+      "eyebrow": "Hal madal qof walba",
+      "title": "Hel meeshaada Natik",
+      "cards": [
+        {
+          "label": "Ardayda cusub",
+          "title": "Ma hubtid meesha aad ka bilaabanayso? Waan ku caawin doonnaa",
+          "stat": "luqado",
+          "points": [
+            "Hubin heer oo bilaash ah, akoon looma baahna",
+            "Koorsooyin laga bilaabo bilow ilaa sare",
+            "Eeg hareerahaaga ka hor intaanad ku biirin"
+          ],
+          "cta": "Hel heerkaaga"
+        },
+        {
+          "label": "Ardayda",
+          "title": "Toddobaad kasta bar adigoo macallin ku garanaya la jira",
+          "stat": "koorsooyin",
+          "points": [
+            "Casharro toddobaadle ah oo leh fiidiyoow, PDF iyo sliid",
+            "Sheeko kooxeed oo fasalkaaga ah",
+            "Shahaado qof walba xaqiijin karo"
+          ],
+          "cta": "Bilow barashada"
+        },
+        {
+          "label": "Macallimiinta",
+          "title": "Baro sida aad jeceshahay, inta kale annaga ayaa qaban",
+          "stat": "macallimiin",
+          "points": [
+            "Toddobaad kasta ku dar casharro, sliidhyo iyo qoraallo",
+            "La sheekeyso ardaydaada kooxdooda gudaheeda",
+            "Saxo imtixaanno oo faallo sii"
+          ],
+          "cta": "La baro Natik"
+        },
+        {
+          "label": "Qof walba",
+          "title": "Su'aal ma qabtaa? Kooxda Natik hal fariin ayay kaaga dhow tahay",
+          "stat": "casharro",
+          "points": [
+            "Jawaabo WhatsApp, Telegram iyo sheeko ku hel",
+            "Caawimaad lacag-bixinta iyo ku biirista",
+            "Hubi shahaado kasta online"
+          ],
+          "cta": "Akhri jawaabaha"
+        }
+      ]
+    },
+    "statsEyebrow": "Natik tirooyin ahaan",
+    "statsTitle": "Bulsho waxbarasho oo sii kordhaysa"
   },
   "courses": {
     "title": "Koorsooyin",
@@ -312,7 +439,54 @@
     "premiumCourse": "Koorso premium ah",
     "payQuestionTitle": "Su'aal ma ka haysaa lacag-bixinta?",
     "payQuestionText": "Koorsooyinka premium waxay lacag lagu bixiyaa bil kasta. Weydii kooxda Natik; waanu ku hagi doonnaa.",
-    "clearFilters": "Nadiifi"
+    "clearFilters": "Nadiifi",
+    "weekN": "Toddobaadka {n}",
+    "sessionN": "Casharka {n}",
+    "sessionsCount": "{count, plural, one {# cashar} other {# casharro}}",
+    "weeksAndSessions": "{weeks, plural, one {# toddobaad} other {# toddobaad}} · {sessions, plural, one {# cashar} other {# casharro}}",
+    "weeklyNote": "Casharro cusub ayaa toddobaad kasta lagu daraa.",
+    "membersOnly": "Fiidiyowyada, PDF-yada iyo sliidhyada way furmaan marka aad ku biirto oo kooxda Natik ay ku aqbasho.",
+    "searchPlaceholder": "Raadi koorso, luqad ama heer",
+    "filters": "Shaandhayn",
+    "filtersTitle": "Shaandhee koorsooyinka",
+    "priceFilter": "Qiimaha",
+    "priceMin": "Ugu yar",
+    "priceMax": "Ugu badan",
+    "priceUnder": "Ka hooseeya ETB {max}",
+    "priceBetween": "ETB {min} ilaa {max}",
+    "priceOver": "ETB {min} iyo ka badan",
+    "showResults": "Muuji {count, plural, one {# koorso} other {# koorsooyin}}",
+    "viewCourse": "Eeg koorsada",
+    "levelLabel": "Heer: {level}",
+    "searchCourses": "Raadi koorsooyin…",
+    "view": "Eeg",
+    "tabOverview": "Guudmar",
+    "tabContent": "Nuxur",
+    "tabInstructor": "Macallin",
+    "includesTitle": "Koorsadani waxay ka kooban tahay",
+    "includeDuration": "Muddada",
+    "includeSessions": "Casharro",
+    "includeCertificate": "Shahaado marka aad dhammayso",
+    "includeAccess": "Gelitaan",
+    "includeLanguage": "Luqad",
+    "includeLevel": "Heer",
+    "includeDevices": "Mobaayl iyo kombiyuutar",
+    "includeGroup": "Sheekada kooxda koorsada",
+    "shareTitle": "La wadaag koorsadan",
+    "share": "La wadaag",
+    "showMore": "Muuji wax dheeraad ah",
+    "showLess": "Muuji wax yar",
+    "howTitle": "Sida ay halkan u shaqeyso",
+    "howSteps": [
+      "Weydii inaad koorsadan ku biirto",
+      "Kooxda Natik way ku aqbashaa",
+      "Toddobaad kasta bar, la sheekeyso fasalkaaga"
+    ],
+    "contentCount": "{weeks, plural, one {# toddobaad} other {# toddobaad}} · {sessions, plural, one {# cashar} other {# casharro}}",
+    "instructorTitle": "Macallin",
+    "similarTitle": "Koorsooyin la mid ah",
+    "previous": "Hore",
+    "next": "Xiga"
   },
   "help": {
     "title": "Xarunta caawimaadda",
@@ -323,43 +497,51 @@
     "topics": [
       {
         "title": "Fur akoon",
-        "text": "Magacaaga, lambarka taleefankaaga iyo erayga sirta ah. Hal daqiiqo oo keliya ayay qaadataa.",
-        "cta": "Fur akoon"
+        "text": "Magacaaga, iimaylkaaga, lambarka taleefankaaga iyo erayga sirta ah. Hal daqiiqo oo keliya ayay qaadataa.",
+        "cta": "Fur akoon",
+        "href": "/register"
       },
       {
         "title": "Tijaabi cashar bilaash ah",
         "text": "Fur cashar tijaabo ah adigoon akoon lahayn.",
-        "cta": "Arag casharrada bilaashka ah"
+        "cta": "Arag casharrada bilaashka ah",
+        "href": "/courses"
       },
       {
         "title": "Dooro koorso",
         "text": "Koorsooyin bilaash ah iyo premium ah oo luqad iyo heer kasta ah.",
-        "cta": "Raadi koorsooyin"
+        "cta": "Raadi koorsooyin",
+        "href": "/courses"
       },
       {
         "title": "Ma ogid heerkaaga?",
         "text": "Ka jawaab su'aalo yar; waxaan kuu tusi doonnaa halka aad ka bilaabi lahayd.",
-        "cta": "Hel heerkaaga"
+        "cta": "Hel heerkaaga",
+        "href": "/find-your-level"
       },
       {
         "title": "Hubi shahaado",
         "text": "Geli lambarka shahaadada si aad u aragto inay run tahay.",
-        "cta": "Xaqiiji shahaado"
+        "cta": "Xaqiiji shahaado",
+        "href": "/verify"
       },
       {
         "title": "Ma illowday erayga sirta ah?",
         "text": "Waxaan kuu soo diri doonnaa fariin qoraal ah si aad mid cusub u dejiso.",
-        "cta": "Beddel erayga sirta ah"
+        "cta": "Beddel erayga sirta ah",
+        "href": "/forgot-password"
       },
       {
         "title": "Su'aalaha lacag-bixinta",
         "text": "Koorsooyinka premium waxay lacag lagu bixiyaa bil kasta. Weydii kooxda Natik.",
-        "cta": "Nala soo xiriir"
+        "cta": "Nala soo xiriir",
+        "href": "/contact"
       },
       {
         "title": "Ku baro taleefanka",
         "text": "Ku dar Natik shaashadda hore ee taleefankaaga oo meel kasta ka baro.",
-        "cta": "Akhri su'aalaha"
+        "cta": "Akhri su'aalaha",
+        "href": "/faq"
       }
     ],
     "guidesEyebrow": "Hage",
@@ -367,7 +549,7 @@
     "guides": [
       {
         "q": "Sidee isu diiwaangeliyaa?",
-        "a": "Taabo Isdiiwaangeli, geli magacaaga, lambarka taleefankaaga iyo erayga sirta ah, aqbal shuruudaha, kadibna taabo Fur akoon. Isla markiiba waad gashay."
+        "a": "Taabo Isdiiwaangeli, geli magacaaga, iimaylkaaga, lambarka taleefankaaga iyo erayga sirta ah, aqbal shuruudaha, kadibna taabo Fur akoon. Isla markiiba waad gashay."
       },
       {
         "q": "Sidee u bilaabaa koorso bilaash ah?",
@@ -387,7 +569,7 @@
       },
       {
         "q": "Waan illaabay erayga sirta ah. Maxaan sameeyaa?",
-        "a": "Taabo Gal, kadib Waan illaabay erayga sirta ah. Geli lambarka taleefankaaga; waxaan kuu soo diri doonnaa fariin qoraal ah si aad eray sir ah oo cusub u dooratid."
+        "a": "Taabo Gal, kadib Waan illaabay erayga sirta ah. Geli iimaylkaaga; waxaan koodh ugu soo diri doonnaa fariin qoraal ah lambarka taleefanka ee akoonkaaga si aad eray sir ah oo cusub u dooratid."
       },
       {
         "q": "Sidee ula hadlaa macallinkayga ama kooxda Natik?",
@@ -400,5 +582,1364 @@
     ],
     "supportTitle": "Weli caawimaad ma u baahan tahay?",
     "supportText": "Kooxdayadu way ku farxi doontaa inay ku caawiso. Noogu qor WhatsApp, Telegram ama wada-sheekaysi."
+  },
+  "site": {
+    "nav": {
+      "courses": "Koorsooyin",
+      "level": "Hel heerkaaga",
+      "teachers": "Macallimiin",
+      "about": "Nagu saabsan",
+      "help": "Caawimaad",
+      "more": "Caawimaad iyo wax kale",
+      "news": "Wararka",
+      "faq": "Su'aalo iyo jawaabo",
+      "helpCentre": "Xarunta caawimaadda",
+      "contact": "Fariin u dir kooxda",
+      "verify": "Xaqiiji shahaado",
+      "home": "Hoyga",
+      "menuHint": "Wax kasta oo Natik ah",
+      "breadcrumb": "Halkan ayaad joogtaa"
+    },
+    "header": {
+      "search": "Raadi",
+      "searchLabel": "Raadi koorsooyin",
+      "tour": "Socod-aqoon samee",
+      "join": "Bilaash ku soo biir",
+      "signIn": "Gal"
+    },
+    "search": {
+      "title": "Raadi koorsooyin",
+      "placeholder": "Raadi koorso, luqad ama heer",
+      "empty": "Koorso la mid ah “{query}” lama helin.",
+      "emptyHint": "Isku day eray kale, ama eeg dhammaan koorsooyinka.",
+      "all": "Eeg dhammaan koorsooyinka",
+      "popular": "Koorsooyin caan ah",
+      "quick": "Isku-xirayaal degdeg ah",
+      "tip": "Taabo / si aad uga raadiso bog kasta",
+      "count": "{count, plural, one {# koorso} other {# koorsooyin}}",
+      "free": "Bilaash",
+      "premium": "Premium",
+      "loading": "Koorsooyinka waa la soo rarayaa…",
+      "failed": "Koorsooyinka lama soo rari karin. Fadlan mar kale isku day."
+    },
+    "auth": {
+      "signInTitle": "Ku soo dhawow mar kale",
+      "signInText": "Gal si aad casharradaada u sii wadato.",
+      "registerTitle": "Samee akoonkaaga bilaashka ah",
+      "registerText": "Daqiiqad ayuu qaadanayaa. Kadibna weydii inaad ku biirto koorso kasta.",
+      "signInTab": "Gal",
+      "registerTab": "Isdiiwaangeli",
+      "switchLabel": "Gal ama isdiiwaangeli",
+      "welcomeBack": "Ku soo dhawow mar kale!",
+      "welcomeNew": "Akoonkaagii waa diyaar. Ku soo dhawow Natik!"
+    },
+    "tour": {
+      "offerTitle": "Natik cusub ma tahay?",
+      "offerText": "Samee socod-aqoon 30 ilbiriqsi ah oo ku saabsan sida wax halkan loo barto.",
+      "offerStart": "I tus",
+      "offerSkip": "Maya, mahadsanid",
+      "step": "Tallaabada {n} ee {total}",
+      "next": "Xiga",
+      "back": "Dib u noqo",
+      "done": "Dhammee",
+      "skip": "Ka bood socod-aqoonka",
+      "close": "Xir socod-aqoonka",
+      "steps": {
+        "welcome": {
+          "title": "Ku soo dhawow Natik",
+          "text": "Baro Carabi, Ingiriisi iyo Afaan Oromo macallimiinta Natik. Waa kan sida aad jidka u heli lahayd."
+        },
+        "browse": {
+          "title": "Hel koorsadaada",
+          "text": "Koorsooyinka, macallimiinta, hubinta heerkaaga iyo caawimaaddu dhammaantood waxay ku jiraan liiskan."
+        },
+        "search": {
+          "title": "Ku raadi hal taabasho",
+          "text": "Qor koorso, luqad ama heer oo isla markiiba fur."
+        },
+        "language": {
+          "title": "Luqaddaada",
+          "text": "U beddel websaydhka oo dhan Ingiriisi, Amxaari, Afaan Oromo ama Soomaali wakhti kasta."
+        },
+        "account": {
+          "title": "Akoonkaaga",
+          "text": "Si bilaash ah isdiiwaangeli, ama gal si aad uga sii wadato meeshii aad joojisay."
+        },
+        "journey": {
+          "title": "Sida barashadu u shaqeyso",
+          "text": "Afar tallaabo oo fudud laga bilaabo gujintaada ugu horreysa ilaa shahaadadaada."
+        }
+      },
+      "journey": [
+        "Weydii inaad koorso ku biirto",
+        "Kooxda Natik way ku aqbashaa",
+        "Toddobaad ka toddobaad bar, la sheekeyso fasalkaaga",
+        "Dhammee oo hel shahaadadaada"
+      ],
+      "createAccount": "Samee akoon bilaash ah",
+      "browseCourses": "Eeg koorsooyinka",
+      "restartHint": "Waxaad dib u samayn kartaa socod-aqoonka wakhti kasta badhanka caawimaadda.",
+      "studentOfferTitle": "Markii ugu horreysay halkan?",
+      "studentOfferText": "Samee socod-aqoon 30 ilbiriqsi ah oo ku saabsan goobtaada waxbarasho."
+    },
+    "message": {
+      "title": "Fariin u dir kooxda",
+      "text": "Wax kasta noo weydii. Waxaan ku jawaabnaa taleefan ama fariin."
+    },
+    "flow": {
+      "levelTitle": "Ma hubtid meesha aad ka bilaabanayso?",
+      "levelText": "Ka jawaab su'aalo yar, waxaan kuu soo jeedinaynaa heerkaaga.",
+      "levelCta": "Hel heerkaaga",
+      "joinTitle": "Ma diyaar u tahay inaad wax barato?",
+      "joinText": "Samee akoon bilaash ah, kadibna weydii inaad ku biirto koorsada aad jeceshahay.",
+      "joinCta": "Samee akoon bilaash ah",
+      "questionTitle": "Weli su'aal ma qabtaa?",
+      "questionText": "Kooxda Natik way ku farxi doontaa inay ku caawiso.",
+      "questionCta": "Fariin u dir kooxda",
+      "next": "Tallaabada xigta"
+    },
+    "course": {
+      "stickyFree": "Koorso bilaash ah",
+      "askQuestion": "Weydii su'aal",
+      "share": "La wadaag",
+      "shared": "Isku-xirka waa la koobiyeeyay",
+      "jump": {
+        "about": "Ku saabsan",
+        "outline": "Qaabka koorsada",
+        "teacher": "Macallin"
+      },
+      "joinBar": "Ku biir koorsadan"
+    },
+    "hero": {
+      "searchPlaceholder": "Raadi koorso, luqad ama heer",
+      "chipsLabel": "Luqado caan ah",
+      "trusted": "{count, plural, one {# arday ayaa} other {# arday ayaa}} hore u baranaya, ku soo biir",
+      "searchCta": "Raadi"
+    },
+    "journey": {
+      "eyebrow": "Laga bilaabo gujinta koowaad ilaa shahaadada",
+      "title": "Sida ay u shaqeyso",
+      "steps": [
+        {
+          "title": "Samee akoonkaaga",
+          "text": "Magacaaga, taleefankaaga iyo erayga sirta ah. Daqiiqad ayuu qaadanayaa."
+        },
+        {
+          "title": "Weydii inaad koorso ku biirto",
+          "text": "Dooro koorso. Kooxda Natik way ku aqbashaa, koorsooyinka premium-na waxay xaqiijisaa lacag-bixintaada."
+        },
+        {
+          "title": "Toddobaad kasta bar",
+          "text": "Casharro cusub oo la duubay, PDF iyo sliide ayaa toddobaad kasta yimaada. La sheekeyso fasalkaaga iyo macallinkaaga."
+        },
+        {
+          "title": "Hel shahaadadaada",
+          "text": "Dhammee koorsada, xaqiiji magacaaga, oo hel shahaado qof walba xaqiijin karo."
+        }
+      ]
+    },
+    "footer": {
+      "quick": "Caawimaad degdeg ah",
+      "tour": "Socod-aqoon samee",
+      "message": "Fariin u dir kooxda",
+      "verify": "Xaqiiji shahaado",
+      "level": "Hel heerkaaga",
+      "sitemap": "Khariidadda bogga",
+      "legal": "Sharci"
+    },
+    "next": {
+      "title": "Maxaad doonaysaa inaad xigta sameyso?",
+      "level": {
+        "title": "Hel heerkaaga",
+        "text": "Ka jawaab su'aalo yar, waxaan kuu soo jeedinaynaa halka aad ka bilaabi lahayd."
+      },
+      "courses": {
+        "title": "Eeg koorsooyinka",
+        "text": "Koorsooyin bilaash ah iyo premium ah saddex luqadood."
+      },
+      "join": {
+        "title": "Samee akoon bilaash ah",
+        "text": "Kadibna weydii inaad ku biirto koorsada aad jeceshahay."
+      },
+      "message": {
+        "title": "Fariin u dir kooxda",
+        "text": "Weydii koorsooyinka, lacag-bixinta ama wax kasta oo kale."
+      },
+      "tour": {
+        "title": "Socod-aqoon samee",
+        "text": "Ka arag sida barashadu halkan u shaqeyso 30 ilbiriqsi gudahood."
+      },
+      "teachers": {
+        "title": "Kala kac macallimiinta",
+        "text": "Dadka ku baraya."
+      }
+    },
+    "studentTour": {
+      "steps": {
+        "welcome": {
+          "title": "Ku soo dhawow goobtaada waxbarasho",
+          "text": "Wax kasta oo koorsooyinkaaga ku saabsan hal meel ayay ku jiraan. Waa kan meesha laga helo."
+        },
+        "menu": {
+          "title": "Liiskaaga",
+          "text": "Halkan taabo wakhti kasta si aad u furto bog kasta: koorsooyin, kooxo, fariimo, lacag-bixin iyo shahaado."
+        },
+        "tabs": {
+          "title": "Tabbo degdeg ah",
+          "text": "Ka boodboodi hoyga, koorsooyinka, kooxaha iyo fariimaha hal taabasho."
+        },
+        "bell": {
+          "title": "Wararka macallimiintaada",
+          "text": "Ogeysiisyo cusub halkan ayay ku soo muuqdaan dhibic yar."
+        },
+        "account": {
+          "title": "Akoonkaaga",
+          "text": "Beddel magacaaga, sawirkaaga ama erayga sirta ah, ama ka bax."
+        },
+        "finish": {
+          "title": "Ma diyaar u tahay inaad wax barato?",
+          "text": "Saddex tallaabo oo aad gashay."
+        }
+      },
+      "list": [
+        "Fur Eeg oo dooro koorso",
+        "Weydii inaad ku biirto. Kooxda Natik way ku aqbashaa",
+        "Toddobaad kasta bar, la sheekeyso fasalkaaga"
+      ],
+      "browse": "Eeg koorsooyinka"
+    },
+    "bottom": {
+      "label": "Hagitaan degdeg ah"
+    }
+  },
+  "meta": {
+    "siteName": "Xarunta Luqadda Natik",
+    "title": "Xarunta Luqadda Natik",
+    "description": "Ka baro Carabi, Ingiriisi iyo Afaan Oromo macallimiinta Natik, online ama fasal ahaan."
+  },
+  "account": {
+    "signInTitle": "Ku soo dhawow",
+    "registerTitle": "Samee akoonkaaga",
+    "soonText": "Tani waxay furmi doontaa cusboonaysiinta xigta.",
+    "backHome": "Ku noqo hoyga"
+  },
+  "placeholder": {
+    "studentTitle": "Salaan",
+    "studentText": "Koorsooyinkaaga iyo horumarkaaga halkan ayay ku muuqan doonaan.",
+    "teacherTitle": "Dashboard-ka macallinka",
+    "teacherText": "Koorsooyinkaaga iyo qiimeynta halkan ayay ku muuqan doonaan.",
+    "adminTitle": "Dashboard-ka maamulaha",
+    "adminText": "Ardayda, lacag-bixinnada iyo fariimaha halkan ayay ku muuqan doonaan."
+  },
+  "notFound": {
+    "title": "Bogga lama helin",
+    "text": "Aan ku celinno jidkaaga.",
+    "home": "Aad hoyga",
+    "contact": "Nala soo xiriir"
+  },
+  "errorPage": {
+    "title": "Wax baa khaldamay",
+    "text": "Fadlan mar kale isku day. Haddii ay sii socoto, nala soo xiriir.",
+    "tryAgain": "Mar kale isku day",
+    "home": "Aad hoyga"
+  },
+  "status": {
+    "enrolment": {
+      "AWAITING_PAYMENT": "Lacag bixin ayaa loo baahan yahay",
+      "PAYMENT_SUBMITTED": "Lacag-bixinta waa la dib u eegayaa",
+      "ACTIVE": "Firfircoon",
+      "COMPLETED": "La dhammeeyay",
+      "EXPIRED": "Wuu dhacay",
+      "CANCELLED": "La joojiyay",
+      "AWAITING_APPROVAL": "Ansixinta ayaa la sugayaa"
+    },
+    "payment": {
+      "SUBMITTED": "Waa la dib u eegayaa",
+      "CONFIRMED": "La xaqiijiyay",
+      "REJECTED": "La diiday"
+    },
+    "content": {
+      "DRAFT": "Qabyo",
+      "PUBLISHED": "La daabacay",
+      "HIDDEN": "La qariyay"
+    },
+    "quiz": {
+      "passed": "Gudbay",
+      "failed": "Ma gudbin",
+      "waiting": "Qiimeynta ayaa la sugayaa"
+    }
+  },
+  "table": {
+    "empty": "Halkan wax ma jiraan",
+    "actions": "Tallaabooyin",
+    "rowActions": "Tallaabooyinka {name}"
+  },
+  "pagination": {
+    "label": "Bog-bogeyn",
+    "previous": "Bogga hore",
+    "next": "Bogga xiga",
+    "page": "Bogga {page}",
+    "summary": "Bogga {page} ee {total}"
+  },
+  "progress": {
+    "complete": "{value}% waa la dhammeeyay"
+  },
+  "stepper": {
+    "label": "Horumar",
+    "summary": "Tallaabada {current} ee {total}",
+    "done": "La dhammeeyay"
+  },
+  "dialog": {
+    "reasonLabel": "Sabab",
+    "reasonRequired": "Fadlan sabab sii."
+  },
+  "offline": {
+    "quiz": "Internet ma haysid. Jawaabahaaga waa la keydiyay waxaana la diraa marka aad dib ku xirmto."
+  },
+  "news": {
+    "title": "Wararka",
+    "subtitle": "Ogeysiisyo ka yimid Xarunta Luqadda Natik.",
+    "emptyTitle": "Wax war ah weli ma jiraan",
+    "emptyText": "Dib u soo noqo dhawaan si aad u hesho cusboonaysiin iyo ogeysiisyo.",
+    "published": "La daabacay {date}"
+  },
+  "verify": {
+    "title": "Xaqiiji shahaado",
+    "subtitle": "Hubi in shahaadada Natik ay run tahay.",
+    "label": "Lambarka shahaadada",
+    "hint": "Waxay u eg tahay NLC-2026-00042.",
+    "cta": "Xaqiiji",
+    "valid": "Shahaado sax ah",
+    "cancelled": "Shahaadadan waa la joojiyay.",
+    "notFound": "Lambarkan ma helin. Hubi oo mar kale isku day.",
+    "name": "Loo bixiyay",
+    "course": "Koorso",
+    "date": "La dhammeeyay",
+    "how": "Shahaado kasta waxay leedahay lambar gaar ah. Gali si aad u aragto cidda loo siiyay iyo koorsada."
+  },
+  "noAccess": {
+    "title": "Kan ma furi kartid",
+    "text": "Waxaa laga yaabaa inuu yahay mid qof kale leeyahay, ama la saaray. Dib u noqo oo ka dooro liiskaaga."
+  },
+  "courseButton": {
+    "enrolFree": "Weydii inaad ku biirto",
+    "payAndEnrol": "Bixi oo is-diiwaangeli",
+    "paymentUnderReview": "Lacag-bixinta waa la dib u eegayaa",
+    "continueLearning": "Sii wad barashada",
+    "renewAccess": "Cusboonaysii gelitaanka",
+    "openEditor": "Fur tafatiraha",
+    "enrolled": "Waad diiwaangashan tahay. Waxbarasho wanaagsan!",
+    "renewed": "Gelitaankaagii mar kale ayaa furmay.",
+    "checking": "Koorsadaada waa la hubinayaa…",
+    "requestToJoin": "Weydii inaad ku biirto",
+    "requestSent": "Codsiga waa la diray. Kooxda Natik dhawaan way ku aqbali doontaa.",
+    "waitingApproval": "Ansixinta ayaa la sugayaa",
+    "waitingApprovalHint": "Kooxda Natik waxay hubisaa codsi kasta. Fariin SMS ah ayaad heli doontaa marka lagu aqbalo."
+  },
+  "blocked": {
+    "NOT_ENROLLED": {
+      "title": "Weli ma diiwaangashanid",
+      "text": "Weli kuma diiwaangashnid koorsadan."
+    },
+    "AWAITING_PAYMENT": {
+      "title": "Lacag bixin ayaa loo baahan yahay",
+      "text": "Dhammee lacag-bixintaada si aad u furto koorsadan.",
+      "button": "Sii wad lacag-bixinta"
+    },
+    "PAYMENT_UNDER_REVIEW": {
+      "title": "Lacag-bixinta waa la dib u eegayaa",
+      "text": "Lacag-bixintaada waa la hubinayaa. Fariin SMS ah ayaad heli doontaa marka gelitaankaagu diyaar noqdo.",
+      "button": "Ku noqo dashboard-ka"
+    },
+    "EXPIRED": {
+      "title": "Gelitaankaagii wuu dhacay",
+      "text": "Gelitaankaagu wuxuu dhacay {date}. Cusboonaysii si aad u sii wadato barashada.",
+      "textNoDate": "Gelitaankaaga koorsadan wuu dhacay. Cusboonaysii si aad u sii wadato barashada."
+    },
+    "CANCELLED": {
+      "title": "Diiwaangelinta waa la joojiyay",
+      "text": "Diiwaangelintan waa la joojiyay.",
+      "button": "Nala soo xiriir"
+    },
+    "viewCourse": "Eeg koorsada",
+    "AWAITING_APPROVAL": {
+      "title": "Ansixinta ayaa la sugayaa",
+      "text": "Kooxda Natik waxay hubisaa codsi kasta oo ku biirid ah. Fariin SMS ah ayaad heli doontaa isla marka lagu aqbalo.",
+      "button": "Ku noqo dashboard-kayga"
+    }
+  },
+  "studentHome": {
+    "title": "Hoyga",
+    "greeting": "Salaan, {name}",
+    "continueTitle": "Sii wad barashada",
+    "lessonLine": "{course} · {lesson}",
+    "continueButton": "Sii wad",
+    "myCourses": "Koorsooyinkayga",
+    "seeAll": "Dhammaan eeg",
+    "news": "Wararka",
+    "newCount": "{count, plural, one {# cusub} other {# cusub}}",
+    "noNews": "Wax war ah weli ma jiraan.",
+    "emptyTitle": "Weli koorso ma jirto",
+    "emptyText": "Dooro mid si aad u bilowdo.",
+    "browse": "Raadi koorsooyin",
+    "tryFree": "Isku day cashar bilaash ah",
+    "certificates": "Shahaadooyin",
+    "certificatesText": "Shahaadooyinkaaga halkan ayay ka muuqan doonaan.",
+    "results": "Natiijooyin dhawaan",
+    "resultsText": "Natiijooyinka imtixaankaaga halkan ayay ka muuqan doonaan.",
+    "resultPassed": "Gudbay",
+    "resultNotPassed": "Ma gudbin",
+    "resultWaiting": "Qiimeynta ayaa la sugayaa",
+    "certificateReadyTitle": "Shahaadadaadu way dhow tahay",
+    "certificateReadyText": "Waad dhammaysay {course}. Xaqiiji magaca lagu daabacayo shahaadadaada.",
+    "certificateReadyButton": "Xaqiiji magacayga",
+    "newSessionsTitle": "Casharro cusub",
+    "new": "Cusub",
+    "start": {
+      "title": "Aan bilowno",
+      "text": "Saddex tallaabo oo fudud. Waan ku hagi doonnaa.",
+      "steps": [
+        {
+          "title": "Dooro koorso",
+          "text": "Eeg koorsooyinka bilaashka ah iyo premium-ka.",
+          "cta": "Raadi koorsooyin"
+        },
+        {
+          "title": "Weydii inaad ku biirto",
+          "text": "Koorso ku taabo “Weydii inaad ku biirto”. Kooxda Natik way ku aqbashaa, waxaanan kuu diraynaa fariin."
+        },
+        {
+          "title": "Baro oo la sheekeyso",
+          "text": "Casharro cusub ayaa toddobaad kasta yimaada. Su'aalaha ka weydii kooxdaada koorsada."
+        }
+      ],
+      "tour": "I wareeji"
+    }
+  },
+  "myCourses": {
+    "title": "Koorsooyinkayga",
+    "active": "Firfircoon",
+    "completed": "La dhammeeyay",
+    "other": "Kuwa kale",
+    "emptyActive": "Koorso firfircoon ma jirto",
+    "emptyCompleted": "Weli koorso la dhammeeyay ma jirto",
+    "emptyOther": "Halkan wax ma jiraan",
+    "emptyText": "Koorsooyinka aad bilowdo halkan ayay ka muuqan doonaan.",
+    "endsOn": "Furan ilaa {date}",
+    "endedOn": "Wuxuu dhammaaday {date}",
+    "browse": "Raadi koorsooyin",
+    "progress": "{value}% waa la dhammeeyay"
+  },
+  "teachersPage": {
+    "title": "Macallimiinteena",
+    "subtitle": "Dadka ka dhiga Xarunta Luqadda Natik.",
+    "emptyTitle": "Macallimiintu dhawaan halkan ayay ka muuqan doonaan",
+    "emptyText": "Xilligan, eeg koorsooyinka.",
+    "seeCourses": "Eeg koorsooyinka"
+  },
+  "fields": {
+    "phone": {
+      "prefix": "+251",
+      "prefixLabel": "Lambar Itoobiya, laga bilaabo +251",
+      "placeholder": "91 234 5678"
+    },
+    "password": {
+      "show": "Muuji erayga sirta ah",
+      "hide": "Qari erayga sirta ah"
+    },
+    "otp": {
+      "digit": "Lambarka {index} ee {count}"
+    },
+    "file": {
+      "choose": "Dooro fayl",
+      "drop": "ama halkan ku jiid",
+      "limits": "{types} · ilaa {max} MB",
+      "remove": "Ka saar {name}",
+      "retry": "Mar kale isku day",
+      "uploading": "Waa la rarayaa… {progress}%",
+      "tooLarge": "Faylkan waa {size} MB. Ugu badnaan waa {max} MB.",
+      "wrongType": "Nooca faylkan halkan looma ogola."
+    },
+    "search": {
+      "placeholder": "Raadi…",
+      "clear": "Tir raadinta"
+    },
+    "money": {
+      "currency": "ETB"
+    },
+    "select": {
+      "placeholder": "Dooro…"
+    }
+  },
+  "errors": {
+    "VALIDATION_FAILED": "Faahfaahin qaar ayaa u baahan hagaajin. Hubi goobaha la calaamadeeyay.",
+    "BAD_REQUEST": "Codsigaas ma fahmin.",
+    "UNAUTHENTICATED": "Fadlan gal si aad u sii wadato.",
+    "FORBIDDEN": "Taas ma geli kartid.",
+    "NOT_FOUND": "Taas ma helin.",
+    "CONFLICT": "Qof kale ayaa beddelay. Cusboonaysii oo mar kale isku day.",
+    "RATE_LIMITED": "Isku day aad u badan. Fadlan wax yar sug oo mar kale isku day.",
+    "PAYLOAD_TOO_LARGE": "Tani aad bay u weyn tahay in la raro.",
+    "INTERNAL_ERROR": "Dhinaceenna ayaa wax khaldamay. Fadlan mar kale isku day.",
+    "SERVICE_UNAVAILABLE": "Adeeggan wakhtigan lama heli karo. Fadlan dhawaan mar kale isku day.",
+    "NETWORK": "Hadda Natik lagama gaari karo. Hubi xiriirkaaga oo mar kale isku day.",
+    "INVALID_CREDENTIALS": "Iimaylka ama erayga sirta ah waa khalad.",
+    "ACCOUNT_LOCKED": "Isku day aad u badan. Isku day 15 daqiiqo ka dib ama dib u dejiso erayga sirta ah.",
+    "COURSE_ACCESS_DENIED": "Weli koorsadan geli kari maysid.",
+    "PAYMENT_UNDER_REVIEW": "Lacag-bixintaada waa la hubinayaa. Fariin SMS ah ayaad heli doontaa marka gelitaankaagu diyaar noqdo.",
+    "ACCESS_EXPIRED": "Gelitaankaagu wuxuu dhacay {date}. Nala soo xiriir si aad u cusboonaysiiso.",
+    "FILE_TOO_LARGE": "Faylkan waa {size} MB. Ugu badnaan waa {max} MB.",
+    "FILE_TYPE_NOT_ALLOWED": "Nooca faylkan halkan looma ogola.",
+    "MEDIA_UNAVAILABLE": "Tani hadda ma soo shubmi karto. Mar kale isku day ama dhibaatada soo sheeg.",
+    "QUIZ_TIME_UP": "Wakhtigii wuu dhammaaday. Jawaabaha la keydiyay waa la gudbiyay.",
+    "PAYMENT_REFERENCE_DUPLICATE": "Tixraacan hore ayaa loo gudbiyay. Haddii ay khalad tahay nala soo xiriir.",
+    "PHONE_ALREADY_REGISTERED": "Lambarkan hore ayuu akoon u leeyahay.",
+    "OTP_INVALID": "Koodhka sax ma aha ama wuu dhacay. Mid cusub codso.",
+    "OTP_TOO_SOON": "Fadlan daqiiqad sug ka hor inta aadan koodh kale codsan.",
+    "PASSWORD_LINK_INVALID": "Isku-xirkan wuu dhacay ama hore ayaa loo isticmaalay. Mid cusub codso.",
+    "CURRENT_PASSWORD_WRONG": "Erayga sirta ah ee hadda jira waa khalad.",
+    "LAST_OWNER": "Ugu yaraan hal mulkiile ayaa loo baahan yahay.",
+    "OWNER_REQUIRED": "Kan sameyn kara waa mulkiilaha oo keliya.",
+    "SLUG_TAKEN": "Cinwaanka webka mar hore ayaa koorso kale u isticmaashay. Dooro mid kale.",
+    "NOT_READY_TO_PUBLISH": "Faahfaahin qaar ayaa ka maqan ka hor inta aan la daabicin.",
+    "CANNOT_DELETE_PUBLISHED": "Tan waa la daabacay, sidaas darteed waa la qarin karaa oo keliya. Qarintu waxay ilaalisaa natiijooyinka ardayda.",
+    "IN_USE": "Tani waa la isticmaalayaa, sidaas darteed laguma saari karo. Waad joojin kartaa beddelkeeda.",
+    "ALREADY_ENROLLED": "Ardaygan hore ayaa loogu diiwaangeliyay koorsadan.",
+    "PAYMENT_ALREADY_CHECKED": "Lacag-bixintan hore ayuu qof kale u hubiyay. Cusboonaysii liiska.",
+    "ENROLMENT_NOT_ALLOWED": "Tan lagama samayn karo xaaladda diiwaangelinta hadda jirta.",
+    "COURSE_NOT_OPEN": "Koorsadan hadda looma furin diiwaangelin.",
+    "NO_ATTEMPTS_LEFT": "Dhammaan isku-dayadaadii imtixaankan waad isticmaashay.",
+    "QUIZ_NOT_READY": "Faahfaahin qaar ayaa ka maqan ka hor inta aan imtixaankan la daabicin.",
+    "ATTEMPT_CLOSED": "Isku-dayganan hore ayaa loo gudbiyay.",
+    "CERTIFICATE_NOT_READY": "Shahaadadaada waa la diyaarinayaa. Hal daqiiqo ka dib mar kale isku day.",
+    "EMAIL_ALREADY_REGISTERED": "Iimaylkan hore ayuu akoon u leeyahay."
+  },
+  "pages": {
+    "soonText": "Bogga waxaa la furi doonaa cusboonaysiinta soo socota.",
+    "backHome": "Aad hoyga",
+    "backDashboard": "Ku noqo dashboard-ka",
+    "myCourses": "Koorsooyinkayga",
+    "certificates": "Shahaadooyin",
+    "profile": "Profile",
+    "announcements": "Ogeysiisyo",
+    "teachCourses": "Koorsooyinkayga",
+    "marking": "Qiimeyn",
+    "users": "Isticmaalayaal",
+    "enrolments": "Diiwaangelin",
+    "adminCourses": "Koorsooyin",
+    "payments": "Lacag-bixinno la hubinayo",
+    "messages": "Fariimo",
+    "website": "Nuxurka websaydhka",
+    "reports": "Warbixinno",
+    "activity": "Diiwaanka dhaqdhaqaaqa",
+    "settings": "Dejinno"
+  },
+  "auth": {
+    "phone": "Lambarka taleefanka",
+    "password": "Erayga sirta ah",
+    "fullName": "Magaca oo dhan",
+    "email": "Iimaylka",
+    "learn": "Waxaan rabaa inaan barto",
+    "passwordHint": "Ugu yaraan 8 xaraf, xarfo iyo lambar",
+    "show": "Muuji",
+    "newPassword": "Erayga sirta ah ee cusub",
+    "register": {
+      "title": "Samee akoonkaaga",
+      "cta": "Samee akoon",
+      "haveAccount": "Akoon ma leedahay?",
+      "signIn": "Gal",
+      "termsLink": "Shuruudaha",
+      "privacyLink": "Ogeysiiska asturnaanta",
+      "termsError": "Fadlan oggolow si aad u sii wadato.",
+      "phoneTaken": "Lambarkan hore ayuu akoon u leeyahay.",
+      "signInInstead": "Gal",
+      "resetInstead": "Dib u deji erayga sirta ah",
+      "termsPre": "Waxaan ahay 16 jir ama ka weyn oo waan aqbalayaa",
+      "termsAnd": "iyo",
+      "subtitle": "Gali macluumaadkaaga oo samee akoon bilaash ah.",
+      "personalInfo": "Macluumaad shakhsi ah",
+      "accountInfo": "Macluumaadka akoonka",
+      "passwordMismatch": "Labada erayga sirta ah isma mid aha.",
+      "emailTaken": "Iimaylkan hore ayuu akoon u leeyahay."
+    },
+    "signIn": {
+      "title": "Ku soo dhawow mar kale",
+      "keep": "I ilaali galay",
+      "forgot": "Erayga sirta ah ma illowday?",
+      "cta": "Gal",
+      "newHere": "Cusub ma tahay?",
+      "create": "Samee akoon",
+      "locked": "Isku day aad u badan. Isku day 15 daqiiqo ka dib ama dib u dejiso erayga sirta ah.",
+      "subtitle": "Geli iimaylkaaga iyo erayga sirta ah si aad u sii wadato."
+    },
+    "forgot": {
+      "title": "Dib u deji erayga sirta ah",
+      "steps": {
+        "phone": "Taleefan",
+        "code": "Koodh",
+        "password": "Erayga sirta ah",
+        "email": "Iimayl"
+      },
+      "phoneText": "Koodh ayaan ku soo diraynaa fariin.",
+      "sendCode": "Dir koodhka",
+      "codeTitle": "Gali koodhkaaga",
+      "codeCta": "Sii wad",
+      "newTitle": "Dooro erayga sirta ah ee cusub",
+      "save": "Keydi erayga sirta ah",
+      "backToSignIn": "Ku noqo gelitaanka",
+      "doneTitle": "Erayga sirta ah waa la keydiyay",
+      "doneText": "Hadda waad gali kartaa.",
+      "goSignIn": "Gal",
+      "sentNote": "Haddii iimaylkan akoon leeyahay, koodh ayaa SMS ahaan kuugu soo socda.",
+      "emailText": "Geli iimaylka aad ku diiwaangelisay. Waxaan koodh ugu soo diri doonaa lambarka taleefanka ee akoonkaaga."
+    },
+    "setPassword": {
+      "title": "Deji erayga sirta ah",
+      "save": "Keydi erayga sirta ah",
+      "doneTitle": "Erayga sirta ah waa la keydiyay",
+      "doneText": "Hadda waad gali kartaa.",
+      "goSignIn": "Gal",
+      "invalidTitle": "Isku-xirkan wuu dhacay",
+      "invalidText": "Mid cusub codso.",
+      "missingToken": "Isku-xirkan wuu dhammaystiran yahay.",
+      "requestNew": "Dib u deji erayga sirta ah"
+    },
+    "code": {
+      "resendIn": "Dib u dir koodhka {time} gudahood",
+      "resend": "Dib u dir koodhka",
+      "resent": "Koodh cusub ayaa la diray"
+    },
+    "firstName": "Magaca koowaad",
+    "lastName": "Magaca aabaha",
+    "gender": "Jinsi",
+    "male": "Lab",
+    "female": "Dheddig",
+    "chooseOne": "Dooro…",
+    "country": "Wadan",
+    "chooseCountry": "Dooro wadanka",
+    "city": "Magaalo ama tuulo",
+    "confirmPassword": "Xaqiiji erayga sirta ah"
+  },
+  "about": {
+    "title": "Ku saabsan Natik",
+    "subtitle": "Xarun luqadeed oo Carabi, Ingiriisi iyo Afaan Oromo ah.",
+    "missionTitle": "Yaan nahay",
+    "missionText": "Xarunta Luqadda Natik waxay dadka ka caawisaa inay bartaan Carabi, Ingiriisi iyo Afaan Oromo iyadoo la adeegsanayo casharro cad iyo macallimiin daryeel leh, fasalka gudihiisa iyo hadda online-ka.",
+    "nameTitle": "Maxay tahay “Natik”?",
+    "nameText": "Natik (ناطق) macnaheedu waa “hadle” afka Carabiga. Hadafkeennu waa mid fudud: inaan kaa caawino inaad ku hadasho kalsooni.",
+    "approachTitle": "Sida aan u barno",
+    "approach": [
+      {
+        "title": "Tallaabo tallaabo",
+        "text": "Koorso kasta waxaa loo qaybiyay cutubyo iyo casharro gaaban, oo leh fiidiyoow, akhris, cod iyo imtixaan."
+      },
+      {
+        "title": "Tababar qiimo leh",
+        "text": "Imtixaannadu waxay bixiyaan natiijo degdeg ah. Macallimiintu waxay saxaan jawaabaha qoran oo faallo ka bixiyaan."
+      },
+      {
+        "title": "Xawaarahaaga",
+        "text": "Ku baro wakhti kasta, qalab kasta, oo ka sii wad meeshii aad joojisay."
+      }
+    ],
+    "teachersTitle": "Macallimiinteena",
+    "visitTitle": "Soo booqo ama nala soo xiriir",
+    "visitText": "Waan ku farxi doonnaa inaan ka jawaabno su'aalaha ku saabsan koorsooyinka, heerarka iyo lacag-bixinta.",
+    "contactCta": "Nala soo xiriir",
+    "coursesCta": "Eeg koorsooyinka",
+    "eyebrowStory": "Sheekadayada",
+    "eyebrowApproach": "Sida aan u barno",
+    "eyebrowTeam": "Kooxdayada",
+    "eyebrowVisit": "Soo booqo"
+  },
+  "contact": {
+    "title": "Nala soo xiriir",
+    "subtitle": "Su'aalo ku saabsan koorsooyinka ama lacag-bixinta? Fariin noo soo dir.",
+    "detailsTitle": "Nala soo xiriir",
+    "phone": "Taleefan",
+    "email": "Iimayl",
+    "address": "Cinwaan",
+    "hours": "Saacadaha shaqada",
+    "openMap": "Ku fur Khariidadda",
+    "formTitle": "Dir fariin",
+    "name": "Magacaaga",
+    "phoneField": "Lambarka taleefanka",
+    "message": "Fariin",
+    "messageHint": "Noo sheeg sida aan kuu caawin karno.",
+    "send": "Dir fariinta",
+    "sentTitle": "Mahadsanid!",
+    "sentText": "Fariintaada waan helnay, dhawaan ayaan ka jawaabi doonaa.",
+    "sendAnother": "Dir fariin kale",
+    "followTitle": "Nala soo raac"
+  },
+  "faq": {
+    "title": "Su'aalaha inta badan la weydiiyo",
+    "subtitle": "Jawaabo degdeg ah oo ku saabsan diiwaangelinta, lacag-bixinta iyo barashada.",
+    "stillTitle": "Weli su'aal ma qabtaa?",
+    "stillText": "Waan ku farxi doonnaa inaan ku caawino.",
+    "stillCta": "Nala soo xiriir",
+    "items": [
+      {
+        "q": "Sidee ayaan isu diiwaangeliyaa?",
+        "a": "Taabo Bilaash ku soo biir oo gali magacaaga, iimaylkaaga, lambarka taleefankaaga iyo erayga sirta ah. Kadibna weydii inaad koorso ku biirto, kooxda Natik way ku aqbashaa."
+      },
+      {
+        "q": "Koorsooyinka ma bilaash baa?",
+        "a": "Koorsooyin qaar waa bilaash, kuwa kale waxay leeyihiin qiime lagu muujiyo bogga koorsada Birrka Itoobiya (ETB). Koorso kasta waxay u baahan tahay in kooxda Natik ay ku aqbasho."
+      },
+      {
+        "q": "Sidee ayaan koorso ugu bixiyaa lacag?",
+        "a": "Ku bixi wareejin bangi ama jeeb mobaayl, ama lacag caddaan ah xarunta. Kadibna noo soo dir tixraaca lacag-bixinta. Waan hubinaa oo koorsadaada waan furnaa."
+      },
+      {
+        "q": "Intee ayay ku qaadanaysaa koorsadayda inay furmaan?",
+        "a": "Isla marka aan xaqiijino lacag-bixintaada. Lacag-bixinnada waxaan hubinnaa ugu yaraan mar maalin kasta oo shaqo ah, waxaadna heli doontaa fariin SMS ah marka gelitaankaagu diyaar noqdo."
+      },
+      {
+        "q": "Ma ku baran karaa taleefankayga?",
+        "a": "Haa. Natik wuxuu ka shaqeeyaa taleefan kasta wuuna soo shubmaa si degdeg ah, xitaa xiriir gaabis ah."
+      },
+      {
+        "q": "Ma soo dejisan karaa casharro?",
+        "a": "PDF-yada iyo codka waa la soo dejisan karaa marka macallinku oggolaado, si aad u barato internet la'aan. Fiidiyowyada waxaa lagu daawan karaa websaydhka oo keliya."
+      },
+      {
+        "q": "Shahaado ma helaa?",
+        "a": "Haa. Dhammee koorsada oo ku gudub imtixaanka ugu dambeeya (dhibcaha guusha waa 70%). Waxaad xaqiijisaa magaca shahaadadaada, kooxda Natik-na way ansixisaa. Kadib waad soo dejisan kartaa, qof kastana wuxuu ku hubin karaa online lambarkeeda."
+      },
+      {
+        "q": "Intee in le'eg ayaan gelitaan u haystaa?",
+        "a": "Koorso kastaa waxay muujisaa muddada gelitaanka. Marka ay dhammaato, natiijooyinkaagu way sii muuqdaan, waxaana cusboonaysiin karnaa gelitaankaaga."
+      },
+      {
+        "q": "Yaa isdiiwaangelin kara?",
+        "a": "Qof kasta oo da'diisu tahay 16 ama ka weyn. Ardayda yaryar fadlan la xiriir xarunta, annaga ayaa diiwaangelin doona."
+      },
+      {
+        "q": "Erayga sirta ah waan illoobay. Maxaan sameeyaa?",
+        "a": "Ka dooro “Erayga sirta ah ma illowday” bogga galitaanka. Waxaan taleefankaaga u diraynaa koodh si aad u doorato erayga sirta ah ee cusub."
+      },
+      {
+        "q": "Websaydhku luqad noocee ah?",
+        "a": "Websaydhka waxaad ku akhrisan kartaa Ingiriisi, Amxaari, Afaan Oromo ama Soomaali: isticmaal badhanka luqadda ee sare. Casharrada koorsooyinka waa Carabi, Ingiriisi ama Afaan Oromo, Carabiguna wuxuu ka muuqdaa midig ilaa bidix."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Ogeysiiska asturnaanta",
+    "subtitle": "Waxa aan ururino, sababta, iyo sida aan u ilaalino.",
+    "updated": "Dhammaadkii la cusboonaysiiyay: Nofeembar 2026",
+    "sections": [
+      {
+        "h": "Waxa aan ururino",
+        "p": [
+          "Magacaaga, iimaylkaaga, lambarka taleefankaaga iyo erayga sirta ah (waxaa lagu kaydiyaa hash ammaan ah oo keliya). Ikhtiyaar ahaan sawirkaaga, jinsigaaga, dalkaaga iyo magaaladaada.",
+          "Dhaqdhaqaaqa barashadaada: casharrada la dhammeeyay, jawaabaha iyo natiijooyinka imtixaanka, iyo shahaadooyin.",
+          "Faahfaahinta lacag-bixinta aad noo dirto koorso: habka, tixraaca, qadarka, taariikhda iyo sawir rasiid ah oo ikhtiyaari ah. Marnaba ma weydiino lambarrada kaadhka, PIN-ka jeebka ama erayada sirta ah ee bangiga.",
+          "Fariimaha aad ku dirto foomka xiriirka."
+        ]
+      },
+      {
+        "h": "Sida aan u isticmaalno",
+        "p": [
+          "Si aan u maamulno akoonkaaga, kuu siino gelitaan koorsooyinkaaga oo aan u muujino horumarkaaga.",
+          "Si aan u hubino lacag-bixinnada oo aan u furno ama u cusboonaysiino gelitaankaaga.",
+          "Si aan u dirno fariimaha SMS yar ee uu platform-ku u baahan yahay: koodhadhka erayga sirta ah, isku-xirayaasha akoonka, go'aamada lacag-bixinta iyo xasuusinta gelitaanka.",
+          "Si aan u bixino shahaadooyin oo qof kasta u oggolaano inuu hubiyo. Hubintu waxay muujisaa magacaaga, koorsada iyo taariikhda oo keliya."
+        ]
+      },
+      {
+        "h": "Yaa arka",
+        "p": [
+          "Macallimiintaadu waxay arkaan horumarkaaga iyo natiijooyinkaaga koorsooyinkooda, laakiin ma arkaan lambarka taleefankaaga ama lacag-bixinnadaada.",
+          "Shaqaalaha Natik waxay arkaan wixii ay u baahan yihiin si ay xarunta u maamulaan. Xogtaada ma iibino.",
+          "Bixiyeyaal la aamini karo ayaa naga caawiya inaan platform-ka maamulno (martigelin, SMS iyo fiidiyoow). Waxay maamulaan xogta si ay adeeggooda u bixiyaan oo keliya."
+        ]
+      },
+      {
+        "h": "Kukiyada",
+        "p": [
+          "Waxaan isticmaalnaa hal kuki si aan kuu ilaalino adigoo galay. Ma isticmaalno kukiyo xayeysiis ama raad-raac ah."
+        ]
+      },
+      {
+        "h": "Intee in le'eg ayaan haynaa",
+        "p": [
+          "Diiwaanadaada waan haynaa inta akoonkaagu firfircoon yahay iyo 3 sano ka dib dhaqdhaqaaqaagii ugu dambeeyay. Kadib waxaan ka saarnaa faahfaahintaada shakhsiyeed.",
+          "Diiwaanada lacag-bixinta waa la haystaa sida xeerarka cashuuruhu u baahan yihiin. Shahaadooyinka waa la haystaa si ay had iyo jeer loo hubin karo."
+        ]
+      },
+      {
+        "h": "Doorashooyinkaaga",
+        "p": [
+          "Waxaad wax ka beddeli kartaa magacaaga, iimaylkaaga iyo sawirkaaga profile-kaaga wakhti kasta.",
+          "Waxaad na weydiin kartaa inaan tirtirno akoonkaaga. Codsiyada waxaan ka dhaqaajinnaa 30 maalmood gudahood."
+        ]
+      },
+      {
+        "h": "Ardayda yaryar",
+        "p": [
+          "Ardaydu waxay isu diiwaangeliyaan laga bilaabo da'da 16. Ardayda ka yar xarunta ayaa diiwaangelisa."
+        ]
+      },
+      {
+        "h": "Su'aalo",
+        "p": [
+          "Nala soo xiriir wakhti kasta, waanan ku farxi doonnaa inaan sharaxno sida xogtaada loo maamulo."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Shuruudaha isticmaalka",
+    "subtitle": "Xeerarka fudud ee loo isticmaalo Natik online.",
+    "updated": "Dhammaadkii la cusboonaysiiyay: Nofeembar 2026",
+    "sections": [
+      {
+        "h": "Akoonkaaga",
+        "p": [
+          "Waa inaad 16 jir ama ka weyn tahay si aad isu diiwaangeliso. Sii faahfaahin sax ah oo erayga sirta ah ku ilaali qarsoodi.",
+          "Waxaad masuul ka tahay wixii ka dhaca akoonkaaga. Noo sheeg haddii aad u malaynayso in qof kale isticmaalayo."
+        ]
+      },
+      {
+        "h": "Koorsooyinka iyo gelitaanka",
+        "p": [
+          "Isdiiwaangelintu ma furto koorso. Weydii inaad koorso ku biirto, kooxda Natik way ku aqbashaa. Koorsooyinka lacagta laga qaado waxay kaloo furmaan kadib markii aan xaqiijino lacag-bixintaada.",
+          "Gelitaanku wuxuu sii socdaa muddada lagu muujiyay bogga koorsada. Koorsooyinku waa barashadaada shakhsiyeed oo keliya."
+        ]
+      },
+      {
+        "h": "Lacag-bixinno",
+        "p": [
+          "Waxaad ku bixisaa websaydhka dibadiisa (bangi, jeeb mobaayl ama lacag caddaan ah) oo noo dirtaa tixraaca. Sawir rasiid keliya ma furo koorso.",
+          "Haddii wax ka qaldamaan lacag-bixinta, nala soo xiriir waanan ku caawin doonnaa inaan hagaajinno."
+        ]
+      },
+      {
+        "h": "Alaabta casharrada",
+        "p": [
+          "Fiidiyowyada, faylasha iyo imtixaannadu waxay leeyihiin Natik iyo macallimiintiisa. Fadlan ha koobiyayn, ha wadaagin ama ha iibin.",
+          "Meesha soo dejintu ay ogoshahay, waxay u tahay barashadaada oo keliya."
+        ]
+      },
+      {
+        "h": "Isticmaal caddaalad ah",
+        "p": [
+          "Ahaw mid ixtiraam leh, hana isku dayin inaad jebiso ama si xun u isticmaasho platform-ka.",
+          "Waxaan joojin karnaa akoon jebiya xeerarkan."
+        ]
+      },
+      {
+        "h": "Shahaadooyin",
+        "p": [
+          "Shahaado waxaa la bixiyaa marka aad dhammayso koorso oo aad ku gudubto imtixaankeeda ugu dambeeya. Waxaan baabi'in karnaa shahaado si aan caddaalad ahayn loo helay."
+        ]
+      },
+      {
+        "h": "Isbeddelo",
+        "p": [
+          "Waxaan cusboonaysiin karnaa shuruudahan iyo koorsooyinkayaga waqti ka waqti. Taariikhda sare waxay muujisaa markii ugu dambeysay ee ay isbeddeleen."
+        ]
+      }
+    ]
+  },
+  "policyPage": {
+    "updated": "Dhammaadkii la cusboonaysiiyay {date}"
+  },
+  "profile": {
+    "title": "Profile",
+    "details": "Faahfaahintayda",
+    "edit": "Wax ka beddel faahfaahinta",
+    "editTitle": "Wax ka beddel faahfaahintaada",
+    "save": "Keydi",
+    "saved": "Faahfaahinta waa la keydiyay",
+    "photo": "Sawir",
+    "changePhoto": "Beddel sawirka",
+    "photoSaved": "Sawirka waa la cusboonaysiiyay",
+    "photoHint": "JPG ama PNG, ilaa 5 MB",
+    "password": "Erayga sirta ah",
+    "changePassword": "Beddel erayga sirta ah",
+    "changeTitle": "Beddel erayga sirta ah",
+    "current": "Erayga sirta ah ee hadda jira",
+    "passwordSaved": "Erayga sirta ah waa la beddelay. Qalabka kale waa laga saaray.",
+    "signOut": "Ka bax",
+    "signingOut": "Waa laga baxayaa…",
+    "role": "Doorka",
+    "phone": "Taleefan",
+    "roles": {
+      "STUDENT": "Arday",
+      "TEACHER": "Macallin",
+      "ADMIN": "Maamule"
+    },
+    "paymentHistory": "Taariikhda lacag-bixinta",
+    "location": "Goobta",
+    "country": "Wadan",
+    "city": "Magaalo ama tuulo",
+    "gender": "Jinsi",
+    "notSet": "Lama dhammaystirin"
+  },
+  "lessonView": {
+    "playVideo": "Daawo fiidiyowga: {title}",
+    "play": "Daawo fiidiyowga",
+    "videoFailed": "Fiidiyowgan lama diyaarin karin. Fadlan dhibaatada soo sheeg.",
+    "videoProcessing": "Fiidiyowgan weli waa la diyaarinayaa. Dhawr daqiiqo ka dib mar kale isku day.",
+    "tryAgain": "Mar kale isku day",
+    "pause": "Hakad",
+    "playAudio": "Dhagayso codka",
+    "back10": "10 ilbiriqsi dib u noqo",
+    "seek": "Meesha codka",
+    "speed": "Xawaare {speed} jeer. Taabo si aad u beddesho.",
+    "audioFailed": "Codkan hadda lama ciyaari karo. Mar kale isku day ama dhibaatada soo sheeg.",
+    "download": "Soo deji",
+    "openPdf": "Fur",
+    "closePdf": "Xir",
+    "pdfLoading": "Dukumentiga waa la furayaa…",
+    "pdfFailed": "Dukumentigan hadda lama furi karo. Mar kale isku day ama dhibaatada soo sheeg.",
+    "pdfPageLabel": "{name}, bogga {page}",
+    "previousPage": "Hore",
+    "nextPage": "Xiga",
+    "pageOf": "Bogga {page} ee {total}",
+    "empty": "Casharkan weli nuxur ma lahan.",
+    "playbackSpeed": "Xawaare",
+    "captions": "Qoraal hoose",
+    "slides": "Sliidhyo",
+    "slideOf": "Sliidhka {n} ee {total}",
+    "keyWords": "Ereyada muhiimka ah",
+    "previousSlide": "Sliidhkii hore",
+    "nextSlide": "Sliidhka xiga",
+    "steps": "Tallaabooyinka casharka",
+    "back": "Dib u noqo",
+    "nextStep": "Tallaabada xigta",
+    "minutes": "Qiyaastii {n} daqiiqo",
+    "objectives": "Waxa aad baran doonto",
+    "step": {
+      "INTRO": "Hordhac",
+      "PREPARE": "Diyaarin",
+      "MAIN": "Cashar",
+      "WATCH": "Daawo",
+      "REVISE": "Dib u eeg",
+      "EXAMPLES": "Tusaalayaal"
+    },
+    "downloadFile": "Soo deji {name}"
+  },
+  "messages": {
+    "title": "Fariimo",
+    "filter": "Shaandhee fariimaha",
+    "new": "Cusub",
+    "closed": "La xiray",
+    "emptyNew": "Fariin cusub ma jirto",
+    "emptyNewText": "Fariimaha foomka xiriirka halkan ayay ka muuqdaan.",
+    "emptyClosed": "Weli fariin la xiray ma jirto",
+    "problem": "Warbixinta dhibaatada",
+    "aboutLesson": "Ku saabsan casharka: {title}",
+    "closedBy": "{name} ayaa xiray {date}",
+    "close": "Xir",
+    "reopen": "Dib u fur",
+    "closedToast": "Fariinta waa la xiray.",
+    "reopenedToast": "Fariinta dib ayaa loo furay."
+  },
+  "announcements": {
+    "title": "Ogeysiisyo",
+    "teacherHint": "U dir ogeysiis ardayda koorsooyinkaaga.",
+    "new": "Ogeysiis cusub",
+    "newTitle": "Ogeysiis cusub",
+    "editTitle": "Wax ka beddel ogeysiiska",
+    "empty": "Weli ogeysiis ma jiro",
+    "emptyText": "Dir mid si aad ugu ogeysiiso ardayda ama booqdayaasha.",
+    "noCourses": "Weli koorso ma jirto",
+    "noCoursesText": "Marka maamuluhu ku magacaabo koorso, halkan ayaad u diri kartaa ardaydeeda.",
+    "scheduled": "La jadwaleeyay",
+    "edit": "Wax ka beddel {title}",
+    "delete": "Tirtir {title}",
+    "deleteTitle": "Ma tirtirtaa ogeysiiskan?",
+    "deleteText": "Qof walba wuu ka lumi doonaa. Tan lama celin karo.",
+    "deleteCta": "Tirtir",
+    "deleted": "Ogeysiiska waa la tirtiray.",
+    "titleField": "Cinwaan",
+    "textField": "Fariin",
+    "audienceField": "Yaa arka",
+    "audience": {
+      "PUBLIC": "Qof walba",
+      "ALL_STUDENTS": "Dhammaan ardayda",
+      "COURSE": "Hal koorso"
+    },
+    "audienceHint": {
+      "PUBLIC": "Waxaa lagu muujiyaa bogga Wararka websaydhka.",
+      "ALL_STUDENTS": "Waxaa loo muujiyaa arday kasta marka ay galaan.",
+      "COURSE": "Waxaa loo muujiyaa ardayda ku diiwaangashan koorsadaas."
+    },
+    "courseField": "Koorso",
+    "chooseCourse": "Dooro koorso",
+    "publishAtField": "Daabac",
+    "publishAtHint": "Marka aad rabto in hadda la daabaco, ka dhig madhan.",
+    "post": "Daabac",
+    "save": "Keydi",
+    "posted": "Ogeysiiska waa la daabacay.",
+    "saved": "Waa la keydiyay."
+  },
+  "learn": {
+    "back": "Ku noqo koorsada",
+    "continue": "Sii wad: {lesson}",
+    "lessonsDone": "{done} cashar oo ka mid ah {total}",
+    "percentDone": "{value}% waa la dhammeeyay",
+    "readOnly": "Koorsadan waad dhammaysay. Weli waad furi kartaa cashar kasta.",
+    "unitCount": "{done}/{total}",
+    "stateDone": "La dhammeeyay",
+    "stateCurrent": "Meesha aad joogto",
+    "stateTodo": "Lama bilaabin",
+    "noLessons": "Casharradii ugu horreeyay dhawaan halkan ayay ka muuqan doonaan.",
+    "contents": "Tusmada",
+    "contentsTitle": "Tusmada koorsada",
+    "lessonOf": "Casharka {n} ee {total}",
+    "previous": "Casharkii hore",
+    "next": "Casharka xiga",
+    "markComplete": "U calaamadee inuu dhammaaday",
+    "completed": "La dhammeeyay",
+    "completedToast": "Casharka waa la dhammeeyay!",
+    "courseCompletedTitle": "Koorsada waa la dhammeeyay!",
+    "courseCompletedText": "Dhammaan casharradii waad dhammaysay. Hambalyo.",
+    "quizRequired": "Ku gudub imtixaanka si aad u dhammaysid",
+    "problemLine": "Casharkan dhibaato ma ku jirtaa?",
+    "reportIt": "Soo sheeg",
+    "reportTitle": "Soo sheeg dhibaato",
+    "reportHint": "Noo sheeg wixii khaldamay. Waan eegi doonnaa.",
+    "reportLabel": "Maxaa dhacay?",
+    "reportSend": "Dir warbixinta",
+    "reportSent": "Mahadsanid. Warbixintaada waan helnay.",
+    "backToCourse": "Qaabka koorsada",
+    "unavailableTitle": "Casharkan lama heli karo",
+    "unavailableText": "Waxaa laga yaabaa in la guuriyay ama la qariyay.",
+    "takeQuiz": "Qaado imtixaanka",
+    "quizPassed": "Imtixaanka waa la gudbay",
+    "stateLocked": "La xiray: marka hore dhammee casharradii hore",
+    "minutesShort": "{n} daqiiqo",
+    "hideOutline": "Qari tusmada",
+    "showOutline": "Muuji tusmada",
+    "previousStep": "Tallaabadii hore",
+    "nextStep": "Tallaabada xigta",
+    "lockedTitle": "Marka hore dhammee casharkii hore",
+    "lockedText": "Koorsadan waxay u furtaa casharrada si isku xigta. Dhammee “{title}” si aad u furto kan.",
+    "lockedGo": "U gudub casharkaas",
+    "weekN": "Toddobaadka {n}",
+    "new": "Cusub",
+    "upcomingTitle": "Kan soo socda",
+    "ongoingNote": "Casharro cusub ayaa toddobaad kasta lagu daraa. Halkan ayaad ku arki doontaa isla marka lagu daro."
+  },
+  "pay": {
+    "title": "Bixi oo is-diiwaangeli",
+    "renewTitle": "Cusboonaysii gelitaanka",
+    "amount": "Qadarka la bixinayo",
+    "stepPay": "Ku bixi mid kuwan ka mid ah",
+    "stepTell": "Noo sheeg wax ku saabsan",
+    "cash": "Ama ku bixi lacag caddaan ah xarunta.",
+    "copy": "Koobiyee",
+    "copied": "La koobiyeeyay",
+    "copyNumber": "Koobiyee lambarka akoonka {provider}",
+    "noAccounts": "Faahfaahinta lacag-bixinta weli lama dejin. Fadlan nala soo xiriir si aad u bixiso.",
+    "contactUs": "Nala soo xiriir",
+    "method": "Sidee ayaad u bixisay?",
+    "bank": "Bangi",
+    "wallet": "Jeeb mobaayl",
+    "reference": "Tixraac ama lambarka macaamilka",
+    "referenceHint": "Rasiidkaaga ama SMS-ka.",
+    "amountPaid": "Qadarka aad bixisay (ETB)",
+    "paidOn": "Taariikhda la bixiyay",
+    "receipt": "Sawirka rasiidka",
+    "receiptHint": "Sawir ama PDF ayaa naga caawiya inaan si degdeg ah u hubino.",
+    "addReceipt": "Ku dar sawir",
+    "changeReceipt": "Beddel",
+    "removeReceipt": "Ka saar rasiidka",
+    "submit": "Dir lacag-bixinta",
+    "noSecrets": "Marnaba ma weydiino lambarrada kaadhka, PIN-yada ama erayada sirta ah.",
+    "rejectedTitle": "Lacag-bixintaadii ugu dambeysay lama aqbalin",
+    "rejectedReason": "Sabab: {reason}",
+    "rejectedText": "Fadlan tan hagaaji oo mar kale dir faahfaahinta lacag-bixintaada.",
+    "reviewTitle": "Lacag-bixinta waa la dib u eegayaa",
+    "reviewText": "Fariin ayaan kuu diri doonnaa marka gelitaankaagu diyaar noqdo.",
+    "reviewRef": "Tixraac {ref}",
+    "goDashboard": "Aad dashboard-ka",
+    "submitted": "Lacag-bixinta waa la diray. Dhawaan ayaan hubin doonnaa.",
+    "openCourse": "Fur koorsada",
+    "paidTitle": "Wax walba waa diyaar",
+    "paidText": "Koorsadan adiga ayaa laguu furay.",
+    "cancelledTitle": "Diiwaangelintan waa la joojiyay",
+    "cancelledText": "Ka bilow mar kale bogga koorsada.",
+    "viewCourse": "Eeg koorsada"
+  },
+  "studentPayments": {
+    "title": "Taariikhda lacag-bixinta",
+    "subtitle": "Lacag-bixin kasta oo aad dirtay.",
+    "emptyTitle": "Weli lacag-bixin ma jirto",
+    "emptyText": "Lacag-bixinnada koorsooyinka lacagta laga qaado halkan ayay ka muuqan doonaan.",
+    "reference": "Tixraac {ref}",
+    "paidOn": "Waa la bixiyay {date}",
+    "method": {
+      "BANK": "Bangi",
+      "MOBILE_WALLET": "Jeeb mobaayl",
+      "CASH": "Lacag caddaan"
+    },
+    "renewal": "Cusboonaysiin",
+    "tryAgain": "Mar kale dir faahfaahinta",
+    "back": "Profile"
+  },
+  "studentNews": {
+    "title": "Wararka",
+    "subtitle": "Fariimo ka yimid Natik iyo macallimiintaada.",
+    "emptyTitle": "Weli war ma jiro",
+    "emptyText": "Ogeysiisyo cusub halkan ayay ka muuqan doonaan.",
+    "markRead": "U calaamadee inuu akhriyay",
+    "markAll": "U calaamadee dhammaan inay la akhriyay",
+    "unread": "Cusub",
+    "forCourse": "Loogu talagalay {course}",
+    "forEveryone": "Loogu talagalay qof walba",
+    "forStudents": "Loogu talagalay dhammaan ardayda"
+  },
+  "certs": {
+    "title": "Shahaadooyin",
+    "subtitle": "Shahaadooyinka aad heshay.",
+    "emptyTitle": "Weli shahaado ma jirto",
+    "emptyText": "Dhammee koorso oo ku gudub imtixaankeeda ugu dambeeya si aad u hesho.",
+    "browse": "Eeg koorsooyinka",
+    "download": "Soo deji PDF",
+    "downloadLabel": "Soo deji PDF-ka {course}",
+    "cancelled": "La joojiyay",
+    "number": "Lambarka {number}",
+    "issued": "La bixiyay {date}",
+    "verifyHint": "Qof kasta wuxuu ka hubin karaa {where}.",
+    "verifyLink": "Fur bogga xaqiijinta",
+    "onTheWay": "Waa soo socotaa",
+    "finished": "La dhammeeyay {date}",
+    "finishedNoDate": "Koorsada waa la dhammeeyay",
+    "statusConfirm": "Xaqiiji magacaaga",
+    "statusWaiting": "Ansixinta ayaa la sugayaa",
+    "statusReturned": "Fadlan hubi",
+    "confirmText": "Hambalyo! Si sax ah u qor magaca aad rabto in lagu daabaco shahaadadaada. Kooxda Natik way hubisaa, kadibna shahaadada way kuu soo dirtaa.",
+    "nameLabel": "Magaca shahaadada",
+    "nameHint": "Magacaaga oo dhan, sida kaarkaaga aqoonsiga ku qoran.",
+    "sendName": "Dir si loo ansixiyo",
+    "nameSent": "La diray. Waan ku ogeysiin doonnaa marka shahaadadaadu diyaar noqoto.",
+    "nameOnIt": "Magaca la daabacayo",
+    "waitingText": "Kooxda Natik way hubinaysaa. Fariin SMS ah ayaad heli doontaa marka shahaadadaadu diyaar noqoto.",
+    "changeName": "Beddel magaca",
+    "changeNameTitle": "Beddel magaca shahaadadaada",
+    "changeNameText": "Waad beddeli kartaa ilaa kooxda Natik ay ansixiso shahaadadaada.",
+    "returnedNote": "Kooxda Natik waxay weydiisaa: {note}"
+  },
+  "quizTake": {
+    "intro": {
+      "questions": "{count, plural, one {# su'aal} other {# su'aalood}}",
+      "time": "{count, plural, one {# daqiiqo} other {# daqiiqo}}",
+      "noTime": "Xaddi waqti ma jiro",
+      "passMark": "Dhibcaha guusha {value}%",
+      "attemptsLeft": "Isku-day hadhay: {left} ee {total}",
+      "attemptsUnlimited": "Isku-day aan xad lahayn",
+      "finalNote": "Kan waa imtixaanka ugu dambeeya ee koorsada.",
+      "start": "Bilow imtixaanka",
+      "resume": "Sii wad imtixaanka",
+      "again": "Mar kale isku day",
+      "noAttempts": "Dhammaan isku-dayadaadii waad isticmaashay. Macallinkaaga weydii haddii aad kale u baahan tahay.",
+      "passedNote": "Imtixaankan waad ku gudubtay. Dhibcaha ugu sarreeya {score}%.",
+      "history": "Isku-dayadayda",
+      "back": "Ku noqo casharka",
+      "readOnly": "Koorsadan waad dhammaysay. Imtixaannadu waa xiran yihiin."
+    },
+    "questionOf": "{n} ee {total}",
+    "dots": "Su'aasha {n}, {state}",
+    "answered": "waa la jawaabay",
+    "notAnswered": "lama jawaabin",
+    "back": "Dib u noqo",
+    "next": "Xiga",
+    "review": "Dib u eeg",
+    "saving": "Waa la keydinayaa…",
+    "savedState": "La keydiyay",
+    "saveFailed": "Weli lama keydin. Mar kale ayaa la isku dayayaa…",
+    "offline": "Internet ma haysid. Jawaabahaaga waxaa lagu keydiyay qalabkan waxaana la diri doonaa markaad online noqoto.",
+    "timer": "Waqtiga hadhay",
+    "timerLabel": "{time} ayaa hadhay",
+    "timeWarning5": "5 daqiiqo ayaa hadhay",
+    "timeWarning1": "1 daqiiqo ayaa hadhay",
+    "timeUp": "Wakhtigii wuu dhammaaday. Jawaabaha la keydiyay waa la gudbiyay.",
+    "true": "Run",
+    "false": "Been",
+    "typeAnswer": "Qor jawaabtaada",
+    "writeAnswer": "Qor jawaabtaada",
+    "chooseOne": "Dooro hal jawaab",
+    "trueFalse": "Run mise been?",
+    "marks": "{marks, plural, one {# dhibic} other {# dhibcood}}",
+    "reviewTitle": "Diyaar ma u tahay inaad gudbiso?",
+    "reviewCount": "{answered} ee {total} ayaa la jawaabay",
+    "reviewSkipped": "Su'aasha {n} lama jawaabin",
+    "goTo": "U gudub su'aasha {n}",
+    "submit": "Gudbi jawaabaha",
+    "submitting": "Waa la gudbinayaa…",
+    "backToQuestions": "Ku noqo su'aalaha",
+    "allAnswered": "Wax walba waa la jawaabay.",
+    "passedTitle": "Waad gudubtay!",
+    "notPassedTitle": "Markan ma gudbin",
+    "scoreLine": "{score}/{max} · Dhibcaha guusha {pass}%",
+    "attemptsLeft": "{count, plural, =0 {Isku-day ma hadhin} one {# isku-day ayaa hadhay} other {# isku-day ayaa hadhay}}",
+    "attemptsUnlimited": "Waad mar kale isku dayi kartaa wakhti kasta.",
+    "tryAgain": "Mar kale isku day",
+    "reviewAnswers": "Dib u eeg jawaabaha",
+    "hideReview": "Qari dib-u-eegista",
+    "nextLesson": "Casharka xiga",
+    "backToCourse": "Qaabka koorsada",
+    "waitingTitle": "Qiimeynta macallinka ayaa la sugayaa",
+    "waitingText": "Dhibcahaaga halkan ayaan ku muujin doonnaa marka la saxo.",
+    "continueCourse": "Sii wad koorsada",
+    "courseCompleteTitle": "Koorsada waa la dhammeeyay!",
+    "courseCompleteText": "Xaqiiji magaca shahaadadaada. Kadibna kooxda Natik way hubisaa oo way kuu soo dirtaa.",
+    "downloadCertificate": "Soo deji shahaadada",
+    "yourAnswer": "Jawaabtaada",
+    "noAnswer": "Jawaab ma jirto",
+    "correctAnswer": "Jawaabta saxda ah",
+    "explanation": "Sharaxaad",
+    "teacherComment": "Faallada macallinka",
+    "marksLine": "{marks}/{max}",
+    "rightLabel": "Sax",
+    "wrongLabel": "Sax ma aha",
+    "history": {
+      "title": "Isku-dayadayda",
+      "empty": "Weli isku-day ma jiro.",
+      "attemptN": "Isku-dayga {n}",
+      "inProgress": "Waa socdaa",
+      "waiting": "Qiimeynta ayaa la sugayaa",
+      "passed": "Gudbay",
+      "failed": "Ma gudbin",
+      "open": "Fur"
+    },
+    "unavailableTitle": "Imtixaankan lama heli karo",
+    "unavailableText": "Waxaa laga yaabaa in la qariyay ama weli aan la daabicin.",
+    "getCertificate": "Hel shahaadadayda"
+  },
+  "chat": {
+    "whatsapp": "Nala sheekayso WhatsApp",
+    "telegram": "Nala sheekayso Telegram",
+    "title": "Fariimo",
+    "newChat": "Sheeko cusub",
+    "searchPlaceholder": "Raadi dad",
+    "back": "Ku noqo sheekooyinka",
+    "empty": "Weli sheeko ma jirto",
+    "emptyText": "La bilow sheeko kooxda Natik ama macallinkaaga.",
+    "pick": "Dooro sheeko",
+    "pickText": "Dooro wada-hadal si aad u aqrisid oo u jawaabto.",
+    "noContacts": "Weli qof lala sheekeysto ma jiro. Ku diiwaangeli koorso si aad fariin ugu dirto macallinkeeda.",
+    "typeToSearch": "Ku qor ugu yaraan 2 xaraf oo magaca ka mid ah.",
+    "newTitle": "Bilow sheeko",
+    "team": "Kooxda Natik",
+    "placeholder": "Qor fariin",
+    "send": "Dir",
+    "attach": "Ku lifaaq fayl",
+    "record": "Duub fariin cod ah",
+    "recording": "Waa la duubayaa…",
+    "cancelRecording": "Jooji duubista",
+    "sendVoice": "Dir fariinta codka",
+    "micDenied": "Ogolow makrofoonka biraawsarkaaga si aad fariimo cod ah u dirto.",
+    "micUnsupported": "Biraawsarkan ma duubi karo fariimo cod ah.",
+    "play": "Ciyaar fariinta codka",
+    "pause": "Hakad fariinta codka",
+    "download": "Soo deji",
+    "photo": "Sawir",
+    "voice": "Fariin cod ah",
+    "today": "Maanta",
+    "yesterday": "Shalay",
+    "sending": "Waa la dirayaa…",
+    "failed": "Lama dirin. Taabo si aad mar kale u isku daydo.",
+    "seen": "La arkay",
+    "sent": "La diray",
+    "loadFailed": "Fariimaha lama soo rari karin.",
+    "unread": "lama akhriyin",
+    "caption": "Ku dar faallo",
+    "removeFile": "Ka saar faylka",
+    "conversations": "Sheekooyin",
+    "open": "Fur sheekada",
+    "tooBig": "Faylkan aad buu u weyn yahay. Ugu badnaan waa 20 MB.",
+    "copy": "Koobiyee qoraalka",
+    "copied": "La koobiyeeyay",
+    "copyFailed": "Lama koobiyeyn karin.",
+    "deleteMessage": "Tirtir fariinta",
+    "deleteMessageTitle": "Ma tirtirtaa fariintan?",
+    "deleteMessageText": "Adiga iyo qofka kale labadiinaba waa laga saarayaa.",
+    "chatMenu": "Doorashooyinka sheekada",
+    "clearHistory": "Nadiifi taariikhda",
+    "clearTitle": "Ma nadiifisaa sheekadan?",
+    "clearText": "Fariimaha adiga oo keliya ayaa laguu qarinayaa. Dhinaca kale way sii haystaa.",
+    "deleteChat": "Tirtir sheekada",
+    "deleteChatTitle": "Ma tirtirtaa sheekadan?",
+    "deleteChatText": "Liiskaaga ayaa laga saarayaa. Dhinaca kale way sii haystaa, wuuna soo laaban doonaa haddii ay mar kale qoraan."
+  },
+  "groups": {
+    "title": "Kooxaha koorsooyinka",
+    "listLabel": "Kooxaha koorsooyinkaaga",
+    "back": "Ku noqo kooxaha",
+    "noGroups": "Weli koox ma jirto",
+    "noGroupsText": "Koorso kasta waxay leedahay sheeko kooxeed. Marka lagu aqbalo koorso, kooxdeeda halkan ayay ka muuqataa.",
+    "noMessages": "Weli fariin ma jirto",
+    "pick": "Dooro koox",
+    "pickText": "Fur koox koorso si aad u aqriso oo ugu qorto asxaabtaada fasalka iyo macallinkaaga.",
+    "courseGroup": "Kooxda koorsada",
+    "showMembers": "Muuji xubnaha",
+    "memberCount": "{count, plural, one {# xubin} other {# xubnood}}",
+    "members": "Xubnaha",
+    "membersText": "Qof walba oo koorsadan ku jira: macallimiinta, kooxda Natik iyo ardayda.",
+    "teachers": "Macallimiin",
+    "team": "Kooxda Natik",
+    "students": "Arday",
+    "roleTeacher": "Macallin",
+    "roleTeam": "Kooxda Natik",
+    "emptyTitle": "Bilow sheekada",
+    "emptyText": "Weydii su'aal, la wadaag wixii aad barato, ama salaan. Asxaabtaada fasalka iyo macallinkaagu way arki doonaan.",
+    "loadEarlier": "Muuji fariimihii hore",
+    "notLoaded": "Fariintaas ayaa sare ah. Marka hore muuji fariimihii hore.",
+    "deleted": "Fariintan waa la tirtiray",
+    "edited": "la tafatiray",
+    "pinned": "La dhejiyay",
+    "pinnedMessage": "Fariinta la dhejiyay",
+    "pin": "Ku dhejiso sare",
+    "unpin": "Ka qaad",
+    "pinnedToast": "Fariinta waa la dhejiyay.",
+    "unpinned": "Fariinta waa laga qaaday.",
+    "reply": "Jawaab",
+    "replyingTo": "U jawaabaya {name}",
+    "cancelReply": "Jooji jawaabta",
+    "edit": "Wax ka beddel",
+    "editTitle": "Wax ka beddel fariintaada",
+    "editLabel": "Fariin",
+    "saveEdit": "Keydi",
+    "cancel": "Jooji",
+    "react": "Ka falcel",
+    "reactionLabel": "{emoji} ka timid {count, plural, one {# qof} other {# qof}}",
+    "messageMenu": "Doorashooyinka fariinta",
+    "deleteTitle": "Ma tirtirtaa fariintan?",
+    "deleteMine": "Waxaa laga saarayaa qof walba oo kooxda ku jira.",
+    "deleteOthers": "Waxaad ka saarayaa fariinta qof kale qof walba oo kooxda ku jira.",
+    "tooBig": "Faylkan aad buu u weyn yahay. Ugu badnaan waa 60 MB fiidiyowga iyo 20 MB faylasha kale.",
+    "unavailableTitle": "Kooxdan ma furi kartid",
+    "unavailableText": "Kaliya ardayda koorsada lagu aqbalay, macallimiintiisa iyo kooxda Natik ayaa ku jira kooxdeeda."
+  },
+  "adminPayments": {
+    "receiptTitle": "Rasiidka",
+    "receiptOpen": "Ku fur tab cusub",
+    "receiptPdf": "Rasiidka PDF"
+  },
+  "people": {
+    "title": "Xogta",
+    "openProfile": "Fur xogta {name}",
+    "loadFailed": "Xogtan lama furi karo.",
+    "about": "Ku saabsan",
+    "teaches": "Wuxuu bara",
+    "sharedCourses": "Koorsooyin wadaag ah",
+    "from": "Ka timid",
+    "contact": "Xiriir",
+    "contactHint": "Kooxda Natik oo keliya ayaa arka.",
+    "message": "Fariin dir",
+    "editMine": "Wax ka beddel xogtayda",
+    "memberSince": "Xubin ka soo bilaabatay {date}",
+    "role": {
+      "STUDENT": "Arday",
+      "TEACHER": "Macallin",
+      "ADMIN": "Kooxda Natik"
+    }
   }
 }

@@ -3,7 +3,7 @@
  * browser claimed. A renamed program or a script saved as ".pdf" is refused (NFR-SEC-004).
  */
 
-export type DetectedKind = 'pdf' | 'audio' | 'video' | 'image';
+export type DetectedKind = 'pdf' | 'audio' | 'video' | 'image' | 'document';
 
 export interface DetectedFile {
   kind: DetectedKind;
@@ -45,6 +45,40 @@ export function detectFile(buf: Buffer): DetectedFile | null {
     if (brand === 'qt  ') return { kind: 'video', mime: 'video/quicktime', ext: 'mov' };
     return { kind: 'video', mime: 'video/mp4', ext: 'mp4' };
   }
+  // Office documents. New ones (.pptx .docx .xlsx) are ZIP files; the parts inside tell which.
+  if (startsWith(buf, 'PK\x03\x04') && buf.includes('[Content_Types].xml')) {
+    if (buf.includes('ppt/'))
+      return {
+        kind: 'document',
+        mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        ext: 'pptx',
+      };
+    if (buf.includes('word/'))
+      return {
+        kind: 'document',
+        mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ext: 'docx',
+      };
+    if (buf.includes('xl/'))
+      return {
+        kind: 'document',
+        mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ext: 'xlsx',
+      };
+  }
+  // Older Office files (.ppt .doc .xls) share one container format: the name says which.
+  if (
+    buf[0] === 0xd0 &&
+    buf[1] === 0xcf &&
+    buf[2] === 0x11 &&
+    buf[3] === 0xe0 &&
+    buf[4] === 0xa1 &&
+    buf[5] === 0xb1 &&
+    buf[6] === 0x1a &&
+    buf[7] === 0xe1
+  )
+    return { kind: 'document', mime: 'application/x-ole-storage', ext: 'ole' };
+
   // WebM / Matroska
   if (buf[0] === 0x1a && buf[1] === 0x45 && buf[2] === 0xdf && buf[3] === 0xa3)
     return { kind: 'video', mime: 'video/webm', ext: 'webm' };

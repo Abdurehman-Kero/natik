@@ -32,6 +32,11 @@ enum UserStatus {
   DISABLED
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 enum SessionKind {
   PERSISTENT
   BROWSER
@@ -80,6 +85,8 @@ enum BlockType {
   AUDIO
   IMAGE
   SLIDES
+  /// A document to download: PowerPoint, Word or Excel.
+  FILE
 }
 
 enum FilePurpose {
@@ -96,6 +103,8 @@ enum FilePurpose {
   CHAT_ATTACHMENT
   CAPTION
   VIDEO_POSTER
+  /// PowerPoint, Word or Excel attached to a session.
+  LESSON_FILE
 }
 
 enum VideoStatus {
@@ -106,6 +115,8 @@ enum VideoStatus {
 }
 
 enum EnrolmentStatus {
+  /// A free course: the student asked to join; an admin accepts them.
+  AWAITING_APPROVAL
   AWAITING_PAYMENT
   PAYMENT_SUBMITTED
   ACTIVE
@@ -213,7 +224,7 @@ model User {
   fullName           String
   /// E.164 (+2519…/+2517…). Null only after personal data is erased (SRS §8.2).
   phone              String?    @unique
-  email              String?
+  email              String?    @unique
   passwordHash       String?
   role               Role       @default(STUDENT)
   isOwner            Boolean    @default(false)
@@ -221,6 +232,10 @@ model User {
   phoneVerifiedAt    DateTime?
   photoFileId        String?    @unique
   interestLanguageId String?
+  gender             Gender?
+  /// Where the person is: ISO 3166-1 alpha-2 country code (e.g. ET) and a free-text city or town.
+  country            String?
+  city               String?
   /// Teachers: short public bio, shown on the About page when showOnWebsite is true.
   bio                String?
   showOnWebsite      Boolean    @default(false)
@@ -233,6 +248,8 @@ model User {
   anonymisedAt       DateTime?
   createdAt          DateTime   @default(now())
   updatedAt          DateTime   @updatedAt
+
+  @@index([country])
 
   branch           Branch     @relation(fields: [branchId], references: [id])
   photo            FileAsset? @relation("UserPhoto", fields: [photoFileId], references: [id])
@@ -263,6 +280,9 @@ model User {
   chatsAsOwner          Conversation[]       @relation("ChatOwner")
   chatsAsPeer           Conversation[]       @relation("ChatPeer")
   chatMessages          ChatMessage[]
+  groupMessages         GroupMessage[]       @relation("GroupMessageSender")
+  groupReactions        GroupReaction[]      @relation("GroupReactionUser")
+  groupReads            GroupRead[]          @relation("GroupReadUser")
 
   @@index([role, status])
   @@index([fullName])
@@ -387,6 +407,8 @@ model Course {
   featured         Boolean       @default(false)
   featuredPosition Int?
   lessonOrder      LessonOrder   @default(OPEN)
+  /// Sessions are still being added week by week: the course can't be completed until this is off.
+  ongoing          Boolean       @default(false)
   /// Paid courses: show the price on the public site, or keep it off (people ask Natik support instead).
   showPrice        Boolean       @default(true)
   /// Optional short video above the description on the public course page (YouTube or Vimeo link).
@@ -407,6 +429,8 @@ model Course {
   quizzes             Quiz[]
   certificates        Certificate[]
   certificateRequests CertificateRequest[]
+  groupMessages       GroupMessage[]
+  groupReads          GroupRead[]
   announcements       Announcement[]
 
   @@index([status, languageId, levelId])
@@ -453,6 +477,9 @@ model Lesson {
   description      String?
   objectives       String[]      @default([])
   estimatedMinutes Int?
+  /// When the session takes place (or took place); shown to students. Upcoming dated sessions are
+  /// listed to enrolled students before they are published.
+  sessionDate      DateTime?
   /// Stays open even when the course opens lessons in order.
   alwaysOpen       Boolean       @default(false)
   downloadsAllowed Boolean       @default(false)
@@ -509,17 +536,18 @@ model FileAsset {
 
   uploadedBy User? @relation("FileUploader", fields: [uploadedById], references: [id])
 
-  userPhoto       User?         @relation("UserPhoto")
-  courseImages    Course[]      @relation("CourseImage")
+  userPhoto       User?          @relation("UserPhoto")
+  courseImages    Course[]       @relation("CourseImage")
   lessonBlocks    LessonBlock[]
   questions       Question[]
   paymentReceipts Payment[]
   certificates    Certificate[]
   testimonials    Testimonial[]
   chatMessages    ChatMessage[]
+  groupMessages   GroupMessage[]
   slideImages     LessonSlide[]
-  videoCaptions   VideoAsset[]  @relation("VideoCaption")
-  videoPosters    VideoAsset[]  @relation("VideoPoster")
+  videoCaptions   VideoAsset[]   @relation("VideoCaption")
+  videoPosters    VideoAsset[]   @relation("VideoPoster")
 
   @@index([purpose])
 }
@@ -580,7 +608,7 @@ model Enrolment {
   certificateRequest CertificateRequest?
 
   /// One open enrolment per student and course; repeated "Enrol" taps are idempotent.
-  @@unique([studentId, courseId], map: "Enrolment_open_per_student_course_key", where: raw("status IN ('AWAITING_PAYMENT', 'PAYMENT_SUBMITTED', 'ACTIVE')"))
+  @@unique([studentId, courseId], map: "Enrolment_open_per_student_course_key", where: raw("status IN ('AWAITING_APPROVAL', 'AWAITING_PAYMENT', 'PAYMENT_SUBMITTED', 'ACTIVE')"))
   @@index([studentId, status])
   @@index([courseId, status])
   @@index([status, endAt])
@@ -1009,6 +1037,18 @@ enum ConversationKind {
   TEACHER_ADMIN
 }
 
+/// What a message in a course group is. SYSTEM messages are announcements the platform posts
+/// ("New session: …").
+enum GroupMessageKind {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  VOICE
+  FILE
+  SYSTEM
+}
+
 enum ChatMessageKind {
   TEXT
   IMAGE
@@ -1061,6 +1101,62 @@ model ChatMessage {
   file         FileAsset?   @relation(fields: [fileId], references: [id])
 
   @@index([conversationId, createdAt])
+}
+
+/// One message in a course's group chat. Everyone in the course (accepted students, its teachers and
+/// the admins) is in the group; membership comes from enrolments, so nobody has to be added by hand.
+model GroupMessage {
+  id          String           @id @default(cuid())
+  courseId    String
+  senderId    String
+  kind        GroupMessageKind
+  body        String?
+  fileId      String?
+  durationSec Int?
+  /// The message this one answers (shown as a quote above it).
+  replyToId   String?
+  editedAt    DateTime?
+  /// Deleted messages stay as "This message was deleted" so replies still make sense.
+  deletedAt   DateTime?
+  /// Teachers and admins can pin messages; the newest pinned one shows at the top.
+  pinnedAt    DateTime?
+  createdAt   DateTime         @default(now())
+
+  course    Course          @relation(fields: [courseId], references: [id])
+  sender    User            @relation("GroupMessageSender", fields: [senderId], references: [id])
+  file      FileAsset?      @relation(fields: [fileId], references: [id])
+  replyTo   GroupMessage?   @relation("GroupReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   GroupMessage[]  @relation("GroupReplies")
+  reactions GroupReaction[]
+
+  @@index([courseId, createdAt])
+  @@index([courseId, pinnedAt])
+}
+
+model GroupReaction {
+  messageId String
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  message GroupMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User         @relation("GroupReactionUser", fields: [userId], references: [id])
+
+  /// One reaction of each kind per person.
+  @@id([messageId, userId, emoji])
+}
+
+/// How far each person has read in each course group (for the unread counts).
+model GroupRead {
+  courseId   String
+  userId     String
+  lastReadAt DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id])
+  user   User   @relation("GroupReadUser", fields: [userId], references: [id])
+
+  @@id([courseId, userId])
+  @@index([userId])
 }
 
 /// One slide of a SLIDES block: a title, some text, an optional picture and a few key words.

@@ -1,40 +1,43 @@
 import {
   ArrowRight,
   BadgeCheck,
+  CalendarDays,
+  CircleCheck,
   Languages,
   MessageSquareText,
-  PlayCircle,
+  MessagesSquare,
   Smartphone,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from '@/components/ui/link';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { isFreeCourse } from '@/components/public/catalogue';
-import { CourseList } from '@/components/public/course-list';
+import { CompactCourseList, TeacherMiniList } from '@/components/public/course-list';
 import { CoursesShowcase } from '@/components/public/courses-showcase';
 import { CtaBand } from '@/components/public/cta-band';
 import { FaqAccordion, type FaqItem } from '@/components/public/faq-accordion';
-import { FeatureGrid, Steps } from '@/components/public/feature-grid';
+import { FeatureGrid } from '@/components/public/feature-grid';
 import { HomeHero } from '@/components/public/home-hero';
 import {
   CommunityBand,
-  LearningFlow,
+  AudienceSection,
+  JourneySection,
   LearningPath,
   StatsStrip,
-  TeachersSection,
 } from '@/components/public/home-extras';
 import { InstallApp } from '@/components/public/install-app';
 import { NewsList } from '@/components/public/news-list';
 import { PublicSection } from '@/components/public/section';
 import { PaymentSupport } from '@/components/public/support-contact';
 import { Testimonials } from '@/components/public/testimonials';
+import { AuthButton } from '@/components/auth/auth-button';
 import { LinkButton } from '@/components/ui/button';
+import { Container } from '@/components/ui/layout';
 import {
   type PublicAnnouncement,
   type PublicCourse,
   type PublicFaqItem,
   type PublicFilters,
-  type PublicFreeLesson,
   type PublicStats,
   type PublicTeacher,
   type PublicTestimonial,
@@ -56,7 +59,7 @@ export default async function HomePage() {
   const locale = await getLocale();
   const tf = await getTranslations('faq');
 
-  const [filters, courses, news, content, faqApi, testimonials, freeLessons, stats, teachers] =
+  const [filters, courses, news, content, faqApi, testimonials, stats, teachers] =
     await Promise.all([
       publicFetch<PublicFilters>('/public/filters', { languages: [], levels: [] }),
       publicFetch<{ items: PublicCourse[] }>('/public/courses', { items: [] }),
@@ -64,7 +67,6 @@ export default async function HomePage() {
       getSiteContent(),
       publicFetch<{ items: PublicFaqItem[] }>('/public/faq', { items: [] }),
       publicFetch<{ items: PublicTestimonial[] }>('/public/testimonials', { items: [] }),
-      publicFetch<{ items: PublicFreeLesson[] }>('/public/free-lessons', { items: [] }),
       publicFetch<PublicStats | null>('/public/stats', null),
       publicFetch<{ items: PublicTeacher[] }>('/public/teachers', { items: [] }),
     ]);
@@ -79,7 +81,9 @@ export default async function HomePage() {
 
   const why = (t.raw('why') as { title: string; text: string }[]).map((item, i) => ({
     ...item,
-    icon: [Languages, Smartphone, MessageSquareText, BadgeCheck][i] ?? Languages,
+    icon:
+      [Languages, Smartphone, MessageSquareText, BadgeCheck, CalendarDays, MessagesSquare][i] ??
+      Languages,
   }));
 
   // Free and premium courses are shown apart, three of each, so visitors choose by what suits them.
@@ -90,7 +94,7 @@ export default async function HomePage() {
       ? {
           value: 'free' as const,
           label: t('tabFree'),
-          content: <CourseList courses={free.slice(0, 3)} />,
+          content: <CompactCourseList courses={free.slice(0, 4)} />,
           seeAll: { href: '/courses?type=free', label: t('seeAllFree') },
         }
       : null,
@@ -98,8 +102,16 @@ export default async function HomePage() {
       ? {
           value: 'premium' as const,
           label: t('tabPremium'),
-          content: <CourseList courses={premium.slice(0, 3)} />,
+          content: <CompactCourseList courses={premium.slice(0, 4)} />,
           seeAll: { href: '/courses?type=premium', label: t('seeAllPremium') },
+        }
+      : null,
+    teachers.items.length > 0
+      ? {
+          value: 'teachers' as const,
+          label: t('tabTeachers'),
+          content: <TeacherMiniList teachers={teachers.items.slice(0, 4)} />,
+          seeAll: { href: '/teachers', label: t('allTeachers') },
         }
       : null,
   ].filter((g): g is NonNullable<typeof g> => g !== null);
@@ -116,9 +128,6 @@ export default async function HomePage() {
     ...(site.socials.length > 0 ? { sameAs: site.socials.map((s) => s.href) } : {}),
   };
 
-  // Feature a free lesson that has a video picture, so the block shows the real lesson.
-  const firstFree = freeLessons.items.find((l) => l.posterUrl) ?? freeLessons.items[0];
-
   return (
     <>
       <script
@@ -132,7 +141,26 @@ export default async function HomePage() {
         eyebrow={locale === 'en' ? content.home?.heroEyebrow : undefined}
         title={locale === 'en' ? content.home?.heroTitle : undefined}
         subtitle={locale === 'en' ? content.home?.heroSubtitle : undefined}
+        languages={languages.filter((l) => l.courseCount > 0)}
       />
+
+      {groups.length > 0 ? (
+        <PublicSection
+          tone="white"
+          eyebrow={t('coursesEyebrow')}
+          title={t('coursesTitle')}
+          intro={t('coursesText')}
+        >
+          <CoursesShowcase groups={groups} />
+        </PublicSection>
+      ) : null}
+
+      <JourneySection />
+      <div className="-mt-6 pb-14 md:-mt-10 md:pb-24">
+        <Container size="reading">
+          <PaymentSupport title={t('payTitle')} text={t('payText')} />
+        </Container>
+      </div>
 
       <PublicSection
         eyebrow={t('languagesEyebrow')}
@@ -184,105 +212,62 @@ export default async function HomePage() {
         </ul>
       </PublicSection>
 
-      {groups.length > 0 ? (
-        <PublicSection
-          tone="white"
-          eyebrow={t('coursesEyebrow')}
-          title={t('coursesTitle')}
-          intro={t('coursesText')}
-        >
-          <CoursesShowcase groups={groups} />
-        </PublicSection>
-      ) : null}
-
-      <PublicSection eyebrow={t('howEyebrow')} title={t('howTitle')}>
-        <Steps items={t.raw('steps') as { title: string; text: string }[]} />
-        <PaymentSupport
-          className="mx-auto mt-12 max-w-2xl"
-          title={t('payTitle')}
-          text={t('payText')}
-        />
-      </PublicSection>
-
-      {firstFree ? (
-        <PublicSection tone="white">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            <Link
-              href={`/courses/${firstFree.course.slug}/lessons/${firstFree.id}`}
-              aria-label={t('openFreeLesson', { title: firstFree.title })}
-              className="group relative block aspect-[3/2] overflow-hidden rounded-3xl shadow-overlay ring-1 ring-border"
-            >
-              {firstFree.posterUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- the lesson video's own picture
-                <img
-                  src={firstFree.posterUrl}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.04]"
-                />
-              ) : (
-                <Image
-                  src={firstFree.course.imageUrl ?? '/images/try-before-you-register.jpg'}
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 560px, 100vw"
-                  className="object-cover transition duration-500 group-hover:scale-[1.04]"
-                />
-              )}
-              <span className="absolute inset-0 bg-linear-to-t from-primary/40 via-transparent to-transparent" />
-              <span
-                className="absolute inset-0 m-auto flex size-20 items-center justify-center rounded-full bg-white text-primary shadow-overlay transition group-hover:scale-110"
-                aria-hidden
-              >
-                <PlayCircle className="size-10" />
-              </span>
-            </Link>
-            <div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-start">
-              <span className="text-sm font-bold tracking-[0.18em] text-accent-strong uppercase">
-                {t('freeEyebrow')}
-              </span>
-              <h2 className="text-2xl font-bold tracking-[-0.01em] md:text-[2.5rem]">
-                {t('freeTitle')}
-              </h2>
-              <p className="max-w-lg text-base text-muted md:text-lg">{t('freeText')}</p>
-              <ul className="flex w-full max-w-lg flex-col gap-2.5 text-start">
-                {freeLessons.items.slice(0, 3).map((lesson) => (
-                  <li key={lesson.id}>
-                    <Link
-                      href={`/courses/${lesson.course.slug}/lessons/${lesson.id}`}
-                      className="flex min-h-14 items-center gap-3 rounded-xl border border-border bg-surface px-4 py-2 shadow-card transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary-soft"
-                    >
-                      <PlayCircle className="size-5 shrink-0 text-primary" aria-hidden />
-                      <span className="line-clamp-2 font-medium">{lesson.title}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <LinkButton
-                href="/free-lessons"
-                size="lg"
-                className="h-auto min-h-12 w-full py-2 text-center whitespace-normal sm:w-auto"
-              >
-                {t('allFreeLessons')}
-              </LinkButton>
-            </div>
+      <PublicSection tone="white">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="relative aspect-[3/2] overflow-hidden rounded-3xl shadow-overlay ring-1 ring-border">
+            <Image
+              src="/images/try-before-you-register.jpg"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 560px, 100vw"
+              className="object-cover"
+            />
+            <span
+              className="absolute inset-0 bg-linear-to-t from-primary/50 via-transparent to-transparent"
+              aria-hidden
+            />
           </div>
-        </PublicSection>
-      ) : null}
+          <div className="flex flex-col items-center gap-5 text-center lg:items-start lg:text-start">
+            <span className="text-sm font-bold tracking-[0.18em] text-accent-strong uppercase">
+              {t('weeklyEyebrow')}
+            </span>
+            <h2 className="text-2xl font-bold tracking-[-0.01em] md:text-[2.5rem]">
+              {t('weeklyTitle')}
+            </h2>
+            <p className="max-w-lg text-base text-muted md:text-lg">{t('weeklyText')}</p>
+            <ul className="flex w-full max-w-lg flex-col gap-2.5 text-start">
+              {(t.raw('weeklyPoints') as string[]).map((point) => (
+                <li
+                  key={point}
+                  className="flex min-h-14 items-center gap-3 rounded-xl border border-border bg-surface px-4 py-2 shadow-card"
+                >
+                  <CircleCheck className="size-5 shrink-0 text-accent-strong" aria-hidden />
+                  <span className="font-medium">{point}</span>
+                </li>
+              ))}
+            </ul>
+            <LinkButton href="/courses" size="lg">
+              {t('browseCourses')}
+            </LinkButton>
+          </div>
+        </div>
+      </PublicSection>
 
       <PublicSection eyebrow={t('whyEyebrow')} title={t('whyTitle')}>
-        <FeatureGrid items={why} />
+        <FeatureGrid items={why} columns={3} />
       </PublicSection>
 
-      <LearningFlow />
+      <AudienceSection stats={stats} teacherCount={teachers.items.length} />
       <LearningPath levels={filters.levels} />
 
-      <TeachersSection teachers={teachers.items} />
       <StatsStrip stats={stats} />
 
       {testimonials.items.length > 0 ? (
-        <PublicSection eyebrow={t('testimonialsEyebrow')} title={t('testimonialsTitle')}>
+        <PublicSection
+          eyebrow={t('testimonialsEyebrow')}
+          title={t('testimonialsTitle')}
+          intro={t('testimonialsText')}
+        >
           <Testimonials items={testimonials.items} label={t('testimonialsTitle')} />
         </PublicSection>
       ) : null}
@@ -312,9 +297,9 @@ export default async function HomePage() {
       <InstallApp />
 
       <CtaBand title={t('ctaTitle')} text={t('ctaText')}>
-        <LinkButton href="/register" variant="onDark" size="lg">
+        <AuthButton mode="register" variant="onDark" size="lg">
           {t('ctaRegister')}
-        </LinkButton>
+        </AuthButton>
         <LinkButton href="/contact" variant="outlineOnDark" size="lg">
           {t('ctaContact')}
         </LinkButton>

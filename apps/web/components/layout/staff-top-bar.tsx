@@ -9,6 +9,7 @@ import {
   Megaphone,
   MessageCircle,
   UserRound,
+  UsersRound,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from '@/components/ui/link';
@@ -24,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/cn';
 import type { CountKey, Counts } from '@/lib/use-live-counts';
 import type { ShellUser } from './student-shell';
 
@@ -32,6 +34,8 @@ interface QuickAction {
   label: string;
   icon: LucideIcon;
   count?: CountKey;
+  /** Left out of the bar on the smallest phones, where the menu drawer has it. */
+  wide?: boolean;
 }
 
 /** What each role needs one tap away: the queues that wait for them and their chats. */
@@ -39,10 +43,24 @@ const ACTIONS: Record<'admin' | 'teacher', QuickAction[]> = {
   admin: [
     { href: '/admin/payments', label: 'admin.payments', icon: CreditCard, count: 'payments' },
     { href: '/admin/messages', label: 'admin.messages', icon: Mail, count: 'messages' },
+    {
+      href: '/admin/groups',
+      label: 'admin.courseGroups',
+      icon: UsersRound,
+      count: 'groups',
+      wide: true,
+    },
     { href: '/admin/chat', label: 'admin.chat', icon: MessageCircle, count: 'chat' },
   ],
   teacher: [
     { href: '/teach/marking', label: 'teacher.marking', icon: ClipboardCheck, count: 'marking' },
+    {
+      href: '/teach/groups',
+      label: 'teacher.courseGroups',
+      icon: UsersRound,
+      count: 'groups',
+      wide: true,
+    },
     { href: '/teach/chat', label: 'teacher.chat', icon: MessageCircle, count: 'chat' },
     { href: '/teach/announcements', label: 'teacher.announcements', icon: Megaphone },
   ],
@@ -89,7 +107,10 @@ export function StaffTopBar({
                 key={action.href}
                 href={action.href}
                 title={label}
-                className="relative flex size-11 items-center justify-center rounded-xl text-ink hover:bg-primary-soft hover:text-primary"
+                className={cn(
+                  'relative items-center justify-center rounded-xl text-ink hover:bg-primary-soft hover:text-primary',
+                  action.wide ? 'hidden size-11 sm:flex' : 'flex size-11',
+                )}
               >
                 <action.icon className="size-5" aria-hidden />
                 <span className="sr-only">{label}</span>

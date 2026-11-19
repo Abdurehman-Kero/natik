@@ -3,6 +3,7 @@ import { expectNoHorizontalScroll, expectNoSeriousA11yIssues, waitForPageReady }
 
 /** The website's menus and buttons in English, Amharic, Afaan Oromo and Somali. */
 const LANGUAGES = [
+  { code: 'ti', name: 'ትግርኛ', heading: 'ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን ተማሃሩ', courses: 'ኮርሳት' },
   { code: 'am', name: 'አማርኛ', heading: 'ዐረብኛ፣ እንግሊዝኛ እና አፋን ኦሮሞ ይማሩ', courses: 'ኮርሶች' },
   {
     code: 'om',
@@ -76,7 +77,7 @@ test.describe('interface languages', () => {
           url: page.url() === 'about:blank' ? 'http://localhost:3100' : page.url(),
         },
       ]);
-      for (const path of ['/', '/courses', '/help', '/free-lessons', '/find-your-level', '/faq']) {
+      for (const path of ['/', '/courses', '/help', '/find-your-level', '/faq']) {
         const response = await page.goto(path);
         expect(response?.status(), `${lang.code} ${path}`).toBeLessThan(400);
         await waitForPageReady(page);

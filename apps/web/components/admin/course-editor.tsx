@@ -1,7 +1,7 @@
 'use client';
 
 import { courseInputSchema, etbToSantim, santimToEtb, slugify, UPLOAD_LIMITS } from '@natik/shared';
-import { Eye, EyeOff, Globe, Trash2, Wrench } from 'lucide-react';
+import { Eye, EyeOff, Globe, MessagesSquare, Trash2, Wrench } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
@@ -56,8 +56,8 @@ function parseEtb(text: string): number | null {
 /** Create and edit a course (FR-ADMIN-003/004). Grouped into cards: Basics, Content, Access, Visibility. */
 export function CourseEditor({ course, languages, levels, teachers }: CourseEditorProps) {
   const t = useTranslations('adminCourses');
+  const tgroups = useTranslations('groups');
   const tc = useTranslations('common');
-  const ts = useTranslations('status.content');
   const errorMessage = useErrorMessage();
   const router = useRouter();
   const editing = course !== null;
@@ -78,6 +78,9 @@ export function CourseEditor({ course, languages, levels, teachers }: CourseEdit
   const [unlimited, setUnlimited] = useState(course ? course.accessDays === null : false);
   const [featured, setFeatured] = useState(course?.featured ?? false);
   const [showPrice, setShowPrice] = useState(course?.showPrice ?? true);
+  const [ongoing, setOngoing] = useState(course?.ongoing ?? true);
+  // A new course goes on the website as soon as it is created, unless the admin keeps it a draft.
+  const [publishNow, setPublishNow] = useState(true);
   const [lessonOrder, setLessonOrder] = useState<'OPEN' | 'IN_ORDER'>(
     course?.lessonOrder ?? 'OPEN',
   );
@@ -149,6 +152,7 @@ export function CourseEditor({ course, languages, levels, teachers }: CourseEdit
       imageFileId: image.fileId,
       lessonOrder,
       showPrice,
+      ongoing,
       trailerUrl: trailerUrl.trim() || null,
     };
   }
@@ -182,7 +186,16 @@ export function CourseEditor({ course, languages, levels, teachers }: CourseEdit
           method: 'POST',
           json: data,
         });
-        toast.success(t('created'));
+        let published = false;
+        if (publishNow) {
+          try {
+            await api(`/admin/courses/${created.id}/publish`, { method: 'POST' });
+            published = true;
+          } catch {
+            // Something still missing (for example the picture): it stays a draft and the page says why.
+          }
+        }
+        toast.success(published ? t('createdPublished') : t('created'));
         router.replace(`/admin/courses/${created.id}`);
       }
     } catch (error) {
@@ -450,12 +463,23 @@ export function CourseEditor({ course, languages, levels, teachers }: CourseEdit
             checked={featured}
             onCheckedChange={setFeatured}
           />
+          <Switch
+            label={t('ongoing')}
+            description={t('ongoingHint')}
+            checked={ongoing}
+            onCheckedChange={setOngoing}
+          />
           {editing ? (
             <p className="flex items-center gap-2 text-sm text-muted">
               {t('currentStatus')} <StatusPill status={`content.${course.status}`} size="sm" />
             </p>
           ) : (
-            <p className="text-sm text-muted">{t('newIsDraft', { status: ts('DRAFT') })}</p>
+            <Switch
+              label={t('publishNow')}
+              description={t('publishNowHint')}
+              checked={publishNow}
+              onCheckedChange={setPublishNow}
+            />
           )}
         </CardContent>
       </Card>
@@ -487,6 +511,9 @@ export function CourseEditor({ course, languages, levels, teachers }: CourseEdit
         back={{ href: '/admin/courses', label: t('title') }}
         action={
           <>
+            <LinkButton href={`/admin/groups?c=${course.id}`} variant="secondary">
+              <MessagesSquare aria-hidden /> {tgroups('courseGroup')}
+            </LinkButton>
             {course.status === 'PUBLISHED' ? (
               <LinkButton href={`/courses/${course.slug}`} variant="secondary">
                 <Eye aria-hidden /> {t('viewOnSite')}
@@ -509,6 +536,21 @@ export function CourseEditor({ course, languages, levels, teachers }: CourseEdit
         <StatusPill status={`content.${course.status}`} />
         <span>{t('students', { count: course.studentCount })}</span>
       </p>
+
+      {course.status !== 'PUBLISHED' ? (
+        <Alert
+          tone="warning"
+          className="mb-5"
+          action={
+            <Button size="sm" onClick={() => setConfirm('publish')}>
+              <Globe aria-hidden /> {t('publish')}
+            </Button>
+          }
+        >
+          <p className="font-semibold">{t('draftBannerTitle')}</p>
+          <p className="font-normal">{t('draftBannerText')}</p>
+        </Alert>
+      ) : null}
 
       {problems.length > 0 ? (
         <Alert tone="warning" className="mb-5">

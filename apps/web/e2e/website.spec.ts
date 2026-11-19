@@ -30,42 +30,30 @@ async function homeHeadlineSoon(page: Page) {
   };
 }
 
-/** Free lessons, the website editor, the inbox and announcements (M4, AT-01, FR-WEB-005). */
-test.describe('free lessons', () => {
-  test('a visitor opens a free lesson without signing in', async ({ page }) => {
+/** Introduction-only course pages, the website editor, the inbox and announcements (M4, FR-WEB-005). */
+test.describe('introduction only', () => {
+  test('old sample-lesson addresses lead to the courses instead of a dead end', async ({
+    page,
+  }) => {
     await page.goto('/free-lessons');
-    await expect(page.getByRole('heading', { level: 1, name: 'Free lessons' })).toBeVisible();
-    const card = page.locator('main a[href*="/lessons/"]').first();
-    await expect(card).toBeVisible();
-    await expectNoHorizontalScroll(page);
-    await expectNoSeriousA11yIssues(page);
-
-    await card.click();
-    await expect(page).toHaveURL(/\/courses\/[^/]+\/lessons\//);
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(page.locator('main').getByRole('paragraph').first()).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Create free account' })).toBeVisible();
-    await expectNoHorizontalScroll(page);
-    await expectNoSeriousA11yIssues(page);
+    await expect(page).toHaveURL(/\/courses$/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Courses' })).toBeVisible();
+    await page.goto('/courses/everyday-english/lessons/not-a-real-lesson');
+    await expect(page).toHaveURL(/\/courses\/everyday-english$/);
   });
 
-  test('a lesson address that is not a free preview is simply not found', async ({ page }) => {
-    const response = await page.goto('/courses/arabic-for-beginners/lessons/not-a-real-lesson');
-    // Pages stream in each visitor's language, so the status is sent before the page knows; Next.js
-    // then marks the not-found page "noindex" so search engines drop it.
-    expect(response?.status()).toBeLessThan(500);
-    await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
-    await expect(
-      page.getByRole('heading', { name: /couldn.t find|not found/i }).first(),
-    ).toBeVisible();
-  });
-
-  test('the course page links its free lessons', async ({ page }) => {
-    await page.goto('/free-lessons');
-    const href = await page.locator('main a[href*="/lessons/"]').first().getAttribute('href');
-    const slug = href!.split('/')[2]!;
-    await page.goto(`/courses/${slug}`);
-    await expect(page.locator('main a[href*="/lessons/"]').first()).toBeVisible();
+  test('a course page lists weeks and sessions, locked until the student is accepted', async ({
+    page,
+  }) => {
+    await page.goto('/courses/everyday-english');
+    await page.getByRole('tab', { name: 'Content' }).click();
+    await expect(page.getByRole('heading', { name: 'Course outline' })).toBeVisible();
+    await expect(page.getByText(/open after you join/)).toBeVisible();
+    await expect(page.getByText('Week 1', { exact: false }).first()).toBeVisible();
+    // No way into a session from the public page.
+    await expect(page.locator('main a[href*="/lessons/"]')).toHaveCount(0);
+    await expectNoHorizontalScroll(page);
+    await expectNoSeriousA11yIssues(page);
   });
 });
 

@@ -31,6 +31,7 @@ export function MyCourseCard({ item }: { item: MyCourseItem }) {
             alt=""
             fill
             sizes="(min-width: 640px) 380px, 80px"
+            quality={60}
             className="card-hover-image object-cover"
           />
         ) : (

@@ -34,29 +34,33 @@ export default async function AdminWebsitePage() {
   const tp = await getTranslations('privacy');
   const tt = await getTranslations('terms');
 
-  const [home, about, contact, faq, testimonials, privacy, terms, featured] = await Promise.all([
-    apiFetch<SiteValue>('/admin/site/home'),
-    apiFetch<SiteValue>('/admin/site/about'),
-    apiFetch<SiteValue>('/admin/site/contact'),
-    apiFetch<{ items: { id: string; question: string; answer: string; published: boolean }[] }>(
-      '/admin/faq',
-    ),
-    apiFetch<{
-      items: {
-        id: string;
-        name: string;
-        quote: string;
-        courseLabel: string | null;
-        published: boolean;
-      }[];
-    }>('/admin/testimonials'),
-    apiFetch<PolicyResponse | null>('/admin/policies/privacy'),
-    apiFetch<PolicyResponse | null>('/admin/policies/terms'),
-    apiFetch<{
-      featured: { id: string; title: string }[];
-      choices: { id: string; title: string }[];
-    }>('/admin/featured-courses'),
-  ]);
+  const [home, about, contact, help, faq, testimonials, privacy, terms, featured] =
+    await Promise.all([
+      apiFetch<SiteValue>('/admin/site/home'),
+      apiFetch<SiteValue>('/admin/site/about'),
+      apiFetch<SiteValue>('/admin/site/contact'),
+      apiFetch<SiteValue>('/admin/site/help'),
+      apiFetch<{ items: { id: string; question: string; answer: string; published: boolean }[] }>(
+        '/admin/faq',
+      ),
+      apiFetch<{
+        items: {
+          id: string;
+          name: string;
+          quote: string;
+          courseLabel: string | null;
+          photoFileId: string | null;
+          photoUrl: string | null;
+          published: boolean;
+        }[];
+      }>('/admin/testimonials'),
+      apiFetch<PolicyResponse | null>('/admin/policies/privacy'),
+      apiFetch<PolicyResponse | null>('/admin/policies/terms'),
+      apiFetch<{
+        featured: { id: string; title: string }[];
+        choices: { id: string; title: string }[];
+      }>('/admin/featured-courses'),
+    ]);
 
   const policy = (
     saved: PolicyResponse | null,
@@ -72,6 +76,7 @@ export default async function AdminWebsitePage() {
       home={home.value ?? {}}
       about={about.value ?? {}}
       contact={contact.value ?? {}}
+      help={help.value ?? {}}
       faq={faq.items}
       testimonials={testimonials.items}
       policies={{

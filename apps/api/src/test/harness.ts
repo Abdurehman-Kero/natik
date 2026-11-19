@@ -22,12 +22,16 @@ export interface Harness {
     password?: string;
     verified?: boolean;
     phone?: string;
-  }): Promise<{ id: string; phone: string; password: string }>;
+  }): Promise<{ id: string; phone: string; email: string; password: string }>;
   /** A browser-like client that keeps its cookies. */
   client(): ReturnType<typeof request.agent>;
   signIn(phone: string, password: string): Promise<ReturnType<typeof request.agent>>;
   close(): Promise<void>;
 }
+
+/** An email address nobody else in the test database has. */
+export const randomEmail = (): string =>
+  `person${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}@example.com`;
 
 export const randomPhone = (): string =>
   `+2519${String(Math.floor(Math.random() * 1e8)).padStart(8, '0')}`;
@@ -72,18 +76,20 @@ export async function createHarness(): Promise<Harness> {
       phone,
     }) {
       const number = phone ?? randomPhone();
+      const mail = randomEmail();
       const user = await prisma.user.create({
         data: {
           branchId: branch.id,
           fullName: `Test ${role}`,
           phone: number,
+          email: mail,
           passwordHash: await hashPassword(password),
           role,
           isOwner,
           phoneVerifiedAt: verified ? new Date() : null,
         },
       });
-      return { id: user.id, phone: number, password };
+      return { id: user.id, phone: number, email: mail, password };
     },
     client: () => request.agent(app.getHttpServer()),
     async signIn(phone, password) {

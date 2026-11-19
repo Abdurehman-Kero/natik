@@ -10,6 +10,10 @@ export const SMS_TEMPLATES = {
     `Natik: payment confirmed. "${p.course}" is now open. Happy learning!`,
   'payment.rejected': (p: { course: string; reason: string }) =>
     `Natik: we couldn't confirm your payment for "${p.course}". Reason: ${p.reason}`,
+  'enrolment.approved': (p: { course: string }) =>
+    `Natik: you're accepted into "${p.course}". Sign in to start learning.`,
+  'enrolment.declined': (p: { course: string }) =>
+    `Natik: your request to join "${p.course}" was not accepted. See the reason in My courses.`,
   'certificate.ready': (p: { course: string; number: string }) =>
     `Natik: your certificate for "${p.course}" is ready (${p.number}). Download it in My certificates.`,
   'certificate.returned': (p: { course: string }) =>

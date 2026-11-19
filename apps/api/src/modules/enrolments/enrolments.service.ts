@@ -54,8 +54,9 @@ export class EnrolmentsService {
   // ── Students ──────────────────────────────────────────────────────────
 
   /**
-   * "Enrol free" / "Pay and enrol". Tapping again returns the same enrolment instead of making
-   * another (FR-ENR-002). Registration alone gives access to nothing (FR-ENR-004).
+   * "Request to join" (free) / "Pay and enrol". Tapping again returns the same enrolment instead of
+   * making another (FR-ENR-002). Nothing opens until an admin accepts the student: a free course waits
+   * for approval, a paid one for the payment check (FR-ENR-004).
    */
   async enrol(student: SessionUser, courseId: string) {
     if (student.role !== 'STUDENT') throw new AppException('FORBIDDEN', HttpStatus.FORBIDDEN);
@@ -76,14 +77,14 @@ export class EnrolmentsService {
           branchId: course.branchId,
           studentId: student.id,
           courseId: course.id,
-          to: free ? 'ACTIVE' : 'AWAITING_PAYMENT',
+          to: free ? 'AWAITING_APPROVAL' : 'AWAITING_PAYMENT',
           actorId: student.id,
-          startAt: free ? now : null,
-          endAt: free ? accessEnd(now, course.accessDays) : null,
+          startAt: null,
+          endAt: null,
         }),
       );
+      void now;
       await this.machine.record([entry]);
-      if (free) await this.progress.recalcEnrolment(enrolment.id);
       return this.view(await this.mustFind(enrolment.id));
     } catch (error) {
       // Two taps at once: the second one finds the first one's enrolment.
@@ -252,6 +253,55 @@ export class EnrolmentsService {
     return this.view(await this.mustFind(enrolmentId));
   }
 
+  /** How many students wait for an admin to accept them (the menu badge). */
+  async approvalCount(): Promise<{ count: number }> {
+    return {
+      count: await this.prisma.enrolment.count({ where: { status: 'AWAITING_APPROVAL' } }),
+    };
+  }
+
+  /** An admin accepts a student into a free course: access opens now, and the student gets an SMS. */
+  async approve(actor: SessionUser, enrolmentId: string) {
+    const enrolment = await this.mustFind(enrolmentId);
+    if (enrolment.status !== 'AWAITING_APPROVAL') {
+      throw new AppException('ENROLMENT_NOT_ALLOWED', HttpStatus.CONFLICT);
+    }
+    const entry = await this.prisma.$transaction((tx) =>
+      this.activate(tx, enrolment, actor.id, 'Accepted by an admin'),
+    );
+    await this.machine.record([entry]);
+    await this.progress.recalcEnrolment(enrolmentId);
+    const row = await this.prisma.enrolment.findUniqueOrThrow({
+      where: { id: enrolmentId },
+      select: { student: { select: { phone: true } }, course: { select: { title: true } } },
+    });
+    if (row.student.phone) {
+      await this.sms
+        .send(row.student.phone, 'enrolment.approved', { course: shorten(row.course.title, 60) })
+        .catch(() => undefined);
+    }
+    return this.view(await this.mustFind(enrolmentId));
+  }
+
+  /** An admin turns a request down, with a reason the student sees. */
+  async decline(actor: SessionUser, enrolmentId: string, reason: string) {
+    const enrolment = await this.mustFind(enrolmentId);
+    if (enrolment.status !== 'AWAITING_APPROVAL') {
+      throw new AppException('ENROLMENT_NOT_ALLOWED', HttpStatus.CONFLICT);
+    }
+    const result = await this.cancel(actor, enrolmentId, reason);
+    const row = await this.prisma.enrolment.findUniqueOrThrow({
+      where: { id: enrolmentId },
+      select: { student: { select: { phone: true } }, course: { select: { title: true } } },
+    });
+    if (row.student.phone) {
+      await this.sms
+        .send(row.student.phone, 'enrolment.declined', { course: shorten(row.course.title, 50) })
+        .catch(() => undefined);
+    }
+    return result;
+  }
+
   /** Cancels with a reason. Progress and results are kept (FR-ENR-009). */
   async cancel(actor: SessionUser, enrolmentId: string, reason: string) {
     const enrolment = await this.mustFind(enrolmentId);
@@ -323,13 +373,17 @@ export class EnrolmentsService {
   /** Finds students by name or phone, for the "enrol student" and "record cash" dialogs. */
   async searchStudents(q: string) {
     const digits = q.replace(/\D/g, '');
+    // Phone numbers are searched only when the text looks like one, not for digits inside a name.
+    const looksLikePhone = /^[\d\s+()-]+$/.test(q.trim());
     const students = await this.prisma.user.findMany({
       where: {
         role: 'STUDENT',
         status: 'ACTIVE',
         OR: [
           { fullName: { contains: q, mode: 'insensitive' } },
-          ...(digits.length >= 3 ? [{ phone: { contains: digits.slice(-9) } }] : []),
+          ...(looksLikePhone && digits.length >= 3
+            ? [{ phone: { contains: digits.slice(-9) } }]
+            : []),
         ],
       },
       orderBy: { fullName: 'asc' },

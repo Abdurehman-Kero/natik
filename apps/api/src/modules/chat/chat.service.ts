@@ -152,6 +152,7 @@ export class ChatService {
           return {
             id: c.id,
             kind: c.kind,
+            personId: other ? other.id : null,
             title: other ? other.fullName : 'Natik team',
             subtitle: other ? roleLabel(other.role) : 'Natik Language Centre',
             avatarUrl: other ? avatar(other.photoFileId) : null,
@@ -386,6 +387,7 @@ export class ChatService {
     return {
       conversation: {
         id: conversation.id,
+        personId: other ? other.id : null,
         title: other ? other.fullName : 'Natik team',
         subtitle: other ? roleLabel(other.role) : 'Natik Language Centre',
         avatarUrl: other ? avatar(other.photoFileId) : null,

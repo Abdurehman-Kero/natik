@@ -1,9 +1,19 @@
 import 'server-only';
 import type { Role } from '@natik/shared';
 import { redirect } from 'next/navigation';
+import { cache } from 'react';
 import { apiFetch } from './api/server';
 import { ApiError } from './api/errors';
 import { HOME_FOR_ROLE, type UserView } from './api/types';
+
+/** Asked once per page view: the layout, the page and the header all need to know who is signed in. */
+const loadMe = cache(async (): Promise<{ user: UserView } | { error: unknown }> => {
+  try {
+    return { user: await apiFetch<UserView>('/me') };
+  } catch (error) {
+    return { error };
+  }
+});
 
 /**
  * The signed-in user, or null for visitors. On public pages `tolerant` treats an unreachable API
@@ -12,15 +22,14 @@ import { HOME_FOR_ROLE, type UserView } from './api/types';
 export async function getCurrentUser(
   options: { tolerant?: boolean } = {},
 ): Promise<UserView | null> {
-  try {
-    return await apiFetch<UserView>('/me');
-  } catch (error) {
-    if (error instanceof ApiError) {
-      if (error.status === 401) return null;
-      if (options.tolerant && error.status === 0) return null;
-    }
-    throw error;
+  const result = await loadMe();
+  if ('user' in result) return result.user;
+  const error = result.error;
+  if (error instanceof ApiError) {
+    if (error.status === 401) return null;
+    if (options.tolerant && error.status === 0) return null;
   }
+  throw error;
 }
 
 /** Only same-site paths: stops "?next=https://evil.example" redirects. */

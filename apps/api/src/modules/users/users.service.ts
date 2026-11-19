@@ -24,6 +24,10 @@ export interface UserView {
   photoUrl: string | null;
   bio: string | null;
   showOnWebsite: boolean;
+  gender: 'MALE' | 'FEMALE' | null;
+  /** Two-letter country code, e.g. ET. */
+  country: string | null;
+  city: string | null;
   lastSignInAt: Date | null;
   erased: boolean;
   createdAt: Date;
@@ -42,6 +46,9 @@ export function toUserView(user: User): UserView {
     photoUrl: user.photoFileId ? `/api/v1/files/${user.photoFileId}` : null,
     bio: user.bio,
     showOnWebsite: user.showOnWebsite,
+    gender: user.gender,
+    country: user.country,
+    city: user.city,
     lastSignInAt: user.lastSignInAt,
     erased: user.anonymisedAt !== null,
     createdAt: user.createdAt,
@@ -50,6 +57,7 @@ export function toUserView(user: User): UserView {
 
 interface ListQuery {
   q?: string;
+  country?: string;
   role?: Role;
   status?: UserStatus;
   page: number;
@@ -73,11 +81,30 @@ export class UsersService {
     return toUserView(await this.get(id));
   }
 
-  async updateProfile(id: string, input: { fullName: string; email?: string }): Promise<UserView> {
-    const user = await this.prisma.user.update({
-      where: { id },
-      data: { fullName: input.fullName.trim(), email: input.email?.trim() || null },
-    });
+  async updateProfile(
+    id: string,
+    input: {
+      fullName: string;
+      email?: string;
+      gender?: 'MALE' | 'FEMALE' | null;
+      country?: string | null;
+      city?: string | null;
+    },
+  ): Promise<UserView> {
+    const user = await this.onEmailConflict(() =>
+      this.prisma.user.update({
+        where: { id },
+        data: {
+          fullName: input.fullName.trim(),
+          // The email is what people sign in with, so it can be changed but not taken away.
+          ...(input.email ? { email: input.email } : {}),
+          // Left out of the request = left as it was; null or empty = cleared.
+          ...(input.gender !== undefined ? { gender: input.gender } : {}),
+          ...(input.country !== undefined ? { country: input.country } : {}),
+          ...(input.city !== undefined ? { city: input.city?.trim() || null } : {}),
+        },
+      }),
+    );
     return toUserView(user);
   }
 
@@ -147,6 +174,7 @@ export class UsersService {
     const where: Prisma.UserWhereInput = { anonymisedAt: null };
     if (query.role) where.role = query.role;
     if (query.status) where.status = query.status;
+    if (query.country) where.country = query.country;
     if (query.q) {
       const digits = query.q
         .replace(/\D/g, '')
@@ -154,6 +182,7 @@ export class UsersService {
         .replace(/^0/, '');
       where.OR = [
         { fullName: { contains: query.q, mode: 'insensitive' } },
+        { city: { contains: query.q, mode: 'insensitive' } },
         ...(digits.length >= 3 ? [{ phone: { contains: digits } }] : []),
       ];
     }
@@ -169,13 +198,31 @@ export class UsersService {
     return { items: rows.map(toUserView), total, page: query.page, pageSize: query.pageSize };
   }
 
+  /** An email belongs to one account: a second account asking for it gets a clear message. */
+  private async onEmailConflict<T>(write: () => Promise<T>): Promise<T> {
+    try {
+      return await write();
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002' &&
+        JSON.stringify(error.meta ?? {}).includes('email')
+      ) {
+        throw new AppException('EMAIL_ALREADY_REGISTERED', HttpStatus.CONFLICT, {
+          fields: { email: ['This email already has an account.'] },
+        });
+      }
+      throw error;
+    }
+  }
+
   async getForAdmin(id: string): Promise<UserView> {
     return toUserView(await this.get(id));
   }
 
   async create(
     actor: SessionUser,
-    input: { fullName: string; phone: string; email?: string; role: Role },
+    input: { fullName: string; phone: string; email: string; role: Role },
   ): Promise<UserView> {
     if (input.role === 'ADMIN' && !actor.isOwner) {
       throw new AppException('OWNER_REQUIRED', HttpStatus.FORBIDDEN);
@@ -187,17 +234,19 @@ export class UsersService {
       });
     }
     const branch = await this.prisma.branch.findFirstOrThrow({ orderBy: { createdAt: 'asc' } });
-    const user = await this.prisma.user.create({
-      data: {
-        branchId: branch.id,
-        fullName: input.fullName.trim(),
-        phone,
-        email: input.email?.trim() || null,
-        role: input.role,
-        // They set their own password from the SMS link, which also verifies the phone.
-        termsAcceptedAt: null,
-      },
-    });
+    const user = await this.onEmailConflict(() =>
+      this.prisma.user.create({
+        data: {
+          branchId: branch.id,
+          fullName: input.fullName.trim(),
+          phone,
+          email: input.email ?? null,
+          role: input.role,
+          // They set their own password from the SMS link, which also verifies the phone.
+          termsAcceptedAt: null,
+        },
+      }),
+    );
     await this.auth.sendPasswordLink(user, 'account.created');
     await this.audit.record({
       actorId: actor.id,
@@ -219,7 +268,7 @@ export class UsersService {
 
     const data: Prisma.UserUpdateInput = {
       fullName: input.fullName.trim(),
-      email: input.email?.trim() || null,
+      ...(input.email ? { email: input.email } : {}),
       ...(input.bio !== undefined ? { bio: input.bio || null } : {}),
       ...(input.showOnWebsite !== undefined ? { showOnWebsite: input.showOnWebsite } : {}),
     };
@@ -240,7 +289,7 @@ export class UsersService {
       data.role = input.role;
     }
 
-    const user = await this.prisma.user.update({ where: { id }, data });
+    const user = await this.onEmailConflict(() => this.prisma.user.update({ where: { id }, data }));
     if (data.role) {
       await this.audit.record({
         actorId: actor.id,

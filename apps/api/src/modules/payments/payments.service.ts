@@ -39,6 +39,7 @@ const paymentRow = {
   status: true,
   rejectionReason: true,
   receiptFileId: true,
+  receipt: { select: { mime: true } },
   createdAt: true,
   checkedAt: true,
   enrolment: {
@@ -526,6 +527,8 @@ export class PaymentsService {
       submittedAt: r.createdAt,
       checkedAt: r.checkedAt,
       receiptUrl: r.receiptFileId ? `/api/v1/files/${r.receiptFileId}` : null,
+      /** So the admin screen can show a picture, or a PDF icon. */
+      receiptIsPdf: r.receipt?.mime === 'application/pdf',
       student: r.enrolment.student,
       course: r.enrolment.course,
       enrolmentId: r.enrolment.id,

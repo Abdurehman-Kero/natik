@@ -1,14 +1,30 @@
 /**
- * Removes the courses and levels that automated browser tests leave behind in the development
- * database, so the public catalogue only shows real sample content. Safe to run any time:
- * it only touches names the tests generate. Never run against production.
+ * Removes the courses, levels and accounts that automated tests leave behind in the development
+ * database, so the public catalogue, the admin lists and the numbers on the home page only show real
+ * sample content. Safe to run any time: it only touches names the tests generate, and never the three
+ * sample accounts from `pnpm db:seed`. Never run against production.
  *
- *   pnpm --filter @natik/api exec tsx prisma/clean-test-data.ts
+ *   pnpm --filter @natik/api exec tsx prisma/clean-test-data.ts            (clean)
+ *   pnpm --filter @natik/api exec tsx prisma/clean-test-data.ts --dry-run  (only list what would go)
  */
+import { existsSync } from 'node:fs';
 import { Client } from 'pg';
+
+if (existsSync('.env')) process.loadEnvFile('.env');
 
 const TEST_COURSES = `title ~ '^(Quiz course|Someone else''s course|Upload test|Guided course|Journey course) .+' OR title ~ '^Arabic for Beginners [0-9]+$'`;
 const TEST_LEVELS = `name ~ '^Level [0-9]+$'`;
+/** Accounts the tests register. The sample accounts (phones below) are always kept. */
+const TEST_USERS = `role IN ('STUDENT', 'TEACHER')
+  AND (phone IS NULL OR phone NOT IN ('+251911000000', '+251911000001', '+251911000002'))
+  AND ("fullName" ~ '^(Abdi K[.] Kedir|Abdi Kedir)$'
+    OR "fullName" ~ '^Teacher [0-9]+$'
+    OR "fullName" ~ '^(Former student|Help Student|Amina Newcomer|Amina Test|Test Person|Shot Student)$'
+    OR "fullName" ~ '^(Sara Group|Outsider|Abel Group|Poster Student|Screens Student) [0-9]+$'
+    OR "fullName" ~ '^(Meron Place|Chat Student|Academy Student|Area Student|Bar Student|Shot Student|ENE|E2E) .+'
+    OR "fullName" ~ ' [A-Z0-9]{6,8}$')`;
+const DRY_RUN = process.argv.includes('--dry-run');
+const wouldRemove = new Map<string, number>();
 
 interface Fk {
   child: string;
@@ -53,9 +69,18 @@ async function main(): Promise<void> {
   /** Deletes the rows with these ids, and first everything that points at them. */
   async function remove(table: string, ids: string[]): Promise<void> {
     if (ids.length === 0) return;
+    if (DRY_RUN) wouldRemove.set(table, (wouldRemove.get(table) ?? 0) + ids.length);
     for (const { child, column } of await fks(table)) {
       if (!(await hasId(child))) {
-        await db.query(`DELETE FROM "${child}" WHERE "${column}" = ANY($1)`, [ids]);
+        if (DRY_RUN) {
+          const { rows } = await db.query<{ n: string }>(
+            `SELECT count(*) AS n FROM "${child}" WHERE "${column}" = ANY($1)`,
+            [ids],
+          );
+          wouldRemove.set(child, (wouldRemove.get(child) ?? 0) + Number(rows[0]!.n));
+        } else {
+          await db.query(`DELETE FROM "${child}" WHERE "${column}" = ANY($1)`, [ids]);
+        }
         continue;
       }
       const { rows } = await db.query<{ id: string }>(
@@ -67,7 +92,7 @@ async function main(): Promise<void> {
         rows.map((r) => r.id),
       );
     }
-    await db.query(`DELETE FROM "${table}" WHERE id = ANY($1)`, [ids]);
+    if (!DRY_RUN) await db.query(`DELETE FROM "${table}" WHERE id = ANY($1)`, [ids]);
   }
 
   await db.query('BEGIN');
@@ -94,8 +119,23 @@ async function main(): Promise<void> {
       'Level',
       levels.rows.map((r) => r.id),
     );
+    const users = await db.query<{ id: string }>(`SELECT id FROM "User" WHERE ${TEST_USERS}`);
+    for (let i = 0; i < users.rows.length; i += 200) {
+      await remove(
+        'User',
+        users.rows.slice(i, i + 200).map((r) => r.id),
+      );
+    }
+    if (DRY_RUN) {
+      await db.query('ROLLBACK');
+      console.log(`Dry run: ${users.rowCount} test accounts would be removed, with these rows:`);
+      console.table([...wouldRemove].map(([table, rows]) => ({ table, rows })));
+      return;
+    }
     await db.query('COMMIT');
-    console.log(`Removed ${courses.rowCount} test courses and ${levels.rowCount} test levels.`);
+    console.log(
+      `Removed ${courses.rowCount} test courses, ${levels.rowCount} test levels and ${users.rowCount} test accounts.`,
+    );
   } catch (error) {
     await db.query('ROLLBACK');
     throw error;

@@ -20,6 +20,7 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
     q: one(params.q).slice(0, 100),
     role: ['STUDENT', 'TEACHER', 'ADMIN'].includes(one(params.role)) ? one(params.role) : '',
     status: ['ACTIVE', 'DISABLED'].includes(one(params.status)) ? one(params.status) : '',
+    country: /^[A-Za-z]{2}$/.test(one(params.country)) ? one(params.country).toUpperCase() : '',
     page: Math.max(1, Number.parseInt(one(params.page), 10) || 1),
   };
 
@@ -27,6 +28,7 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
   if (query.q) search.set('q', query.q);
   if (query.role) search.set('role', query.role);
   if (query.status) search.set('status', query.status);
+  if (query.country) search.set('country', query.country);
 
   const data = await apiFetch<Paged<UserView>>(`/admin/users?${search}`);
   return <UsersView data={data} query={query} actor={{ id: actor.id, isOwner: actor.isOwner }} />;

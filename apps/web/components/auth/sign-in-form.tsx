@@ -11,17 +11,31 @@ import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { PasswordField } from '@/components/ui/password-field';
-import { PhoneField } from '@/components/ui/phone-field';
+import { TextField } from '@/components/ui/input';
 import { api, useErrorMessage } from '@/lib/api/client';
 import { ApiError } from '@/lib/api/errors';
 import { type FieldErrors, validate } from '@/lib/forms';
 
-export function SignInForm({ next }: { next: string | null }) {
+/**
+ * `embedded` (inside the sign-in dialog): no page title, no page change; the parent decides where to
+ * go next, and the "create an account" link switches the dialog instead.
+ */
+export function SignInForm({
+  next,
+  embedded,
+  onDone,
+  onSwitch,
+}: {
+  next: string | null;
+  embedded?: boolean;
+  onDone?: (home: string) => void;
+  onSwitch?: () => void;
+}) {
   const t = useTranslations('auth');
   const ts = useTranslations('auth.signIn');
   const errorMessage = useErrorMessage();
   const router = useRouter();
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [keep, setKeep] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -31,7 +45,7 @@ export function SignInForm({ next }: { next: string | null }) {
   async function submit(event: FormEvent) {
     event.preventDefault();
     setFormError(null);
-    const { data, errors: found } = validate(signInSchema, { phone, password, keepSignedIn: keep });
+    const { data, errors: found } = validate(signInSchema, { email, password, keepSignedIn: keep });
     setErrors(found);
     if (!data) return;
 
@@ -39,8 +53,12 @@ export function SignInForm({ next }: { next: string | null }) {
     try {
       const result = await api<{ home: string }>('/auth/sign-in', { method: 'POST', json: data });
       forgetSession();
-      router.replace(next ?? result.home);
-      router.refresh();
+      if (onDone) {
+        onDone(result.home);
+      } else {
+        router.replace(next ?? result.home);
+        router.refresh();
+      }
     } catch (error) {
       setFormError({
         locked: error instanceof ApiError && error.code === 'ACCOUNT_LOCKED',
@@ -52,7 +70,12 @@ export function SignInForm({ next }: { next: string | null }) {
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
-      <h1 className="text-2xl font-bold md:text-[1.75rem]">{ts('title')}</h1>
+      {embedded ? null : (
+        <header className="text-center">
+          <h1 className="text-2xl font-bold md:text-[1.75rem]">{ts('title')}</h1>
+          <p className="mt-1 text-muted">{ts('subtitle')}</p>
+        </header>
+      )}
 
       {formError ? (
         <Alert
@@ -69,14 +92,28 @@ export function SignInForm({ next }: { next: string | null }) {
         </Alert>
       ) : null}
 
-      {/* Development only: quick sign-in for the practice accounts. Remove before launch. */}
-      {process.env.NODE_ENV === 'development' ? <DevAccountSwitcher next={next} /> : null}
+      {/* Development only: fills in a practice account (you still press Sign in). Remove before launch. */}
+      {process.env.NODE_ENV === 'development' ? (
+        <DevAccountSwitcher
+          onPick={(account) => {
+            setEmail(account.email);
+            setPassword(account.password);
+            setErrors({});
+            setFormError(null);
+          }}
+        />
+      ) : null}
 
-      <PhoneField
-        label={t('phone')}
-        value={phone}
-        onValueChange={setPhone}
-        error={errors.phone}
+      <TextField
+        label={t('email')}
+        type="email"
+        inputMode="email"
+        autoComplete="username"
+        autoCapitalize="none"
+        spellCheck={false}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        error={errors.email}
         autoFocus
       />
       <PasswordField
@@ -107,12 +144,22 @@ export function SignInForm({ next }: { next: string | null }) {
 
       <p className="text-center text-muted">
         {ts('newHere')}{' '}
-        <Link
-          href={next ? `/register?next=${encodeURIComponent(next)}` : '/register'}
-          className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
-        >
-          {ts('create')}
-        </Link>
+        {onSwitch ? (
+          <button
+            type="button"
+            onClick={onSwitch}
+            className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
+          >
+            {ts('create')}
+          </button>
+        ) : (
+          <Link
+            href={next ? `/register?next=${encodeURIComponent(next)}` : '/register'}
+            className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
+          >
+            {ts('create')}
+          </Link>
+        )}
       </p>
     </form>
   );

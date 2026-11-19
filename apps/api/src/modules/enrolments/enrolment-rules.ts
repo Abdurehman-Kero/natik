@@ -10,7 +10,9 @@ export type EnrolmentState = EnrolmentStatus | 'NEW';
  * enrolment that is under review or expired.
  */
 export const ALLOWED_TRANSITIONS: Record<EnrolmentState, readonly EnrolmentStatus[]> = {
-  NEW: ['ACTIVE', 'AWAITING_PAYMENT'],
+  NEW: ['ACTIVE', 'AWAITING_PAYMENT', 'AWAITING_APPROVAL'],
+  // A free course: an admin accepts the student, or turns the request down.
+  AWAITING_APPROVAL: ['ACTIVE', 'CANCELLED'],
   AWAITING_PAYMENT: ['PAYMENT_SUBMITTED', 'CANCELLED', 'ACTIVE' /* + cash at the centre */],
   PAYMENT_SUBMITTED: ['ACTIVE', 'AWAITING_PAYMENT', 'CANCELLED' /* + */],
   ACTIVE: ['COMPLETED', 'EXPIRED', 'CANCELLED'],

@@ -84,10 +84,6 @@ describe('public website and its editor', () => {
       .patch(`/api/v1/teach/blocks/${block.id}`)
       .send({ textJson: text('Hello learners') })
       .expect(200);
-    await teacherAgent
-      .patch(`/api/v1/teach/lessons/${lesson.id}`)
-      .send({ isFreePreview: options.free })
-      .expect(200);
     if (options.publishLesson !== false) {
       await teacherAgent.post(`/api/v1/teach/lessons/${lesson.id}/publish`).expect(200);
       await teacherAgent.post(`/api/v1/teach/units/${unit.id}/publish`).expect(200);
@@ -116,44 +112,36 @@ describe('public website and its editor', () => {
     return { course, unit, lesson, teacher, teacherAgent };
   }
 
-  describe('free lessons (AT-01, FR-CAT-005, FR-WEB-006)', () => {
-    it('a free preview lesson opens for visitors, and is listed', async () => {
-      const { lesson, course } = await courseWithLesson({ free: true });
-      const res = await h.client().get(`/api/v1/public/lessons/${lesson.id}`).expect(200);
-      expect(res.body.lesson.title).toBe('Free lesson');
-      expect(res.body.lesson.blocks[0].html).toBe('<p>Hello learners</p>');
-      expect(res.body.course.slug).toBe(course.slug);
-      const list = await h.client().get('/api/v1/public/free-lessons').expect(200);
-      expect(list.body.items.some((l: { id: string }) => l.id === lesson.id)).toBe(true);
+  describe('introduction only (FR-CAT-005, FR-WEB-006)', () => {
+    it('visitors get no session content: sample lesson addresses are gone', async () => {
+      const { lesson } = await courseWithLesson({ free: true });
+      await h.client().get(`/api/v1/public/lessons/${lesson.id}`).expect(404);
+      await h.client().get('/api/v1/public/free-lessons').expect(404);
+      // Opening the session itself asks visitors to sign in.
+      await h.client().get(`/api/v1/learn/lessons/${lesson.id}`).expect(401);
     });
 
-    it('a lesson that is not a free preview answers “not found”, with no hint it exists', async () => {
-      const { lesson } = await courseWithLesson({ free: false });
-      const res = await h.client().get(`/api/v1/public/lessons/${lesson.id}`).expect(404);
-      expect(res.body.error.code).toBe('NOT_FOUND');
-      const unknown = await h.client().get('/api/v1/public/lessons/does-not-exist').expect(404);
-      expect(unknown.body.error.message).toBe(res.body.error.message);
-    });
-
-    it('drafts, hidden lessons and unpublished courses never appear', async () => {
+    it('the course page lists weeks and session titles, and never drafts or hidden ones', async () => {
       const draftLesson = await courseWithLesson({ free: true, publishLesson: false });
-      const draftCourse = await courseWithLesson({ free: true, publishCourse: false });
       const hidden = await courseWithLesson({ free: true });
+      const shown = await courseWithLesson({ free: true });
       await hidden.teacherAgent.post(`/api/v1/teach/lessons/${hidden.lesson.id}/hide`).expect(200);
 
-      for (const { lesson } of [draftLesson, draftCourse, hidden]) {
-        await h.client().get(`/api/v1/public/lessons/${lesson.id}`).expect(404);
-      }
-      const list = await h.client().get('/api/v1/public/free-lessons').expect(200);
-      const ids = list.body.items.map((l: { id: string }) => l.id);
-      for (const { lesson } of [draftLesson, draftCourse, hidden])
-        expect(ids).not.toContain(lesson.id);
-      // the course page does not list them either
       const detail = await h
         .client()
-        .get(`/api/v1/public/courses/${hidden.course.slug}`)
+        .get(`/api/v1/public/courses/${shown.course.slug}`)
         .expect(200);
-      expect(JSON.stringify(detail.body.outline)).not.toContain(hidden.lesson.id);
+      expect(detail.body.outline[0].lessons[0]).toEqual({
+        id: shown.lesson.id,
+        title: shown.lesson.title,
+        sessionDate: null,
+      });
+      // Titles only: no content of any kind.
+      expect(JSON.stringify(detail.body)).not.toContain('Hello learners');
+      for (const { course, lesson } of [draftLesson, hidden]) {
+        const page = await h.client().get(`/api/v1/public/courses/${course.slug}`).expect(200);
+        expect(JSON.stringify(page.body.outline)).not.toContain(lesson.id);
+      }
     });
   });
 
@@ -272,6 +260,63 @@ describe('public website and its editor', () => {
       );
       expect(pub).toContain(shown.id);
       expect(pub).not.toContain(hidden.id);
+    });
+
+    it('a testimonial can have a student photo that is public only once it is shown', async () => {
+      await h.prisma.testimonial.deleteMany();
+      const upload = await admin
+        .post('/api/v1/files')
+        .field('purpose', 'SITE_IMAGE')
+        .attach('file', image, 'student.png')
+        .expect(201);
+      const photoId = upload.body.id as string;
+      // Before it is used on the website, only an admin can see the picture.
+      await h.client().get(`/api/v1/files/${photoId}`).expect(404);
+      await admin.get(`/api/v1/files/${photoId}`).expect(200);
+
+      const shown = (
+        await admin
+          .post('/api/v1/admin/testimonials')
+          .send({
+            name: 'Photo P.',
+            quote: 'I could ask questions at any time.',
+            photoFileId: photoId,
+          })
+          .expect(201)
+      ).body;
+      expect(shown.photoUrl).toBe(`/api/v1/files/${photoId}`);
+      const pub = (await h.client().get('/api/v1/public/testimonials').expect(200)).body.items;
+      expect(pub.find((i: { id: string }) => i.id === shown.id).photoUrl).toBe(
+        `/api/v1/files/${photoId}`,
+      );
+      await h.client().get(`/api/v1/files/${photoId}`).expect(200);
+
+      // Only a site picture can be used: a course image is refused.
+      const other = await admin
+        .post('/api/v1/files')
+        .field('purpose', 'COURSE_IMAGE')
+        .attach('file', image, 'cover.png')
+        .expect(201);
+      await admin
+        .post('/api/v1/admin/testimonials')
+        .send({
+          name: 'Wrong P.',
+          quote: 'This uses the wrong kind of picture.',
+          photoFileId: other.body.id,
+        })
+        .expect(400);
+
+      // Hiding the testimonial hides the picture from visitors again.
+      await admin
+        .put(`/api/v1/admin/testimonials/${shown.id}`)
+        .send({
+          name: 'Photo P.',
+          quote: 'I could ask questions at any time.',
+          photoFileId: photoId,
+          published: false,
+        })
+        .expect(200);
+      await h.client().get(`/api/v1/files/${photoId}`).expect(404);
     });
 
     it('policy text is made safe before it is shown', async () => {

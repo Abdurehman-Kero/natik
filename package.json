@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lhci": "lhci autorun",
-    "dev": "pnpm services:up && turbo run dev",
+    "dev": "node scripts/dev.mjs",
+    "dev:verbose": "pnpm services:up && turbo run dev",
     "dev:apps": "turbo run dev",
     "dev:warm": "node scripts/warm-routes.mjs",
     "preview": "pnpm build && turbo run start",

@@ -61,13 +61,22 @@ describe('public website API', () => {
       );
     });
 
-    it('allows 5 messages an hour per visitor', async () => {
+    it('allows 5 messages an hour per phone number, and other people on the same network still get through', async () => {
+      const phone = randomPhone();
       const results: number[] = [];
       for (let i = 0; i < 6; i++) {
-        results.push((await h.client().post('/api/v1/public/contact').send(body())).status);
+        results.push(
+          (await h.client().post('/api/v1/public/contact').send(body({ phone }))).status,
+        );
       }
       expect(results.slice(0, 5)).toEqual([200, 200, 200, 200, 200]);
       expect(results[5]).toBe(429);
+      // Someone else behind the same address is not blocked by that number's limit.
+      const other = await h
+        .client()
+        .post('/api/v1/public/contact')
+        .send({ ...body(), phone: '+251922334455' });
+      expect(other.status).toBe(200);
     });
   });
 

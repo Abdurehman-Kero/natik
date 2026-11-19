@@ -7,13 +7,14 @@ import {
   Power,
   PowerOff,
   Eraser,
+  Eye,
   Send,
   ShieldCheck,
   Users,
 } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -35,12 +36,16 @@ import { Select } from '@/components/ui/select';
 import { toast } from '@/components/ui/toast';
 import { api, useErrorMessage } from '@/lib/api/client';
 import type { Paged, UserView } from '@/lib/api/types';
+import { flagOf } from '@/lib/countries';
+import { useCountryName, useCountryOptions } from '@/lib/use-country-options';
+import { UserDetailsDialog } from './user-details-dialog';
 import { UserFormDialog } from './user-form-dialog';
 
 export interface UsersQuery {
   q: string;
   role: string;
   status: string;
+  country: string;
   page: number;
 }
 
@@ -50,6 +55,7 @@ function hrefFor(query: UsersQuery, overrides: Partial<UsersQuery>): string {
   if (merged.q) params.set('q', merged.q);
   if (merged.role) params.set('role', merged.role);
   if (merged.status) params.set('status', merged.status);
+  if (merged.country) params.set('country', merged.country);
   if (merged.page > 1) params.set('page', String(merged.page));
   const text = params.toString();
   return text ? `/admin/users?${text}` : '/admin/users';
@@ -71,11 +77,15 @@ export function UsersView({
   const router = useRouter();
   const [search, setSearch] = useState(query.q);
   const [creating, setCreating] = useState(false);
+  const locale = useLocale();
+  const countries = useCountryOptions(locale, query.country || undefined);
+  const nameOfCountry = useCountryName(locale);
+  const [viewing, setViewing] = useState<UserView | null>(null);
   const [editing, setEditing] = useState<UserView | null>(null);
   const [disabling, setDisabling] = useState<UserView | null>(null);
   const [erasing, setErasing] = useState<UserView | null>(null);
 
-  const filtered = Boolean(query.q || query.role || query.status);
+  const filtered = Boolean(query.q || query.role || query.status || query.country);
   const totalPages = Math.max(1, Math.ceil(data.total / data.pageSize));
 
   function go(overrides: Partial<UsersQuery>) {
@@ -101,12 +111,18 @@ export function UsersView({
       header: t('columns.name'),
       mobile: 'title',
       cell: (u) => (
-        <span className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setViewing(u)}
+          className="flex min-h-11 items-center gap-3 text-start"
+        >
           <Avatar name={u.fullName} src={u.photoUrl} size="sm" />
           <span className="flex min-w-0 flex-col">
-            <span className="truncate font-medium text-ink">{u.fullName}</span>
+            <span className="truncate font-medium text-ink hover:text-primary hover:underline">
+              {u.fullName}
+            </span>
           </span>
-        </span>
+        </button>
       ),
     },
     {
@@ -114,6 +130,22 @@ export function UsersView({
       header: t('columns.phone'),
       mobile: 'meta',
       cell: (u) => <span className="tabular-nums">{u.phone}</span>,
+    },
+    {
+      key: 'location',
+      header: t('columns.location'),
+      mobile: 'meta',
+      cell: (u) =>
+        u.country ? (
+          <span className="flex min-w-0 flex-col">
+            <span className="truncate">
+              {flagOf(u.country)} {nameOfCountry(u.country)}
+            </span>
+            {u.city ? <span className="truncate text-sm text-muted">{u.city}</span> : null}
+          </span>
+        ) : (
+          <span className="text-muted">—</span>
+        ),
     },
     {
       key: 'role',
@@ -170,7 +202,14 @@ export function UsersView({
             }}
           />
         </form>
-        <div className="grid grid-cols-2 gap-3 md:w-80">
+        <div className="grid grid-cols-2 gap-3 md:w-[34rem] md:grid-cols-3">
+          <Select
+            aria-label={t('country')}
+            value={query.country}
+            onChange={(e) => go({ country: e.target.value })}
+            placeholder={t('allCountries')}
+            options={countries}
+          />
           <Select
             aria-label={t('role')}
             value={query.role}
@@ -225,6 +264,9 @@ export function UsersView({
                 </IconButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+                <DropdownMenuItem onSelect={() => setViewing(u)}>
+                  <Eye aria-hidden /> {t('viewDetails')}
+                </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setEditing(u)}>
                   <Pencil aria-hidden /> {t('edit')}
                 </DropdownMenuItem>
@@ -277,6 +319,7 @@ export function UsersView({
         hrefFor={(page) => hrefFor(query, { page })}
       />
 
+      <UserDetailsDialog user={viewing} onClose={() => setViewing(null)} />
       <UserFormDialog open={creating} onOpenChange={setCreating} user={null} actor={actor} />
       <UserFormDialog
         open={editing !== null}

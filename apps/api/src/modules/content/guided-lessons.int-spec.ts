@@ -200,11 +200,17 @@ describe('guided lessons (Phase A)', () => {
     expect(left.slides).toHaveLength(1);
 
     // An empty deck does not count as lesson content when publishing.
+    // (A week holds up to 3 sessions, so this one goes in a week of its own.)
+    const deckCourseId = (await teacher.get(`/api/v1/teach/lessons/${id}`)).body.course.id;
+    const week = (
+      await teacher
+        .post(`/api/v1/teach/courses/${deckCourseId}/units`)
+        .send({ title: 'Week 2' })
+        .expect(201)
+    ).body;
     const emptyLesson = (
       await teacher
-        .post(
-          `/api/v1/teach/units/${(await teacher.get(`/api/v1/teach/lessons/${id}`)).body.unit.id}/lessons`,
-        )
+        .post(`/api/v1/teach/units/${week.id}/lessons`)
         .send({ title: 'Only an empty deck' })
         .expect(201)
     ).body;

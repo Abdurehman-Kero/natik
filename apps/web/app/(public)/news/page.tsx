@@ -1,6 +1,7 @@
 import { Newspaper } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { NewsList } from '@/components/public/news-list';
+import { NextSteps } from '@/components/public/next-steps';
 import { PageHero } from '@/components/public/page-hero';
 import { PublicSection } from '@/components/public/section';
 import { Card } from '@/components/ui/card';
@@ -32,6 +33,7 @@ export default async function NewsPage() {
           </Card>
         )}
       </PublicSection>
+      <NextSteps items={['courses', 'join']} />
     </>
   );
 }

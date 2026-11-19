@@ -111,6 +111,9 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem;
+    /* Phones have a tab bar along the bottom: keep focused or scrolled-to things clear of it
+       (WCAG 2.2 "focus not obscured"). */
+    scroll-padding-bottom: 6rem;
   }
 
   body {
@@ -152,12 +155,14 @@
     font-family: var(--font-arabic);
     line-height: 1.9;
   }
-  :lang(am) {
+  :lang(am),
+  :lang(ti) {
     font-family: var(--font-ethiopic);
     line-height: 1.7;
   }
   /* The whole page in Amharic: taller lines so Ethiopic letters never feel cramped. */
-  html:lang(am) body {
+  html:lang(am) body,
+  html:lang(ti) body {
     line-height: 1.7;
   }
 

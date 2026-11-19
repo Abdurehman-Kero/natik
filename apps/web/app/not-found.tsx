@@ -1,5 +1,6 @@
 import { Compass } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { ClientMessages } from '@/components/client-messages';
 import { PublicShell } from '@/components/layout/shells';
 import { LinkButton } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -13,23 +14,25 @@ export async function generateMetadata() {
 export default async function NotFound() {
   const t = await getTranslations('notFound');
   return (
-    <PublicShell>
-      <div className="flex flex-1 items-center justify-center py-16">
-        <EmptyState
-          as="h1"
-          icon={Compass}
-          title={t('title')}
-          description={t('text')}
-          action={
-            <>
-              <LinkButton href="/">{t('home')}</LinkButton>
-              <LinkButton href="/contact" variant="secondary">
-                {t('contact')}
-              </LinkButton>
-            </>
-          }
-        />
-      </div>
-    </PublicShell>
+    <ClientMessages area="public">
+      <PublicShell>
+        <div className="flex flex-1 items-center justify-center py-16">
+          <EmptyState
+            as="h1"
+            icon={Compass}
+            title={t('title')}
+            description={t('text')}
+            action={
+              <>
+                <LinkButton href="/">{t('home')}</LinkButton>
+                <LinkButton href="/contact" variant="secondary">
+                  {t('contact')}
+                </LinkButton>
+              </>
+            }
+          />
+        </div>
+      </PublicShell>
+    </ClientMessages>
   );
 }

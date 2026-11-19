@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
 import {
+  createStudent,
   expectNoHorizontalScroll,
   expectNoSeriousA11yIssues,
   latestCode,
+  emailFor,
   latestSms,
   newPhone,
   typeCode,
@@ -15,15 +17,18 @@ import {
 test.describe('accounts', () => {
   async function register(page: import('@playwright/test').Page, phone: string, password: string) {
     await page.goto('/register');
-    await page.getByLabel('Full name').fill('Abdi Kedir');
+    await page.getByLabel('First name').fill('Abdi');
+    await page.getByLabel('Last name').fill('Kedir');
     await page.getByLabel('Phone number').fill(phone);
+    await page.getByLabel('Email').fill(emailFor(phone));
     await page.getByLabel('Password', { exact: true }).fill(password);
+    await page.getByLabel('Confirm password').fill(password);
     await page.getByRole('checkbox', { name: /16 or older/ }).check();
     await page.getByRole('button', { name: 'Create account' }).click();
     await expect(page).toHaveURL(/\/dashboard/);
   }
 
-  test('a new student registers with name, phone and password and lands on the dashboard', async ({
+  test('a new student registers with name, email, phone and password and lands on the dashboard', async ({
     page,
   }) => {
     const phone = newPhone();
@@ -40,16 +45,20 @@ test.describe('accounts', () => {
   test('forms explain mistakes next to the field', async ({ page }) => {
     await page.goto('/register');
     await page.getByRole('button', { name: 'Create account' }).click();
-    await expect(page.getByText('Enter your full name.')).toBeVisible();
+    await expect(page.getByText('Enter your full name.').first()).toBeVisible();
     await expect(page.getByText('Enter a 9-digit Ethiopian mobile number.')).toBeVisible();
+    await expect(page.getByText('Enter your email address.')).toBeVisible();
     await expect(page.getByText('Please accept to continue.')).toBeVisible();
   });
 
   test('a phone that already has an account offers sign in and reset', async ({ page }) => {
     await page.goto('/register');
-    await page.getByLabel('Full name').fill('Someone Else');
+    await page.getByLabel('First name').fill('Someone');
+    await page.getByLabel('Last name').fill('Else');
     await page.getByLabel('Phone number').fill('911000002'); // seeded student
+    await page.getByLabel('Email').fill(emailFor(newPhone()));
     await page.getByLabel('Password', { exact: true }).fill('Passw0rd123');
+    await page.getByLabel('Confirm password').fill('Passw0rd123');
     await page.getByRole('checkbox', { name: /16 or older/ }).check();
     await page.getByRole('button', { name: 'Create account' }).click();
     await expect(page.getByText('This number already has an account.')).toBeVisible();
@@ -67,11 +76,11 @@ test.describe('accounts', () => {
     await expect(page).toHaveURL(/\/$/);
 
     await page.goto('/sign-in');
-    await page.getByLabel('Phone number').fill(phone);
+    await page.getByLabel('Email').fill(emailFor(phone));
     await page.getByLabel('Password', { exact: true }).fill('Wrong12345');
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(
-      page.getByRole('alert').filter({ hasText: 'Phone number or password is incorrect.' }),
+      page.getByRole('alert').filter({ hasText: 'Email or password is incorrect.' }),
     ).toBeVisible();
 
     await page.getByLabel('Password', { exact: true }).fill('Passw0rd123');
@@ -79,16 +88,20 @@ test.describe('accounts', () => {
     await expect(page).toHaveURL(/\/dashboard/);
   });
 
-  test('protected pages send visitors to sign in, then bring them back', async ({ page }) => {
+  test('protected pages send visitors to sign in, then bring them back', async ({
+    page,
+    baseURL,
+  }) => {
+    const student = await createStudent(baseURL!);
     await page.goto('/dashboard');
     await expect(page).toHaveURL(/\/sign-in\?next=%2Fdashboard/);
-    await page.getByLabel('Phone number').fill('911000002');
-    await page.getByLabel('Password', { exact: true }).fill('Student2026');
+    await page.getByLabel('Email').fill(student.email.toUpperCase()); // any letter case works
+    await page.getByLabel('Password', { exact: true }).fill(student.password);
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page).toHaveURL(/\/dashboard/);
   });
 
-  test('forgot password: phone, code, new password, then sign in', async ({ page }) => {
+  test('forgot password: email, code by SMS, new password, then sign in', async ({ page }) => {
     const phone = newPhone();
     await register(page, phone, 'Passw0rd123');
     await expect(page).toHaveURL(/\/dashboard/);
@@ -96,7 +109,7 @@ test.describe('accounts', () => {
     await expect(page).toHaveURL(/\/$/);
 
     await page.goto('/forgot-password');
-    await page.getByLabel('Phone number').fill(phone);
+    await page.getByLabel('Email').fill(emailFor(phone));
     await page.getByRole('button', { name: 'Send code' }).click();
     await expect(page.getByRole('heading', { name: 'Enter your code' })).toBeVisible();
     await expectNoHorizontalScroll(page);
@@ -110,7 +123,7 @@ test.describe('accounts', () => {
     await expect(page.getByRole('heading', { name: 'Password saved' })).toBeVisible();
 
     await page.getByRole('link', { name: 'Sign in' }).click();
-    await page.getByLabel('Phone number').fill(phone);
+    await page.getByLabel('Email').fill(emailFor(phone));
     await page.getByLabel('Password', { exact: true }).fill('NewPassw0rd9');
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page).toHaveURL(/\/dashboard/);

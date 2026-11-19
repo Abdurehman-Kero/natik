@@ -1,4 +1,5 @@
-import { ArrowLeft } from 'lucide-react';
+import { formatDate } from '@natik/shared';
+import { ArrowLeft, CalendarClock, MessagesSquare } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { getTranslations } from 'next-intl/server';
 import { AccessBlocked } from '@/components/learn/access-blocked';
@@ -22,6 +23,7 @@ export default async function CourseOutlinePage({ params }: { params: Promise<{ 
   await requireRole(['STUDENT'], `/learn/${slug}`);
   const t = await getTranslations('learn');
   const tp = await getTranslations('pages');
+  const tg = await getTranslations('groups');
   const result = await loadOrDenied<CourseOutline>(`/learn/${encodeURIComponent(slug)}`);
   if (!result.ok) return <NoAccess backHref="/my-courses" backLabel={tp('myCourses')} />;
   const outline = result.data;
@@ -61,6 +63,13 @@ export default async function CourseOutlinePage({ params }: { params: Promise<{ 
           </p>
         </div>
         {outline.access.readOnly ? <Alert tone="success">{t('readOnly')}</Alert> : null}
+        <LinkButton
+          href={`/groups?c=${outline.course.id}`}
+          variant="secondary"
+          className="self-start"
+        >
+          <MessagesSquare aria-hidden /> {tg('courseGroup')}
+        </LinkButton>
         {outline.continueLesson ? (
           <LinkButton
             href={`/learn/${outline.course.slug}/lessons/${outline.continueLesson.id}`}
@@ -80,6 +89,33 @@ export default async function CourseOutlinePage({ params }: { params: Promise<{ 
       ) : (
         <UnitList units={outline.units} slug={outline.course.slug} />
       )}
+
+      {outline.upcoming.length > 0 ? (
+        <section aria-labelledby="upcoming" className="flex flex-col gap-3">
+          <h2 id="upcoming" className="flex items-center gap-2 font-sans text-lg font-semibold">
+            <CalendarClock className="size-5 text-accent-strong" aria-hidden /> {t('upcomingTitle')}
+          </h2>
+          <ul className="flex flex-col divide-y divide-border rounded-xl border border-dashed border-border-strong bg-surface">
+            {outline.upcoming.map((session) => (
+              <li key={session.id} className="flex items-center gap-3 px-4 py-3">
+                <span className="min-w-0 flex-1">
+                  <span className="block font-medium text-ink">{session.title}</span>
+                  <span className="block text-sm text-muted">{session.weekTitle}</span>
+                </span>
+                {session.sessionDate ? (
+                  <span className="shrink-0 rounded-lg bg-primary-soft px-2.5 py-1 text-sm font-semibold text-primary">
+                    {formatDate(session.sessionDate)}
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : outline.ongoing ? (
+        <p className="flex items-center gap-2 text-sm text-muted">
+          <CalendarClock className="size-4" aria-hidden /> {t('ongoingNote')}
+        </p>
+      ) : null}
     </div>
   );
 }

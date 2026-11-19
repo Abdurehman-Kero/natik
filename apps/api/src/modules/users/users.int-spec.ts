@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { UsersService } from './users.service';
-import { createHarness, type Harness, randomPhone } from '../../test/harness';
+import { createHarness, type Harness, randomEmail, randomPhone } from '../../test/harness';
 
 /** Roles and permissions: BR-ROLE-001…004 and FR-ADMIN-002 (needs PostgreSQL + Redis). */
 describe('admin user management and permissions', () => {
@@ -17,7 +17,12 @@ describe('admin user management and permissions', () => {
     await h.prisma.user.updateMany({ where: { isOwner: true }, data: { isOwner: false } });
   });
 
-  const newUser = () => ({ fullName: 'Sara Mohammed', phone: randomPhone(), role: 'TEACHER' });
+  const newUser = () => ({
+    fullName: 'Sara Mohammed',
+    phone: randomPhone(),
+    email: randomEmail(),
+    role: 'TEACHER',
+  });
 
   describe('who can open what', () => {
     it('visitors get 401 and students get 403 on admin routes', async () => {
@@ -88,6 +93,63 @@ describe('admin user management and permissions', () => {
       expect(byName.body.items[0]).not.toHaveProperty('passwordHash');
     });
 
+    it('keeps where a person is (country, city, gender) from registration, and shows it to admins', async () => {
+      const phone = randomPhone();
+      const created = await h
+        .client()
+        .post('/api/v1/auth/register')
+        .send({
+          fullName: 'Hana Bekele',
+          phone,
+          email: randomEmail(),
+          password: 'Passw0rd123',
+          acceptTerms: true,
+          confirmAge: true,
+          gender: 'FEMALE',
+          country: 'ke',
+          city: '  Nairobi ',
+        })
+        .expect(201);
+      const mine = await h.signIn(phone, 'Passw0rd123');
+      const me = (await mine.get('/api/v1/me').expect(200)).body;
+      expect(me).toMatchObject({ gender: 'FEMALE', country: 'KE', city: 'Nairobi' });
+
+      // A bad country code is refused.
+      await h
+        .client()
+        .post('/api/v1/auth/register')
+        .send({
+          fullName: 'Bad Country',
+          phone: randomPhone(),
+          email: randomEmail(),
+          password: 'Passw0rd123',
+          acceptTerms: true,
+          confirmAge: true,
+          country: 'Ethiopia',
+        })
+        .expect(400);
+
+      // They can change it, or clear the city by sending nothing.
+      const changed = await mine
+        .patch('/api/v1/me')
+        .send({ fullName: 'Hana Bekele', country: 'ET', city: '' })
+        .expect(200);
+      expect(changed.body).toMatchObject({ country: 'ET', city: null, gender: 'FEMALE' });
+      // Leaving the fields out leaves them as they were.
+      const same = await mine.patch('/api/v1/me').send({ fullName: 'Hana B.' }).expect(200);
+      expect(same.body).toMatchObject({ country: 'ET', gender: 'FEMALE' });
+
+      // An admin sees it in the list and the detail, and can filter by country.
+      const admin = await h.makeUser({ role: 'ADMIN' });
+      const agent = await h.signIn(admin.phone, admin.password);
+      const listed = (await agent.get('/api/v1/admin/users?country=et&pageSize=50').expect(200))
+        .body.items as { id: string; country: string }[];
+      expect(listed.some((u) => u.id === created.body.id || u.id === me.id)).toBe(true);
+      expect(listed.every((u) => u.country === 'ET')).toBe(true);
+      const detail = (await agent.get(`/api/v1/admin/users/${me.id}`).expect(200)).body;
+      expect(detail).toMatchObject({ country: 'ET', gender: 'FEMALE' });
+    });
+
     it('creates a teacher who gets an SMS link, sets a password and signs in (AT-02 admin flow)', async () => {
       const owner = await h.makeUser({ role: 'ADMIN', isOwner: true });
       const admin = await h.signIn(owner.phone, owner.password);
@@ -113,6 +175,34 @@ describe('admin user management and permissions', () => {
         .send({ phone: body.phone, password: 'TeacherPass1' });
       expect(teacher.status).toBe(200);
       expect(teacher.body.home).toBe('/teach');
+    });
+
+    it('refuses an email that already has an account, for admins and for profile changes', async () => {
+      const owner = await h.makeUser({ role: 'ADMIN', isOwner: true });
+      const admin = await h.signIn(owner.phone, owner.password);
+      const existing = await h.makeUser({});
+      const res = await admin
+        .post('/api/v1/admin/users')
+        .send({ ...newUser(), email: existing.email.toUpperCase() })
+        .expect(409);
+      expect(res.body.error.code).toBe('EMAIL_ALREADY_REGISTERED');
+      // An admin must give an email: it is how the person signs in.
+      const { email: _omit, ...without } = newUser();
+      await admin.post('/api/v1/admin/users').send(without).expect(400);
+
+      // Changing your own email to someone else's is refused too, and an empty email does not erase it.
+      const me = await h.makeUser({});
+      const mine = await h.signIn(me.phone, me.password);
+      const taken = await mine
+        .patch('/api/v1/me')
+        .send({ fullName: 'Someone', email: existing.email })
+        .expect(409);
+      expect(taken.body.error.code).toBe('EMAIL_ALREADY_REGISTERED');
+      const kept = await mine
+        .patch('/api/v1/me')
+        .send({ fullName: 'Someone', email: '' })
+        .expect(200);
+      expect(kept.body.email).toBe(me.email);
     });
 
     it('refuses a phone that already has an account', async () => {

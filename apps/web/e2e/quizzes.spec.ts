@@ -8,9 +8,10 @@ import {
 import {
   expectNoHorizontalScroll,
   expectNoSeriousA11yIssues,
-  newPhone,
   SEED,
   signInAs,
+  joinCourse,
+  newContact,
 } from './helpers';
 
 /** A real PNG, used as the course cover (a course needs a picture to be published). */
@@ -78,6 +79,8 @@ async function buildCourse(api: APIRequestContext, lessons = 2): Promise<Built> 
         outcomes: ['Try a quiz'],
         access: 'FREE',
         accessDays: 90,
+        // All sessions are in: the course can be completed.
+        ongoing: false,
         imageFileId: image.id,
       },
     }),
@@ -184,7 +187,7 @@ async function registerStudent(page: Page) {
   const res = await page.request.post('/api/v1/auth/register', {
     data: {
       fullName: name,
-      phone: newPhone(),
+      ...newContact(),
       password: 'Passw0rd123',
       acceptTerms: true,
       confirmAge: true,
@@ -319,7 +322,7 @@ test.describe('taking a quiz (AT-10, AT-11, AT-13)', () => {
     const quizId = await buildQuiz(admin, course.lessonIds[1]!, { isFinal: true });
     const studentName = await registerStudent(page);
 
-    await page.request.post(`/api/v1/courses/${course.courseId}/enrol`);
+    await joinCourse(page, course.courseId);
     await page.goto(`/learn/${course.slug}/lessons/${course.lessonIds[0]}`);
     await page.getByRole('button', { name: 'Mark as complete' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Completed' })).toBeVisible();
@@ -450,7 +453,7 @@ test.describe('taking a quiz (AT-10, AT-11, AT-13)', () => {
     const quizId = await buildQuiz(admin, course.lessonIds[0]!);
     await admin.dispose();
     await registerStudent(page);
-    await page.request.post(`/api/v1/courses/${course.courseId}/enrol`);
+    await joinCourse(page, course.courseId);
 
     await page.goto(`/learn/${course.slug}/quiz/${quizId}`);
     await page.getByRole('button', { name: 'Start quiz' }).click();
@@ -481,7 +484,7 @@ test.describe('taking a quiz (AT-10, AT-11, AT-13)', () => {
     const quizId = await buildQuiz(admin, course.lessonIds[0]!, { minutes: 1 });
     await admin.dispose();
     await registerStudent(page);
-    await page.request.post(`/api/v1/courses/${course.courseId}/enrol`);
+    await joinCourse(page, course.courseId);
 
     await page.goto(`/learn/${course.slug}/quiz/${quizId}`);
     await expect(page.getByText('1 minute')).toBeVisible();
@@ -518,7 +521,7 @@ test.describe('marking and certificates screens (desktop)', () => {
     const course = await buildCourse(admin, 1);
     const quizId = await buildQuiz(admin, course.lessonIds[0]!, { isFinal: true });
     const studentName = await registerStudent(page);
-    await page.request.post(`/api/v1/courses/${course.courseId}/enrol`);
+    await joinCourse(page, course.courseId);
     const started = await ok<{ attemptId: string }>(
       await page.request.post(`/api/v1/learn/quizzes/${quizId}/attempts`),
       'start',

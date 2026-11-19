@@ -27,6 +27,7 @@ export const DEFAULT_ERROR_MESSAGES: Record<ErrorCode, string> = {
   PAYMENT_REFERENCE_DUPLICATE:
     'This reference was already submitted. Contact us if this is a mistake.',
   PHONE_ALREADY_REGISTERED: 'This number already has an account. Sign in or reset your password.',
+  EMAIL_ALREADY_REGISTERED: 'This email already has an account. Sign in or reset your password.',
   OTP_INVALID: "That code isn't right or has expired. Request a new one.",
   OTP_TOO_SOON: 'Please wait a minute before asking for another code.',
   PASSWORD_LINK_INVALID: 'This link has expired or was already used. Ask for a new one.',

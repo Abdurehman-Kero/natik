@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectNoHorizontalScroll, expectNoSeriousA11yIssues, newPhone, SEED } from './helpers';
+import { expectNoHorizontalScroll, expectNoSeriousA11yIssues, SEED, newContact } from './helpers';
 
 /** A tiny valid PNG, used as a picture to send. */
 const PNG = Buffer.from(
@@ -27,7 +27,7 @@ async function registerStudent(page: Page, name: string) {
   const res = await page.request.post('/api/v1/auth/register', {
     data: {
       fullName: name,
-      phone: newPhone(),
+      ...newContact(),
       password: 'Passw0rd123',
       acceptTerms: true,
       confirmAge: true,
@@ -104,6 +104,19 @@ test.describe('chat', () => {
     await admin.getByRole('button', { name: new RegExp(name) }).click();
     await expect(admin.getByRole('region').getByText(hello)).toBeVisible();
     await expect(admin.getByRole('button', { name: 'Play voice message' })).toBeVisible();
+
+    // The student's name in the chat header opens their profile card. The Natik team sees where they
+    // are from and how to reach them; the student's own view of the team chat has no such button.
+    await admin.getByRole('region', { name }).getByRole('button', { name }).click();
+    const card = admin.getByRole('dialog', { name });
+    await expect(card.getByText('Student', { exact: true })).toBeVisible();
+    await expect(card.getByRole('link', { name: /@/ })).toBeVisible();
+    await expect(card.getByRole('link', { name: /\+251/ })).toBeVisible();
+    await expectNoSeriousA11yIssues(admin);
+    await admin.keyboard.press('Escape');
+    await expect(
+      page.getByRole('region', { name: 'Natik team' }).locator('button[aria-haspopup="dialog"]'),
+    ).toHaveCount(0);
     const reply = `Welcome ${unique()}`;
     await admin.getByLabel('Write a message').fill(reply);
     await admin.keyboard.press('Enter');

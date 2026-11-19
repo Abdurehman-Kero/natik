@@ -32,6 +32,15 @@ export type LessonViewBlock = { stage: LessonStageName | null } & (
     }
   | {
       id: string;
+      /** PowerPoint, Word or Excel: always downloaded (it can't be shown inside the page). */
+      type: 'FILE';
+      url: string;
+      name: string;
+      sizeBytes: number;
+      caption: string | null;
+    }
+  | {
+      id: string;
       type: 'VIDEO';
       videoId: string;
       title: string;
@@ -119,6 +128,19 @@ export class LessonViewService {
               downloadUrl: lesson.downloadsAllowed
                 ? `/api/v1/files/${block.file.id}?download=1`
                 : null,
+            });
+          }
+          break;
+        case 'FILE':
+          if (block.file) {
+            blocks.push({
+              stage,
+              id: block.id,
+              type: 'FILE',
+              url: `/api/v1/files/${block.file.id}`,
+              name: block.file.originalName,
+              sizeBytes: block.file.sizeBytes,
+              caption: block.caption,
             });
           }
           break;

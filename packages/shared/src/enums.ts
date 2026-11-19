@@ -28,7 +28,7 @@ export type ContentStatus = keyof typeof ContentStatus;
 export const CourseAccess = defineEnum('FREE', 'PAID');
 export type CourseAccess = keyof typeof CourseAccess;
 
-export const BlockType = defineEnum('TEXT', 'VIDEO', 'PDF', 'AUDIO', 'IMAGE', 'SLIDES');
+export const BlockType = defineEnum('TEXT', 'VIDEO', 'PDF', 'AUDIO', 'IMAGE', 'SLIDES', 'FILE');
 export type BlockType = keyof typeof BlockType;
 
 export const FilePurpose = defineEnum(
@@ -45,8 +45,20 @@ export const FilePurpose = defineEnum(
   'CHAT_ATTACHMENT',
   'CAPTION',
   'VIDEO_POSTER',
+  'LESSON_FILE',
 );
 export type FilePurpose = keyof typeof FilePurpose;
+
+export const GroupMessageKind = defineEnum(
+  'TEXT',
+  'IMAGE',
+  'VIDEO',
+  'AUDIO',
+  'VOICE',
+  'FILE',
+  'SYSTEM',
+);
+export type GroupMessageKind = keyof typeof GroupMessageKind;
 
 export const ConversationKind = defineEnum('STUDENT_ADMIN', 'STUDENT_TEACHER', 'TEACHER_ADMIN');
 export type ConversationKind = keyof typeof ConversationKind;
@@ -64,6 +76,7 @@ export const VideoStatus = defineEnum('UPLOADING', 'PROCESSING', 'READY', 'FAILE
 export type VideoStatus = keyof typeof VideoStatus;
 
 export const EnrolmentStatus = defineEnum(
+  'AWAITING_APPROVAL',
   'AWAITING_PAYMENT',
   'PAYMENT_SUBMITTED',
   'ACTIVE',
@@ -150,6 +163,7 @@ export const ALL_ENUMS = {
   InboxMessageStatus,
   SmsStatus,
   ConversationKind,
+  GroupMessageKind,
   ChatMessageKind,
   LessonOrder,
   LessonStage: LessonStageValues,

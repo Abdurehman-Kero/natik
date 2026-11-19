@@ -7,7 +7,6 @@ export const dynamic = 'force-dynamic';
 const PAGES = [
   '',
   '/courses',
-  '/free-lessons',
   '/find-your-level',
   '/teachers',
   '/about',

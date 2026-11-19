@@ -56,16 +56,6 @@ export class PublicCatalogController {
     });
   }
 
-  @Get('free-lessons')
-  freeLessons() {
-    return this.catalog.freeLessons();
-  }
-
-  @Get('lessons/:id')
-  freeLesson(@Param('id') id: string) {
-    return this.catalog.freeLesson(id);
-  }
-
   @Get('courses/:slug')
   detail(@Param('slug') slug: string) {
     return this.catalog.detail(slug);

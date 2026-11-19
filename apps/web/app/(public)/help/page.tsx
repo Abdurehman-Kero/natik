@@ -12,6 +12,7 @@ import {
 import Link from '@/components/ui/link';
 import { getTranslations } from 'next-intl/server';
 import { FaqAccordion, type FaqItem } from '@/components/public/faq-accordion';
+import { NextSteps } from '@/components/public/next-steps';
 import { PageHero } from '@/components/public/page-hero';
 import { PublicSection } from '@/components/public/section';
 import { PaymentSupport } from '@/components/public/support-contact';
@@ -92,6 +93,7 @@ export default async function HelpPage() {
       <PublicSection size="reading">
         <PaymentSupport title={t('supportTitle')} text={t('supportText')} />
       </PublicSection>
+      <NextSteps items={['message', 'level', 'tour']} />
     </>
   );
 }

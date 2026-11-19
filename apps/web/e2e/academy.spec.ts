@@ -1,5 +1,11 @@
 import { expect, type Page, type PlaywrightWorkerArgs, test } from '@playwright/test';
-import { expectNoHorizontalScroll, expectNoSeriousA11yIssues, newPhone, SEED } from './helpers';
+import {
+  expectNoHorizontalScroll,
+  expectNoSeriousA11yIssues,
+  joinCourse,
+  SEED,
+  newContact,
+} from './helpers';
 
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
@@ -15,36 +21,73 @@ const text = (value: string) => ({
 test.describe('public additions', () => {
   test('the home page explains how learning works and offers the level check', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'How learning works' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'How it works' })).toBeVisible();
     await expect(page.getByRole('heading', { name: /Your path from beginner/ })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Find your level/ }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: /Find your level/ }).first()).toBeVisible();
     await expectNoHorizontalScroll(page);
     await expectNoSeriousA11yIssues(page);
   });
 
-  test('the student quotes slide by themselves once reached, stop on hover, and can be paused', async ({
+  test('the student quotes move on by themselves, stop while you read, and can be controlled', async ({
     page,
   }, testInfo) => {
     await page.goto('/');
-    const slides = page.getByRole('region', { name: 'Students say' });
+    const slides = page.getByRole('region', { name: 'What our students say' });
     await slides.scrollIntoViewIfNeeded();
-    const track = slides.locator('.marquee-track');
-    const x = async () => track.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
-    const start = await x();
-    await expect.poll(x, { timeout: 15_000 }).toBeLessThan(start - 5);
+    // Which quote is showing: the dot that is marked as current (quotes can repeat in test data).
+    const current = async () =>
+      slides.locator('button[aria-current="true"]').getAttribute('aria-label');
+    const first = await current();
+    expect(first).toMatch(/^Show quote 1 of/);
+
+    // It moves on by itself (a quote stays about 8 seconds).
+    await expect.poll(current, { timeout: 20_000 }).not.toBe(first);
+
+    // Next and the dots move it by hand.
+    await slides.getByRole('button', { name: /^Show quote 1 of/ }).click();
+    await expect.poll(current).toBe(first);
+    await slides.getByRole('button', { name: 'Next quote' }).click();
+    await expect.poll(current).toMatch(/^Show quote 2 of/);
+    await slides.getByRole('button', { name: 'Previous quote' }).click();
+    await expect.poll(current).toBe(first);
 
     // Hovering stops it (phones have no hover, so this is checked with a pointer only).
     if (!testInfo.project.name.includes('phone') && testInfo.project.name !== 'mobile') {
       await slides.hover();
-      await page.waitForTimeout(400);
-      const held = await x();
-      await page.waitForTimeout(1200);
-      expect(Math.abs((await x()) - held)).toBeLessThan(1);
+      const held = await current();
+      await page.waitForTimeout(9_000);
+      expect(await current()).toBe(held);
       await page.mouse.move(0, 0);
     }
-    await page.getByRole('button', { name: 'Pause slideshow' }).click();
-    await expect(page.getByRole('button', { name: 'Play slideshow' })).toBeVisible();
+    await slides.getByRole('button', { name: 'Pause slideshow' }).click();
+    await expect(slides.getByRole('button', { name: 'Play slideshow' })).toBeVisible();
     await expectNoHorizontalScroll(page);
+    await expectNoSeriousA11yIssues(page);
+  });
+
+  test('the home page shows what you can do as tabs of courses and teachers', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'See what you can do on Natik' })).toBeVisible();
+    const tabs = page.getByRole('tab');
+    await expect(tabs.first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Teachers' }).click();
+    await expect(page.getByRole('link', { name: 'All teachers' })).toBeVisible();
+    await page.getByRole('tab', { name: 'Premium' }).click();
+    await expect(page.getByRole('link', { name: 'See all premium courses' })).toBeVisible();
+    await expectNoHorizontalScroll(page);
+    await expectNoSeriousA11yIssues(page);
+  });
+
+  test('the navy footer has the sitemap, legal links, contact details and social links', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const footer = page.getByRole('contentinfo');
+    await expect(footer.getByRole('heading', { name: 'Sitemap' })).toBeVisible();
+    await expect(footer.getByRole('heading', { name: 'Legal' })).toBeVisible();
+    await expect(footer.getByRole('heading', { name: 'Contact' })).toBeVisible();
+    await expect(footer.getByRole('link', { name: 'Courses' })).toBeVisible();
+    await expect(footer.getByRole('button', { name: 'English' })).toBeVisible();
     await expectNoSeriousA11yIssues(page);
   });
 
@@ -75,12 +118,14 @@ test.describe('public additions', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Our teachers' })).toBeVisible();
     await expectNoHorizontalScroll(page);
     await expectNoSeriousA11yIssues(page);
-    await page.getByRole('link', { name: 'Find your level' }).last().click();
-    await expect(page).toHaveURL(/\/find-your-level/);
+    // "Find your level" in the footer opens the questions in a dialog on the same page.
+    await page.getByRole('contentinfo').getByRole('button', { name: 'Find your level' }).click();
+    await expect(page.getByRole('dialog', { name: 'Find your level' })).toBeVisible();
   });
 
-  test('a course page folds its lessons away and links its free lessons', async ({ page }) => {
+  test('a course page folds its weeks away and lists the sessions, locked', async ({ page }) => {
     await page.goto('/courses/everyday-english');
+    await page.getByRole('tab', { name: 'Content' }).click();
     await expect(page.getByRole('heading', { name: 'Course outline' })).toBeVisible();
     await expect(page.locator('details').first()).toBeVisible();
     await expectNoHorizontalScroll(page);
@@ -99,7 +144,7 @@ async function registerStudent(page: Page) {
   const res = await page.request.post('/api/v1/auth/register', {
     data: {
       fullName: `Academy Student ${unique()}`,
-      phone: newPhone(),
+      ...newContact(),
       password: 'Passw0rd123',
       acceptTerms: true,
       confirmAge: true,
@@ -180,11 +225,10 @@ test.describe('guided lessons', () => {
     const published = await api.post(`/api/v1/admin/courses/${course.id}/publish`);
     expect(published.ok(), await published.text()).toBe(true);
 
-    // The student enrols and lands in the first lesson, on the intro.
+    // The student joins (an admin accepts) and opens the first session, on the intro.
     await registerStudent(page);
-    await page.goto(`/courses/${course.slug}`);
-    await page.getByRole('button', { name: 'Enrol free' }).click({ timeout: 15_000 });
-    await expect(page).toHaveURL(/\/learn\/.*\/lessons\//, { timeout: 15_000 });
+    await joinCourse(page, course.id);
+    await page.goto(`/learn/${course.slug}/lessons/${lessons[0]}`);
     const steps = page.getByRole('navigation', { name: 'Lesson steps' });
     await expect(steps.getByRole('button', { name: /Intro/ })).toHaveAttribute(
       'aria-current',
@@ -196,7 +240,7 @@ test.describe('guided lessons', () => {
     await expectNoSeriousA11yIssues(page);
 
     // Next step: the slides, one at a time.
-    const bar = page.getByRole('navigation', { name: /Lesson 1 of 2/ });
+    const bar = page.getByRole('navigation', { name: /Session 1 of 2/ });
     await bar.getByRole('button', { name: 'Next step' }).click();
     await expect(page.getByRole('heading', { name: 'Slide one' })).toBeVisible();
     await expect(page.getByText('salaam')).toBeVisible();
@@ -221,13 +265,16 @@ test.describe('guided lessons', () => {
     // Lesson two is closed until lesson one is done.
     await page.goto(`/learn/${course.slug}/lessons/${lessons[1]}`);
     await expect(
-      page.getByRole('heading', { name: 'Finish the earlier lesson first' }),
+      page.getByRole('heading', { name: 'Finish the earlier session first' }),
     ).toBeVisible();
-    await page.getByRole('link', { name: 'Go to that lesson' }).click();
+    await page.getByRole('link', { name: 'Go to that session' }).click();
     await expect(page).toHaveURL(new RegExp(`/lessons/${lessons[0]}`));
 
-    await page.getByRole('button', { name: 'Mark as complete' }).click();
-    await expect(page.getByText('Completed').first()).toBeVisible();
+    const [completed] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/complete') && r.request().method() === 'POST'),
+      page.getByRole('button', { name: 'Mark as complete' }).click(),
+    ]);
+    expect(completed.status(), await completed.text()).toBe(200);
     await page.goto(`/learn/${course.slug}/lessons/${lessons[1]}`);
     await expect(page.getByText('Lesson two body.')).toBeVisible();
     await api.dispose();

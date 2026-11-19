@@ -74,8 +74,17 @@ export class ProgressService {
 
     let completed = enrolment.status === 'COMPLETED';
     const stillOpen = !enrolment.endAt || enrolment.endAt >= new Date();
+    // A course still adding sessions week by week can't be finished yet.
+    const ongoing =
+      (
+        await this.prisma.course.findUnique({
+          where: { id: enrolment.courseId },
+          select: { ongoing: true },
+        })
+      )?.ongoing ?? false;
     if (
       progressPct === 100 &&
+      !ongoing &&
       enrolment.status === 'ACTIVE' &&
       stillOpen &&
       !(await this.finalQuizStillToPass(enrolment.courseId, enrolment.studentId))

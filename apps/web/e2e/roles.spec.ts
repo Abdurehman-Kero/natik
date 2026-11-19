@@ -6,22 +6,49 @@ import {
   newPhone,
   SEED,
   signInAs,
+  emailFor,
 } from './helpers';
 
 /** The student, teacher and admin areas: who gets in, how they look on phones, and user management. */
 test.describe('areas and permissions', () => {
-  test('the student area has four bottom tabs on phones', async ({ page, isMobile }) => {
+  test('the student area has five bottom tabs and a menu button on phones', async ({
+    page,
+    isMobile,
+  }) => {
     test.skip(!isMobile, 'bottom tabs are for phones');
     await signInAs(page, SEED.student);
     await page.goto('/dashboard');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     const tabs = page.getByRole('navigation', { name: 'Main navigation' }).last();
-    for (const name of ['Home', 'Courses', 'Certificates', 'Profile']) {
+    for (const name of ['Home', 'Courses', 'Explore', 'Groups', 'Messages']) {
       await expect(tabs.getByRole('link', { name })).toBeVisible();
     }
     await expect(tabs.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page');
     await expectNoHorizontalScroll(page);
     await expectNoSeriousA11yIssues(page);
+
+    // The menu button opens every page, grouped, plus the account and language choices.
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    const menu = page.getByRole('dialog');
+    for (const name of [
+      'Home',
+      'My courses',
+      'Browse courses',
+      'Course groups',
+      'Messages',
+      'Announcements',
+      'My payments',
+      'Certificates',
+      'Profile',
+    ]) {
+      await expect(menu.getByRole('link', { name: new RegExp(`^${name}`) })).toBeVisible();
+    }
+    await expect(menu.getByRole('link', { name: 'Sign out' })).toBeVisible();
+    await expect(menu.getByRole('button', { name: 'How this works' })).toBeVisible();
+    await menu.getByRole('link', { name: 'Certificates' }).click();
+    await expect(page).toHaveURL(/\/certificates/);
+    await expect(menu).toBeHidden();
+    await expectNoHorizontalScroll(page);
   });
 
   test('students are kept out of staff areas without an error page', async ({ page }) => {
@@ -75,6 +102,7 @@ test.describe('areas and permissions', () => {
 
     await dialog.getByLabel('Full name').fill(name);
     await dialog.getByLabel('Phone number').fill(phone);
+    await dialog.getByLabel('Email').fill(emailFor(phone));
     await dialog.getByRole('radio', { name: 'Teacher' }).click();
     await dialog.getByRole('button', { name: 'Create user' }).click();
     await expect(dialog).toBeHidden();
@@ -82,9 +110,13 @@ test.describe('areas and permissions', () => {
     // the new teacher was texted a link to set a password
     expect(await latestSms(page, phone)).toContain('Set your password');
 
-    await page.getByRole('searchbox', { name: 'Search name or phone…' }).fill(name);
-    await page.getByRole('searchbox', { name: 'Search name or phone…' }).press('Enter');
-    await expect(page).toHaveURL(/q=Teacher/);
+    // The search box takes input only once the page is ready, so the search is repeated until it runs.
+    const search = page.getByRole('searchbox', { name: 'Search name or phone…' });
+    await expect(async () => {
+      await search.fill(name);
+      await search.press('Enter');
+      await expect(page).toHaveURL(/q=Teacher/, { timeout: 3000 });
+    }).toPass({ timeout: 20_000 });
     await expect(
       page.locator('li:visible, tr:visible').filter({ hasText: name }).first(),
     ).toBeVisible();

@@ -1,6 +1,6 @@
 # Teacher guide
 
-Sign in with your phone number and password. **My courses** lists the courses an admin assigned to you.
+Sign in with your email and password. **My courses** lists the courses an admin assigned to you.
 
 ## Build a lesson
 

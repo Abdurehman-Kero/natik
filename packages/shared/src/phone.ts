@@ -23,6 +23,13 @@ export function formatPhone(e164: string | null | undefined): string {
   return m ? `+251 ${m[1]} ${m[2]} ${m[3]}` : e164;
 }
 
+/** "abebe.kebede@example.com" → "a•••@example.com" (for logs and screens that need no full address). */
+export function maskEmail(email: string | null | undefined): string {
+  if (!email) return '—';
+  const at = email.indexOf('@');
+  return at > 0 ? `${email[0]}•••${email.slice(at)}` : '—';
+}
+
 /** "+251912345678" → "+251 9•• ••• 678" (shown wherever the full number isn't needed). */
 export function maskPhone(e164: string | null | undefined): string {
   if (!e164) return '—';

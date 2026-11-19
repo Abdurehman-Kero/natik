@@ -13,6 +13,7 @@ export type LessonDenial =
   | 'NOT_FOUND'
   | 'SIGN_IN'
   | 'NOT_ENROLLED'
+  | 'AWAITING_APPROVAL'
   | 'AWAITING_PAYMENT'
   | 'PAYMENT_UNDER_REVIEW'
   | 'EXPIRED'
@@ -32,7 +33,13 @@ export type CourseGrant =
 export interface EnrolmentInfo {
   id: string;
   status:
-    'AWAITING_PAYMENT' | 'PAYMENT_SUBMITTED' | 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'CANCELLED';
+    | 'AWAITING_APPROVAL'
+    | 'AWAITING_PAYMENT'
+    | 'PAYMENT_SUBMITTED'
+    | 'ACTIVE'
+    | 'COMPLETED'
+    | 'EXPIRED'
+    | 'CANCELLED';
   endAt: Date | null;
 }
 
@@ -63,6 +70,25 @@ export class AccessPolicy {
     return link !== null;
   }
 
+  /**
+   * Who is in a course's group chat: every admin, the course's own teachers, and students whose access
+   * is open (accepted, not expired). Returns how the person takes part, or null when they are not in it.
+   */
+  async courseGroupRole(
+    actor: Actor | undefined,
+    courseId: string,
+  ): Promise<'ADMIN' | 'TEACHER' | 'STUDENT' | null> {
+    if (!actor) return null;
+    if (actor.role === 'ADMIN') return 'ADMIN';
+    if (actor.role === 'TEACHER') {
+      return (await this.canEditCourseContent(actor, courseId)) ? 'TEACHER' : null;
+    }
+    if (actor.role === 'STUDENT') {
+      return (await this.studentCourseAccess(actor.id, courseId)).allowed ? 'STUDENT' : null;
+    }
+    return null;
+  }
+
   /** Price, access, Free/Paid, teachers and featured are admin-only (FR-TEACH-007). */
   canEditCourseSettings(actor: Actor | undefined): boolean {
     return actor?.role === 'ADMIN';
@@ -81,7 +107,6 @@ export class AccessPolicy {
   /**
    * Who may open a lesson (and the files and videos inside it).
    * - Staff who can edit the course: always, drafts included (preview).
-   * - Anyone: a free-preview lesson that is published with all its parents (FR-LEARN-010, FR-CAT-005).
    * - Students: need an enrolment that is ACTIVE, or COMPLETED and before its end date (ARCHITECTURE §6).
    */
   async canOpenLesson(actor: Actor | undefined, lessonId: string): Promise<LessonAccess> {
@@ -116,7 +141,7 @@ export class AccessPolicy {
       lesson.unit.status === 'PUBLISHED' &&
       lesson.course.status === 'PUBLISHED';
     if (!live) return { allowed: false, reason: 'NOT_AVAILABLE' };
-    if (lesson.isFreePreview) return { allowed: true, as: 'FREE_PREVIEW', lesson: accessed };
+    // The public site shows course introductions only: every session needs an accepted student.
     if (!actor) return { allowed: false, reason: 'SIGN_IN' };
     if (actor.role !== 'STUDENT') return { allowed: false, reason: 'NOT_ENROLLED' };
 
@@ -202,6 +227,8 @@ export class AccessPolicy {
         return enrolment.endAt && enrolment.endAt < now
           ? deny('EXPIRED')
           : { allowed: true, enrolment: info };
+      case 'AWAITING_APPROVAL':
+        return deny('AWAITING_APPROVAL');
       case 'AWAITING_PAYMENT':
         return deny('AWAITING_PAYMENT');
       case 'PAYMENT_SUBMITTED':

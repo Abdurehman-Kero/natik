@@ -30,7 +30,12 @@ export interface RenewResult extends EnrolmentSummary {
 }
 
 export type BlockedReason =
-  'NOT_ENROLLED' | 'AWAITING_PAYMENT' | 'PAYMENT_UNDER_REVIEW' | 'EXPIRED' | 'CANCELLED';
+  | 'NOT_ENROLLED'
+  | 'AWAITING_APPROVAL'
+  | 'AWAITING_PAYMENT'
+  | 'PAYMENT_UNDER_REVIEW'
+  | 'EXPIRED'
+  | 'CANCELLED';
 
 /** Why a course or lesson did not open, with what the screen needs to offer the next step. */
 export interface BlockedInfo {
@@ -92,6 +97,14 @@ export interface StudentDashboard {
   certificates: { id: string; number: string; courseTitle: string }[];
   /** Finished courses whose certificate needs the student to confirm the name. */
   certificatesToConfirm: { id: string; courseTitle: string }[];
+  /** Sessions added in the last few days, not opened yet. */
+  newSessions: {
+    id: string;
+    title: string;
+    sessionDate: string | null;
+    courseSlug: string;
+    courseTitle: string;
+  }[];
 }
 
 export type LessonState = 'done' | 'current' | 'todo' | 'locked';
@@ -101,7 +114,23 @@ export interface OutlineUnit {
   title: string;
   done: number;
   total: number;
-  lessons: { id: string; title: string; state: LessonState; minutes: number | null }[];
+  lessons: {
+    id: string;
+    title: string;
+    state: LessonState;
+    minutes: number | null;
+    sessionDate: string | null;
+    /** Added in the last few days and not opened yet. */
+    isNew: boolean;
+  }[];
+}
+
+/** A session planned with a date but not added yet. */
+export interface UpcomingSession {
+  id: string;
+  title: string;
+  weekTitle: string;
+  sessionDate: string | null;
 }
 
 export type CourseOutline =
@@ -131,6 +160,9 @@ export type CourseOutline =
       access: { allowed: true; readOnly: boolean };
       enrolment: { id: string; status: EnrolmentStatus; progressPct: number; endAt: string | null };
       units: OutlineUnit[];
+      /** Sessions are still being added week by week. */
+      ongoing: boolean;
+      upcoming: UpcomingSession[];
       totals: { done: number; total: number };
       continueLesson: { id: string; title: string } | null;
     };
@@ -212,6 +244,7 @@ export interface AdminPayment {
   checkedAt: string | null;
   checkedBy: string | null;
   receiptUrl: string | null;
+  receiptIsPdf: boolean;
   student: { id: string; fullName: string; phone: string | null };
   course: { id: string; title: string; slug: string };
   enrolmentId: string;

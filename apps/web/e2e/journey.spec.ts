@@ -7,6 +7,7 @@ import {
   SEED,
   signInAs,
   waitForPageReady,
+  emailFor,
 } from './helpers';
 
 /**
@@ -139,17 +140,17 @@ test.describe('one course from creation to a paying student', () => {
     await page.goto('/teach/courses');
     await page.getByRole('link', { name: new RegExp(title) }).click();
     await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
-    await page.getByRole('button', { name: 'Add unit' }).first().click();
-    await page.getByLabel('Unit title').fill('Writing emails');
+    await page.getByRole('button', { name: 'Add week' }).first().click();
+    await page.getByLabel('Week title').fill('Writing emails');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(page.getByRole('heading', { name: /Writing emails/ })).toBeVisible();
-    await page.getByRole('button', { name: 'Add lesson' }).click();
-    await page.getByLabel('Lesson title').fill('A polite first email');
+    await page.getByRole('button', { name: 'Add session' }).click();
+    await page.getByLabel('Session title').fill('A polite first email');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(page).toHaveURL(/\/lessons\/[a-z0-9]+$/);
 
-    await page.getByRole('button', { name: 'Text', exact: true }).click();
-    await page.getByRole('textbox', { name: 'Lesson text' }).click();
+    await page.getByRole('button', { name: 'Notes', exact: true }).click();
+    await page.getByRole('textbox', { name: 'Notes' }).click();
     await page.keyboard.type('Start with a greeting, say why you are writing, and end politely.');
     await expect(page.getByRole('status').filter({ hasText: 'Saved' }).first()).toBeVisible({
       timeout: 15_000,
@@ -166,18 +167,14 @@ test.describe('one course from creation to a paying student', () => {
     await snap('teacher-lesson-with-pdf-and-video');
 
     await page.getByRole('button', { name: 'Publish', exact: true }).last().click();
-    await expect(page.getByText('Lesson published.')).toBeVisible();
+    await expect(page.getByText('Session published. Students see it now.')).toBeVisible();
     await snap('teacher-lesson-published');
 
-    // ── 3. The admin publishes the course ───────────────────────────────
+    // ── 3. The course went on the website when it was created ───────────
     await switchTo(SEED.owner);
     await page.goto(`/admin/courses/${courseId}`);
-    await page.getByRole('button', { name: 'Publish', exact: true }).first().click();
-    await page
-      .getByRole('alertdialog')
-      .getByRole('button', { name: 'Publish', exact: true })
-      .click();
-    await expect(page.getByText('Course published.')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'View on website' })).toBeVisible();
+    await expect(page.getByText('This course is not on the website yet')).toHaveCount(0);
     await snap('admin-course-published');
 
     // ── 4. A visitor finds the course on the website ────────────────────
@@ -194,8 +191,11 @@ test.describe('one course from creation to a paying student', () => {
     const slug = new URL(page.url()).pathname.split('/').pop()!;
     // No amount on the public page; visitors are pointed to Natik support instead.
     await expect(page.getByText('Premium course').first()).toBeVisible();
-    await expect(page.locator('main')).not.toContainText('ETB');
+    // (Other courses in "Similar courses" may show their own price, so look only above them.)
+    const aboveSimilar = (await page.locator('main').innerText()).split('Similar courses')[0]!;
+    expect(aboveSimilar).not.toContain('ETB');
     // The teacher's published unit and lesson are listed for visitors.
+    await page.getByRole('tab', { name: 'Content' }).click();
     await expect(page.getByText('Writing emails').first()).toBeVisible();
     await expect(
       page.getByRole('listitem').filter({ hasText: 'A polite first email' }),
@@ -204,9 +204,12 @@ test.describe('one course from creation to a paying student', () => {
 
     // ── 5. They register from the course page and pay ───────────────────
     await page.getByRole('link', { name: 'Register to enrol' }).click({ timeout: 15_000 });
-    await page.getByLabel('Full name').fill(student.name);
+    await page.getByLabel('First name').fill(student.name.split(' ')[0]!);
+    await page.getByLabel('Last name').fill(student.name.split(' ').slice(1).join(' '));
     await page.getByLabel('Phone number').fill(student.phone);
+    await page.getByLabel('Email').fill(emailFor(student.phone));
     await page.getByLabel('Password', { exact: true }).fill(student.password);
+    await page.getByLabel('Confirm password').fill(student.password);
     await page.getByRole('checkbox').check();
     await snap('student-register');
     await page.getByRole('button', { name: 'Create account' }).click();

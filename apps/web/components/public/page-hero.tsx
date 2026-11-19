@@ -1,5 +1,8 @@
+import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
+import Link from '@/components/ui/link';
 import { Container } from '@/components/ui/layout';
 import { cn } from '@/lib/cn';
 import mark from '@/public/brand/natik-mark.png';
@@ -11,6 +14,10 @@ export interface PageHeroProps {
   subtitle?: string;
   /** Buttons under the text. */
   children?: ReactNode;
+  /** Pages between Home and this one, e.g. [{ label: 'Courses', href: '/courses' }]. */
+  trail?: { label: string; href: string }[];
+  /** Hide the "Home › Title" line (the home page does not use this component anyway). */
+  noCrumbs?: boolean;
   /** "home" is taller and left-aligned with a bigger watermark. */
   size?: 'home' | 'page';
   className?: string;
@@ -23,8 +30,11 @@ export function PageHero({
   subtitle,
   children,
   size = 'page',
+  trail = [],
+  noCrumbs,
   className,
 }: PageHeroProps) {
+  const tn = useTranslations('site.nav');
   return (
     <section
       className={cn(
@@ -56,6 +66,23 @@ export function PageHero({
           size === 'home' ? 'py-14 md:py-24' : 'py-14 md:py-20',
         )}
       >
+        {size === 'page' && !noCrumbs ? (
+          <nav aria-label={tn('breadcrumb')} className="mb-1">
+            <ol className="flex flex-wrap items-center justify-center gap-1 text-sm text-white/75">
+              {[{ label: tn('home'), href: '/' }, ...trail].map((crumb) => (
+                <li key={crumb.href} className="flex items-center gap-1">
+                  <Link href={crumb.href} className="rounded px-1 hover:text-white hover:underline">
+                    {crumb.label}
+                  </Link>
+                  <ChevronRight className="size-3.5 rtl:rotate-180" aria-hidden />
+                </li>
+              ))}
+              <li aria-current="page" className="px-1 font-semibold text-white/95">
+                {title}
+              </li>
+            </ol>
+          </nav>
+        ) : null}
         {eyebrow ? (
           <p className="flex items-center gap-2 text-sm font-semibold tracking-[0.14em] text-white/80 uppercase">
             <span className="h-[3px] w-6 rounded-full bg-accent" aria-hidden />

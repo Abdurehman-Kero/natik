@@ -21,7 +21,7 @@ export async function ChatButtons() {
   ].filter((item): item is NonNullable<typeof item> => Boolean(item));
 
   return (
-    <ul className="fixed right-4 bottom-4 z-40 flex flex-col gap-3 sm:right-6 sm:bottom-6">
+    <ul className="fixed right-4 bottom-4 z-40 flex flex-col gap-3 max-lg:bottom-20 sm:right-6 sm:bottom-6 max-lg:sm:bottom-20">
       {items.map((item) => (
         <li key={item.name}>
           <a

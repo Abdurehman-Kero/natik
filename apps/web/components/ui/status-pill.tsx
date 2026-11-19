@@ -32,6 +32,7 @@ type Tone = 'primary' | 'accent' | 'warning' | 'muted' | 'danger' | 'success';
 const STATUS: Record<StatusKey, { tone: Tone; icon: LucideIcon }> = {
   'enrolment.ACTIVE': { tone: 'primary', icon: CirclePlay },
   'enrolment.COMPLETED': { tone: 'accent', icon: Award },
+  'enrolment.AWAITING_APPROVAL': { tone: 'warning', icon: Hourglass },
   'enrolment.AWAITING_PAYMENT': { tone: 'warning', icon: Wallet },
   'enrolment.PAYMENT_SUBMITTED': { tone: 'warning', icon: Clock },
   'enrolment.EXPIRED': { tone: 'muted', icon: CalendarX },

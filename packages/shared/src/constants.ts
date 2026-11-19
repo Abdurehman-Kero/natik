@@ -18,6 +18,19 @@ export const UPLOAD_LIMITS = {
     mimeTypes: ['audio/mpeg', 'audio/mp4', 'audio/x-m4a', 'audio/ogg', 'audio/wav', 'audio/x-wav'],
   },
   image: { maxBytes: 5 * MB, mimeTypes: ['image/jpeg', 'image/png', 'image/webp'] },
+  /** PowerPoint, Word and Excel attached to a session (downloaded by students). */
+  document: {
+    maxBytes: 50 * MB,
+    mimeTypes: [
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+    ],
+    extensions: ['.pptx', '.ppt', '.docx', '.doc', '.xlsx', '.xls'],
+  },
   receipt: {
     maxBytes: 5 * MB,
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
@@ -30,6 +43,15 @@ export type UploadKind = keyof typeof UPLOAD_LIMITS;
 export function bytesToMb(bytes: number): number {
   return Math.ceil(bytes / MB);
 }
+
+/** Courses run week by week, with up to this many sessions in a week. */
+export const MAX_SESSIONS_PER_WEEK = 3;
+
+/** A session stays marked "New" for students this long after it is added (unless opened). */
+export const NEW_SESSION_DAYS = 7;
+
+/** The reactions a course group offers, as in Telegram. */
+export const GROUP_REACTIONS = ['👍', '❤️', '😂', '😮', '🙏', '👏'] as const;
 
 /** Largest page size any list endpoint accepts. */
 export const MAX_PAGE_SIZE = 50;

@@ -54,7 +54,21 @@ export class RetentionService {
       select: { id: true, storageKey: true },
     });
 
+    // What they wrote in course groups goes too: the messages are emptied (so replies still read well)
+    // and the files they shared are deleted.
+    const groupFiles = await this.prisma.fileAsset.findMany({
+      where: { purpose: 'CHAT_ATTACHMENT', groupMessages: { some: { senderId: userId } } },
+      select: { id: true, storageKey: true },
+    });
+
     await this.prisma.$transaction(async (tx) => {
+      await tx.groupMessage.updateMany({
+        where: { senderId: userId },
+        data: { deletedAt: new Date(), body: null, pinnedAt: null, fileId: null },
+      });
+      await tx.groupReaction.deleteMany({ where: { userId } });
+      await tx.groupRead.deleteMany({ where: { userId } });
+      await tx.fileAsset.deleteMany({ where: { id: { in: groupFiles.map((f) => f.id) } } });
       await tx.conversation.deleteMany({
         where: { OR: [{ ownerId: userId }, { peerId: userId }] },
       });
@@ -70,6 +84,9 @@ export class RetentionService {
           bio: null,
           showOnWebsite: false,
           interestLanguageId: null,
+          gender: null,
+          country: null,
+          city: null,
           status: 'DISABLED',
           failedSignIns: 0,
           lockedUntil: null,
@@ -92,6 +109,7 @@ export class RetentionService {
       if (photo) await tx.fileAsset.delete({ where: { id: photo.id } });
     });
     for (const f of chatFiles) await this.storage.remove(f.storageKey).catch(() => undefined);
+    for (const f of groupFiles) await this.storage.remove(f.storageKey).catch(() => undefined);
     if (photo) await this.storage.remove(photo.storageKey).catch(() => undefined);
 
     await this.audit.record({

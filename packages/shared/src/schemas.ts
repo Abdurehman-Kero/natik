@@ -29,17 +29,37 @@ export const passwordSchema = z.string().superRefine((value, ctx) => {
     ctx.addIssue({ code: 'custom', message: 'Add at least one number.' });
 });
 
+/** An email that may be left empty (profile and admin edits of people who have none yet). Always lower case. */
 export const emailSchema = z
   .string()
   .trim()
+  .toLowerCase()
   .max(200)
   .pipe(z.union([z.literal(''), z.email('Enter a valid email address.')]))
   .optional();
+
+/** An email address that must be filled in: it is what people sign in with. Always lower case. */
+export const requiredEmailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(1, 'Enter your email address.')
+  .max(200)
+  .pipe(z.email('Enter a valid email address.'));
 
 export const otpCodeSchema = z
   .string()
   .trim()
   .regex(/^\d{6}$/, 'Enter the 6-digit code.');
+
+/** Where a person is: a two-letter country code (ET, KE, ...) and an optional city or town. */
+export const genderSchema = z.enum(['MALE', 'FEMALE']);
+export const countrySchema = z
+  .string()
+  .trim()
+  .toUpperCase()
+  .regex(/^[A-Z]{2}$/, 'Choose a country.');
+export const citySchema = z.string().trim().max(80, 'Keep the city under 80 characters.');
 
 export const registerSchema = z.object({
   fullName: fullNameSchema,
@@ -47,22 +67,44 @@ export const registerSchema = z.object({
   password: passwordSchema,
   /** Id of the language the student wants to learn (editable list). */
   interestLanguageId: z.string().min(1).optional(),
-  email: emailSchema,
+  email: requiredEmailSchema,
+  gender: genderSchema.optional(),
+  country: countrySchema.optional(),
+  city: citySchema.optional(),
   acceptTerms: z.literal(true, { error: 'Please accept the Terms and Privacy notice.' }),
   confirmAge: z.literal(true, { error: 'Please confirm you are 16 or older.' }),
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
-export const signInSchema = z.object({
-  phone: phoneSchema,
-  password: z.string().min(1, 'Enter your password.').max(PASSWORD_MAX_LENGTH),
-  keepSignedIn: z.boolean().optional(),
-});
+/**
+ * People sign in with their email address. A phone number is still accepted for accounts that have no
+ * email yet (older accounts), but the website only asks for the email.
+ */
+export const signInSchema = z
+  .object({
+    email: requiredEmailSchema.optional(),
+    phone: phoneSchema.optional(),
+    password: z.string().min(1, 'Enter your password.').max(PASSWORD_MAX_LENGTH),
+    keepSignedIn: z.boolean().optional(),
+  })
+  .refine((v) => v.email || v.phone, {
+    message: 'Enter your email address.',
+    path: ['email'],
+  });
 export type SignInInput = z.infer<typeof signInSchema>;
 
-export const forgotPasswordSchema = z.object({ phone: phoneSchema });
+/** The code is texted to the phone on the account, so people only need to enter their email. */
+export const forgotPasswordSchema = z
+  .object({ email: requiredEmailSchema.optional(), phone: phoneSchema.optional() })
+  .refine((v) => v.email || v.phone, { message: 'Enter your email address.', path: ['email'] });
 
-export const verifyResetCodeSchema = z.object({ phone: phoneSchema, code: otpCodeSchema });
+export const verifyResetCodeSchema = z
+  .object({
+    email: requiredEmailSchema.optional(),
+    phone: phoneSchema.optional(),
+    code: otpCodeSchema,
+  })
+  .refine((v) => v.email || v.phone, { message: 'Enter your email address.', path: ['email'] });
 
 export const setPasswordSchema = z.object({
   token: z.string().min(20).max(200),
@@ -72,6 +114,9 @@ export const setPasswordSchema = z.object({
 export const updateProfileSchema = z.object({
   fullName: fullNameSchema,
   email: emailSchema,
+  gender: genderSchema.nullable().optional(),
+  country: countrySchema.nullable().optional(),
+  city: citySchema.nullable().optional(),
 });
 
 export const changePasswordSchema = z.object({
@@ -82,7 +127,7 @@ export const changePasswordSchema = z.object({
 export const adminCreateUserSchema = z.object({
   fullName: fullNameSchema,
   phone: phoneSchema,
-  email: emailSchema,
+  email: requiredEmailSchema,
   role: z.enum(['STUDENT', 'TEACHER', 'ADMIN']),
 });
 
@@ -98,6 +143,13 @@ export const listUsersQuerySchema = z.object({
   q: z.string().trim().max(100).optional(),
   role: z.enum(['STUDENT', 'TEACHER', 'ADMIN']).optional(),
   status: z.enum(['ACTIVE', 'DISABLED']).optional(),
+  /** Only people in this country (two-letter code). */
+  country: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z]{2}$/)
+    .optional(),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(50).default(20),
 });
@@ -183,6 +235,8 @@ export const courseInputSchema = z
     imageFileId: z.string().min(1).nullable().optional(),
     /** OPEN: all lessons can be opened. IN_ORDER: a lesson opens once the ones before it are done. */
     lessonOrder: z.enum(['OPEN', 'IN_ORDER']).optional(),
+    /** Sessions are still being added: the course can't be completed yet. */
+    ongoing: z.boolean().optional(),
     /** Paid courses: show the price on the public site (off = people ask Natik support). */
     showPrice: z.boolean().optional(),
     /** A YouTube or Vimeo link for a short trailer on the course page. */
@@ -238,7 +292,6 @@ export type LessonStage = z.infer<typeof lessonStageSchema>;
 
 export const lessonInputSchema = z.object({
   title: titleSchema('title'),
-  isFreePreview: z.boolean().optional(),
   downloadsAllowed: z.boolean().optional(),
   description: z
     .string()
@@ -251,6 +304,12 @@ export const lessonInputSchema = z.object({
   estimatedMinutes: z.number().int().min(1).max(600).nullable().optional(),
   /** Stays open even when the course opens lessons in order. */
   alwaysOpen: z.boolean().optional(),
+  /** When the session takes place (a date, shown to students). */
+  sessionDate: z
+    .string()
+    .refine((v) => !Number.isNaN(Date.parse(v)), 'Enter a valid date.')
+    .nullable()
+    .optional(),
 });
 
 /** Moves lessons between and within units; each unit lists its lessons in order. */
@@ -262,7 +321,7 @@ export const lessonsReorderSchema = z.object({
 });
 
 export const blockCreateSchema = z.object({
-  type: z.enum(['TEXT', 'VIDEO', 'PDF', 'AUDIO', 'IMAGE', 'SLIDES']),
+  type: z.enum(['TEXT', 'VIDEO', 'PDF', 'AUDIO', 'IMAGE', 'SLIDES', 'FILE']),
   stage: lessonStageSchema.nullable().optional(),
   textJson: richTextSchema.optional(),
   fileId: z.string().min(1).optional(),
@@ -341,7 +400,7 @@ const optionalUrl = z
   );
 
 /** Editable keys of the website editor (SiteContent rows). */
-export const SITE_CONTENT_KEYS = ['home', 'about', 'contact'] as const;
+export const SITE_CONTENT_KEYS = ['home', 'about', 'contact', 'help'] as const;
 export type SiteContentKey = (typeof SITE_CONTENT_KEYS)[number];
 
 export const homeContentSchema = z.object({
@@ -401,10 +460,33 @@ export const contactContentSchema = z.object({
   youtube: optionalUrl,
 });
 
+/** A YouTube or Vimeo link (watch, share, embed or Shorts address). */
+const videoUrl = z
+  .string()
+  .trim()
+  .max(300)
+  .optional()
+  .transform((v) => v || undefined)
+  .refine(
+    (v) =>
+      v === undefined ||
+      /^https:\/\/(www\.|m\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be|vimeo\.com|player\.vimeo\.com)\//i.test(
+        v,
+      ),
+    'Enter a full YouTube or Vimeo link, starting with https://',
+  );
+
+/** The "how to use Natik" videos shown in the Help tab of the student and teacher areas. */
+export const helpContentSchema = z.object({
+  studentVideoUrl: videoUrl,
+  teacherVideoUrl: videoUrl,
+});
+
 export const siteContentSchemas = {
   home: homeContentSchema,
   about: aboutContentSchema,
   contact: contactContentSchema,
+  help: helpContentSchema,
 } as const;
 
 export const faqInputSchema = z.object({
@@ -425,6 +507,8 @@ export const testimonialInputSchema = z.object({
     .min(10, 'Enter what they said.')
     .max(400, 'Keep the quote under 400 characters.'),
   courseLabel: optionalText(80),
+  /** A picture of the student (uploaded with purpose SITE_IMAGE); empty = initials are shown. */
+  photoFileId: z.string().min(1).nullable().optional(),
   published: z.boolean().default(true),
 });
 
@@ -538,7 +622,15 @@ export const listAdminEnrolmentsQuerySchema = z.object({
   courseId: z.string().min(1).optional(),
   studentId: z.string().min(1).optional(),
   status: z
-    .enum(['AWAITING_PAYMENT', 'PAYMENT_SUBMITTED', 'ACTIVE', 'COMPLETED', 'EXPIRED', 'CANCELLED'])
+    .enum([
+      'AWAITING_APPROVAL',
+      'AWAITING_PAYMENT',
+      'PAYMENT_SUBMITTED',
+      'ACTIVE',
+      'COMPLETED',
+      'EXPIRED',
+      'CANCELLED',
+    ])
     .optional(),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(50).default(20),
@@ -569,4 +661,26 @@ export const reportProblemSchema = z.object({
 /** Admin searches for a student to enrol or record a payment for. */
 export const studentSearchQuerySchema = z.object({
   q: z.string().trim().min(1).max(60),
+});
+
+/** A message to a course group: text, and optionally a reply to another message. */
+export const groupMessageSchema = z.object({
+  body: z.string().max(2000).optional(),
+  replyToId: z.string().min(1).max(60).optional(),
+  voice: z.coerce.boolean().optional(),
+  durationSec: z.coerce.number().int().min(1).max(900).optional(),
+});
+
+export const groupEditSchema = z.object({
+  body: z.string().trim().min(1, 'Write a message.').max(2000),
+});
+
+export const groupReactSchema = z.object({
+  emoji: z.enum(['👍', '❤️', '😂', '😮', '🙏', '👏']),
+});
+
+export const groupMessagesQuerySchema = z.object({
+  /** Older messages: those before this message id. */
+  before: z.string().min(1).max(60).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(50),
 });

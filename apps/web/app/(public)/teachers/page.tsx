@@ -1,6 +1,7 @@
 import { UsersRound } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { TeacherCard } from '@/components/public/home-extras';
+import { NextSteps } from '@/components/public/next-steps';
 import { PageHero } from '@/components/public/page-hero';
 import { PublicSection } from '@/components/public/section';
 import { LinkButton } from '@/components/ui/button';
@@ -40,6 +41,7 @@ export default async function TeachersPage() {
           </Card>
         )}
       </PublicSection>
+      <NextSteps items={['courses', 'level', 'message']} tone="canvas" />
     </>
   );
 }

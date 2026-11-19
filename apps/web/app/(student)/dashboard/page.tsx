@@ -1,10 +1,10 @@
-import { Award, BookOpen, ChevronRight, ClipboardCheck } from 'lucide-react';
+import { Award, ChevronRight, ClipboardCheck, Sparkles } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { getTranslations } from 'next-intl/server';
 import { MyCourseCard } from '@/components/learn/my-course-card';
+import { GettingStarted } from '@/components/learn/getting-started';
 import { LinkButton } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { EmptyState } from '@/components/ui/empty-state';
 import { SectionHeading } from '@/components/ui/layout';
 import { ProgressBar } from '@/components/ui/progress';
 import type { StudentDashboard } from '@/lib/api/learn-types';
@@ -29,23 +29,7 @@ export default async function StudentDashboardPage() {
         <h1 className="text-[1.625rem] font-bold md:text-4xl">
           {t('greeting', { name: data.firstName })}
         </h1>
-        <Card>
-          <EmptyState
-            icon={BookOpen}
-            title={t('emptyTitle')}
-            description={t('emptyText')}
-            action={
-              <>
-                <LinkButton href="/courses" size="lg">
-                  {t('browse')}
-                </LinkButton>
-                <LinkButton href="/free-lessons" variant="ghost" size="lg">
-                  {t('tryFree')}
-                </LinkButton>
-              </>
-            }
-          />
-        </Card>
+        <GettingStarted />
       </div>
     );
   }
@@ -75,6 +59,36 @@ export default async function StudentDashboardPage() {
           <LinkButton href="/certificates" variant="accent" className="sm:shrink-0">
             {t('certificateReadyButton')}
           </LinkButton>
+        </section>
+      ) : null}
+
+      {data.newSessions.length > 0 ? (
+        <section aria-labelledby="new-sessions" className="flex flex-col gap-3">
+          <h2 id="new-sessions" className="flex items-center gap-2 font-sans text-lg font-semibold">
+            <Sparkles className="size-5 text-accent-strong" aria-hidden /> {t('newSessionsTitle')}
+          </h2>
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {data.newSessions.map((session) => (
+              <li key={session.id}>
+                <Link
+                  href={`/learn/${session.courseSlug}/lessons/${session.id}`}
+                  className="flex h-full card-hover items-center gap-3 rounded-xl border border-border bg-surface p-4 shadow-card"
+                >
+                  <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-bold tracking-wide text-white uppercase">
+                    {t('new')}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-semibold text-ink">{session.title}</span>
+                    <span className="block truncate text-sm text-muted">
+                      {session.courseTitle}
+                      {session.sessionDate ? ` · ${formatDate(session.sessionDate)}` : ''}
+                    </span>
+                  </span>
+                  <ChevronRight className="size-5 shrink-0 text-muted rtl:rotate-180" aria-hidden />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       ) : null}
 
@@ -111,7 +125,7 @@ export default async function StudentDashboardPage() {
 
       <section className="flex flex-col gap-4">
         <SectionHeading title={t('myCourses')} link={{ href: '/my-courses', label: t('seeAll') }} />
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {data.courses.map((item) => (
             <li key={item.enrolmentId}>
               <MyCourseCard item={item} />
@@ -160,7 +174,7 @@ export default async function StudentDashboardPage() {
         </Card>
       </section>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Card>
           <CardContent className="flex flex-col gap-3">
             <p className="flex items-center gap-2 font-semibold text-ink">

@@ -14,6 +14,7 @@ import { cn } from '@/lib/cn';
 import { useStoredFlag } from '@/lib/use-stored-flag';
 import { useLiveCounts } from '@/lib/use-live-counts';
 import { adminNav, teacherNav } from './nav';
+import { StaffBottomTabs } from './staff-bottom-tabs';
 import { StaffTopBar } from './staff-top-bar';
 import { type BadgeCounts, SidebarNav } from './sidebar';
 import type { ShellUser } from './student-shell';
@@ -138,12 +139,23 @@ export function StaffShell({ area, children, user, badges }: StaffShellProps) {
           }
         />
 
-        <main id="main" tabIndex={-1} className="flex-1 py-6 focus:outline-none md:py-8">
+        <main
+          id="main"
+          tabIndex={-1}
+          className="flex-1 py-6 pb-24 focus:outline-none md:py-8 lg:pb-8"
+        >
           <Container>
             <PageFade>{children}</PageFade>
           </Container>
         </main>
       </div>
+
+      <StaffBottomTabs
+        area={area}
+        badges={counts}
+        onMore={() => setMobileOpen(true)}
+        className="lg:hidden"
+      />
     </div>
   );
 }

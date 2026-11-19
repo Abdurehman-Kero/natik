@@ -12,6 +12,10 @@ export interface UserView {
   photoUrl: string | null;
   bio: string | null;
   showOnWebsite: boolean;
+  gender: 'MALE' | 'FEMALE' | null;
+  /** Two-letter country code, e.g. ET. */
+  country: string | null;
+  city: string | null;
   lastSignInAt: string | null;
   erased?: boolean;
   createdAt: string;
@@ -41,7 +45,7 @@ export const HOME_FOR_ROLE: Record<Role, string> = {
 // ─── Course builder (M3) ───────────────────────────────────────────────────
 
 export type ContentStatusValue = 'DRAFT' | 'PUBLISHED' | 'HIDDEN';
-export type BlockKind = 'TEXT' | 'VIDEO' | 'PDF' | 'AUDIO' | 'IMAGE' | 'SLIDES';
+export type BlockKind = 'TEXT' | 'VIDEO' | 'PDF' | 'AUDIO' | 'IMAGE' | 'SLIDES' | 'FILE';
 
 /** The steps of a guided lesson that a block can belong to (null = the plain lesson part). */
 export type LessonStageName = 'PREPARE' | 'WATCH' | 'REVISE' | 'EXAMPLES';
@@ -78,6 +82,8 @@ export interface AdminCourseDetail {
   durationText: string | null;
   lessonOrder: 'OPEN' | 'IN_ORDER';
   showPrice: boolean;
+  /** Sessions are still being added week by week. */
+  ongoing: boolean;
   trailerUrl: string | null;
   access: 'FREE' | 'PAID';
   priceSantim: number | null;
@@ -128,7 +134,8 @@ export interface OutlineLesson {
   id: string;
   title: string;
   status: ContentStatusValue;
-  isFreePreview: boolean;
+  /** When the session takes place. */
+  sessionDate: string | null;
   blockTypes: BlockKind[];
 }
 
@@ -188,7 +195,7 @@ export interface EditorLesson {
   id: string;
   title: string;
   status: ContentStatusValue;
-  isFreePreview: boolean;
+  sessionDate: string | null;
   downloadsAllowed: boolean;
   description: string | null;
   objectives: string[];
@@ -226,6 +233,15 @@ export type LessonViewBlock = { stage: LessonStageName | null } & (
       sizeBytes: number;
       caption: string | null;
       downloadUrl: string | null;
+    }
+  | {
+      id: string;
+      /** PowerPoint, Word or Excel: downloaded. */
+      type: 'FILE';
+      url: string;
+      name: string;
+      sizeBytes: number;
+      caption: string | null;
     }
   | {
       id: string;

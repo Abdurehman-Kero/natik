@@ -8,9 +8,11 @@ import {
 import {
   expectNoHorizontalScroll,
   expectNoSeriousA11yIssues,
+  joinCourse,
   latestSms,
   newPhone,
   SEED,
+  emailFor,
 } from './helpers';
 
 /** A tiny valid PNG, used as a "receipt photo". */
@@ -28,6 +30,7 @@ async function registerStudent(page: Page, name = `E2E Student ${unique()}`) {
     data: {
       fullName: name,
       phone,
+      email: emailFor(phone),
       password: 'Passw0rd123',
       acceptTerms: true,
       confirmAge: true,
@@ -62,6 +65,15 @@ async function findPayment(api: APIRequestContext, studentName: string, status =
   throw new Error(`No ${status} payment found for ${studentName}`);
 }
 
+/** The signed-in student asks to join a free course (nobody accepts it yet). */
+async function joinRequest(page: Page, slug: string) {
+  const course = (await (await page.request.get(`/api/v1/public/courses/${slug}`)).json()) as {
+    id: string;
+  };
+  const res = await page.request.post(`/api/v1/courses/${course.id}/enrol`);
+  expect(((await res.json()) as { status: string }).status).toBe('AWAITING_APPROVAL');
+}
+
 /** Fills and sends the payment form as a student. */
 async function submitPayment(page: Page, reference: string, withReceipt = true) {
   await page.getByLabel('Reference or transaction number').fill(reference);
@@ -76,18 +88,41 @@ async function submitPayment(page: Page, reference: string, withReceipt = true) 
 }
 
 test.describe('free course (AT-04, AT-09)', () => {
-  test('a new student enrols with one tap, learns, and finishes', async ({ page }) => {
-    await registerStudent(page);
+  test('a new student asks to join; once an admin accepts, the course opens', async ({
+    page,
+    playwright,
+    baseURL,
+  }) => {
+    const { phone, name } = await registerStudent(page);
 
     await page.goto('/courses/everyday-english');
-    await page.getByRole('button', { name: 'Enrol free' }).click({ timeout: 15_000 });
-    // Straight into the first lesson.
-    await expect(page).toHaveURL(/\/learn\/everyday-english\/lessons\//, { timeout: 15_000 });
-    await expect(page.getByRole('heading', { level: 1, name: 'Greeting people' })).toBeVisible();
+    await page.getByRole('button', { name: 'Request to join' }).click({ timeout: 15_000 });
+    await expect(page.getByText(/Request sent/)).toBeVisible();
+    await expect(page.getByRole('button', { name: /Waiting for approval/ })).toBeDisabled({
+      timeout: 15_000,
+    });
+    // Nothing opens yet, and the page says why.
+    await page.goto('/learn/everyday-english');
+    await expect(page.getByRole('heading', { name: 'Waiting for approval' })).toBeVisible();
     await expectNoHorizontalScroll(page);
     await expectNoSeriousA11yIssues(page);
 
-    // The sample course has a quiz on this lesson, a second lesson and a final quiz.
+    // An admin accepts the request; the student gets an SMS and the course opens.
+    const admin = await adminApi(playwright, baseURL!);
+    const list = await admin.get('/api/v1/admin/enrolments?status=AWAITING_APPROVAL&pageSize=50');
+    const items = (
+      (await list.json()) as { items: { id: string; student: { fullName: string } }[] }
+    ).items;
+    const request = items.find((i) => i.student.fullName === name);
+    expect(request, 'the request waits for the admin').toBeTruthy();
+    expect((await admin.post(`/api/v1/admin/enrolments/${request!.id}/approve`)).ok()).toBe(true);
+    await admin.dispose();
+    expect(await latestSms(page, phone)).toContain('accepted');
+
+    await page.goto('/courses/everyday-english');
+    await page.getByRole('link', { name: 'Continue learning' }).click({ timeout: 15_000 });
+    await expect(page).toHaveURL(/\/learn\/everyday-english\/lessons\//, { timeout: 15_000 });
+    await expect(page.getByRole('heading', { level: 1, name: 'Greeting people' })).toBeVisible();
     await expect(page.getByRole('link', { name: /Take the quiz/ }).first()).toBeVisible();
     await page.goto('/my-courses');
     await expect(page.getByRole('link', { name: /Everyday English/ })).toBeVisible();
@@ -99,27 +134,35 @@ test.describe('free course (AT-04, AT-09)', () => {
   test('registering gives no access to a course', async ({ page }) => {
     await registerStudent(page);
     await page.goto('/dashboard');
-    await expect(page.getByRole('heading', { level: 2, name: 'No courses yet' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: "Let's get you started" }),
+    ).toBeVisible();
     await expectNoHorizontalScroll(page);
 
     // A direct link to a lesson explains why and offers the next step.
     await page.goto('/learn/everyday-english');
     await expect(page.getByRole('heading', { name: "You're not enrolled yet" })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Enrol free' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Request to join' })).toBeVisible();
     await expectNoSeriousA11yIssues(page);
   });
 
   test('registering from a course page brings you back able to enrol', async ({ page }) => {
     await page.goto('/courses/everyday-english');
     await page.getByRole('link', { name: 'Register to enrol' }).click({ timeout: 15_000 });
-    await expect(page).toHaveURL(/\/register\?next=%2Fcourses%2Feveryday-english/);
-    await page.getByLabel('Full name').fill(`E2E Visitor ${unique()}`);
-    await page.getByLabel('Phone number').fill(newPhone());
+    await expect(page.getByRole('dialog', { name: 'Create your free account' })).toBeVisible();
+    await page.getByLabel('First name').fill('E2E');
+    await page.getByLabel('Last name').fill(`Visitor ${unique()}`);
+    const phone = newPhone();
+    await page.getByLabel('Phone number').fill(phone);
+    await page.getByLabel('Email').fill(emailFor(phone));
     await page.getByLabel('Password', { exact: true }).fill('Natik-Test-2026!');
+    await page.getByLabel('Confirm password').fill('Natik-Test-2026!');
     await page.getByRole('checkbox').check();
     await page.getByRole('button', { name: 'Create account' }).click();
     await expect(page).toHaveURL(/\/courses\/everyday-english$/, { timeout: 15_000 });
-    await expect(page.getByRole('button', { name: 'Enrol free' })).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('button', { name: 'Request to join' })).toBeVisible({
+      timeout: 15_000,
+    });
   });
 
   test('a visitor who is not signed in is asked to register', async ({ page }) => {
@@ -288,6 +331,60 @@ test.describe('admin screens (desktop)', () => {
     throw new Error('payment card not found');
   }
 
+  test('enrolments: a request to join is accepted from the banner', async ({ page }) => {
+    const { name } = await registerStudent(page);
+    await joinRequest(page, 'everyday-english');
+    await page.context().clearCookies();
+    expect((await page.request.post('/api/v1/auth/sign-in', { data: SEED.owner })).ok()).toBe(true);
+
+    await page.goto('/admin/enrolments');
+    await page.getByRole('button', { name: /asks? to join/ }).click();
+    await expect(page).toHaveURL(/status=AWAITING_APPROVAL/);
+    const row = page.locator('li', { hasText: name });
+    await expect(row.getByText('Waiting for approval')).toBeVisible();
+    await expectNoSeriousA11yIssues(page);
+    await row.getByRole('button', { name: `Accept ${name}` }).click();
+    await expect(page.getByText(`${name} is accepted.`)).toBeVisible();
+  });
+
+  test('payments queue: the receipt the student sent shows as a picture and opens large', async ({
+    page,
+  }) => {
+    const name = await studentPaysThenAdminSignsIn(page);
+    const card = await openCard(page, name);
+
+    // A small picture of the receipt is right on the card.
+    const receipt = card.getByRole('button', { name: 'Receipt' });
+    await expect(receipt).toBeVisible();
+    await expect(card.locator('img[src^="/api/v1/files/"]')).toHaveCount(1);
+    await expect
+      .poll(() =>
+        card
+          .locator('img')
+          .first()
+          .evaluate((img) => (img as HTMLImageElement).naturalWidth),
+      )
+      .toBeGreaterThan(0);
+
+    // It opens large in a dialog, with a link to open it in its own tab.
+    await receipt.click();
+    const dialog = page.getByRole('dialog', { name: 'Receipt' });
+    await expect(dialog.getByRole('img', { name: 'Receipt' })).toBeVisible();
+    await expect(dialog.getByRole('link', { name: 'Open in a new tab' })).toHaveAttribute(
+      'href',
+      /^\/api\/v1\/files\//,
+    );
+    await expectNoSeriousA11yIssues(page);
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+
+    // Clean up so the queue does not fill with test payments.
+    await card.getByRole('button', { name: 'Reject' }).click();
+    await page.getByLabel('Reason').fill('Test payment');
+    await page.getByRole('button', { name: 'Reject payment' }).click();
+    await expect(page.getByText('Payment rejected')).toBeVisible();
+  });
+
   test('payments queue: rejecting needs a reason', async ({ page }) => {
     const name = await studentPaysThenAdminSignsIn(page);
     const card = await openCard(page, name);
@@ -385,9 +482,7 @@ test.describe('admin screens (desktop)', () => {
 test.describe('screens fit the phone and are accessible', () => {
   test('dashboard, my courses, news, outline and payment history', async ({ page }) => {
     await registerStudent(page);
-    await page.goto('/courses/everyday-english');
-    await page.getByRole('button', { name: 'Enrol free' }).click({ timeout: 15_000 });
-    await expect(page).toHaveURL(/\/learn\//, { timeout: 15_000 });
+    await joinCourse(page, 'everyday-english');
 
     for (const path of [
       '/dashboard',
@@ -405,8 +500,9 @@ test.describe('screens fit the phone and are accessible', () => {
 
   test('"Report a problem" reaches the admin messages', async ({ page, playwright, baseURL }) => {
     const { name } = await registerStudent(page);
+    await joinCourse(page, 'everyday-english');
     await page.goto('/courses/everyday-english');
-    await page.getByRole('button', { name: 'Enrol free' }).click({ timeout: 15_000 });
+    await page.getByRole('link', { name: 'Continue learning' }).click({ timeout: 15_000 });
     await expect(page).toHaveURL(/\/learn\/everyday-english\/lessons\//, { timeout: 15_000 });
     await page.getByRole('button', { name: 'Report it' }).click();
     const message = `Video will not play ${unique()}`;

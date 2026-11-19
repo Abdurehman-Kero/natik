@@ -83,4 +83,22 @@ export class AdminEnrolmentsController {
   cancel(@CurrentUser() actor: SessionUser, @Param('id') id: string, @Body() dto: CancelDto) {
     return this.enrolments.cancel(actor, id, dto.reason);
   }
+
+  /** Students waiting to be accepted into a free course (the menu badge). */
+  @Get('enrolments/requests/count')
+  requestsCount() {
+    return this.enrolments.approvalCount();
+  }
+
+  @Post('enrolments/:id/approve')
+  @HttpCode(HttpStatus.OK)
+  approve(@CurrentUser() actor: SessionUser, @Param('id') id: string) {
+    return this.enrolments.approve(actor, id);
+  }
+
+  @Post('enrolments/:id/decline')
+  @HttpCode(HttpStatus.OK)
+  decline(@CurrentUser() actor: SessionUser, @Param('id') id: string, @Body() dto: CancelDto) {
+    return this.enrolments.decline(actor, id, dto.reason);
+  }
 }

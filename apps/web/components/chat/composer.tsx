@@ -1,10 +1,11 @@
 'use client';
 
-import { FileText, Mic, Paperclip, SendHorizontal, Trash2, X } from 'lucide-react';
+import { FileText, Film, Mic, Paperclip, SendHorizontal, Trash2, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   type FormEvent,
   type KeyboardEvent,
+  type ReactNode,
   useCallback,
   useEffect,
   useRef,
@@ -17,6 +18,8 @@ import { useRecorder } from '@/lib/chat/use-recorder';
 
 const ACCEPT = 'image/*,application/pdf,audio/*,video/mp4,.doc,.docx,.xls,.xlsx,.ppt,.pptx';
 const MAX_BYTES = 20 * 1024 * 1024;
+/** Course groups also take video clips (mp4, webm, mov). */
+export const GROUP_ACCEPT = `${ACCEPT},video/webm,video/quicktime,.mp4,.webm,.mov`;
 
 /**
  * The message box: attach a file, type, or hold a voice note. Enter sends, Shift+Enter makes a new
@@ -25,9 +28,23 @@ const MAX_BYTES = 20 * 1024 * 1024;
 export function Composer({
   onSend,
   disabled,
+  accept = ACCEPT,
+  maxBytes = MAX_BYTES,
+  tooBigText,
+  banner,
+  focusKey,
 }: {
   onSend: (message: Outgoing) => void;
   disabled?: boolean;
+  /** The kinds of file the picker offers. */
+  accept?: string;
+  /** The biggest file the box takes before sending. */
+  maxBytes?: number;
+  tooBigText?: string;
+  /** Shown above the box, for example "Replying to Sara". */
+  banner?: ReactNode;
+  /** Changes when the box should take the keyboard focus (for example after choosing Reply). */
+  focusKey?: string | null;
 }) {
   const t = useTranslations('chat');
   const [text, setText] = useState('');
@@ -44,6 +61,10 @@ export function Composer({
       return null;
     });
   }, []);
+
+  useEffect(() => {
+    if (focusKey) input.current?.focus();
+  }, [focusKey]);
 
   useEffect(() => {
     if (recorder.error)
@@ -79,8 +100,8 @@ export function Composer({
     const picked = list?.[0];
     if (picker.current) picker.current.value = '';
     if (!picked) return;
-    if (picked.size > MAX_BYTES) {
-      toast.error(t('tooBig'));
+    if (picked.size > maxBytes) {
+      toast.error(tooBigText ?? t('tooBig'));
       return;
     }
     setFile(picked);
@@ -127,6 +148,7 @@ export function Composer({
   const canSend = text.trim().length > 0 || file !== null;
   return (
     <form onSubmit={submit} className="border-t border-border bg-surface p-2">
+      {banner}
       {file ? (
         <div className="mb-2 flex items-center gap-3 rounded-xl bg-primary-soft p-2">
           {preview ? (
@@ -134,7 +156,11 @@ export function Composer({
             <img src={preview} alt="" className="size-12 rounded-lg object-cover" />
           ) : (
             <span className="flex size-12 items-center justify-center rounded-lg bg-surface text-primary">
-              <FileText className="size-6" aria-hidden />
+              {file.type.startsWith('video/') ? (
+                <Film className="size-6" aria-hidden />
+              ) : (
+                <FileText className="size-6" aria-hidden />
+              )}
             </span>
           )}
           <span className="flex min-w-0 flex-1 flex-col">
@@ -155,7 +181,7 @@ export function Composer({
         <input
           ref={picker}
           type="file"
-          accept={ACCEPT}
+          accept={accept}
           className="sr-only"
           tabIndex={-1}
           aria-hidden

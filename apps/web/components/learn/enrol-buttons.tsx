@@ -8,17 +8,23 @@ import { toast } from '@/components/ui/toast';
 import { api, useErrorMessage } from '@/lib/api/client';
 import type { CourseState, EnrolmentSummary, RenewResult } from '@/lib/api/learn-types';
 
-/** "Enrol free" or "Pay and enrol". Free opens the first lesson at once; paid goes to the payment page. */
+/**
+ * "Request to join" (free course) or "Pay and enrol". Nothing opens at once: a free course waits for
+ * an admin to accept the student; a paid one goes to the payment page and waits for the check.
+ */
 export function EnrolButton({
   courseId,
   slug,
   isFree,
   fullWidth = true,
+  onRequested,
 }: {
   courseId: string;
   slug: string;
   isFree: boolean;
   fullWidth?: boolean;
+  /** Called once a request to join is sent, so the page can show "Waiting for approval". */
+  onRequested?: () => void;
 }) {
   const t = useTranslations('courseButton');
   const errorMessage = useErrorMessage();
@@ -36,12 +42,16 @@ export function EnrolButton({
         const state = await api<CourseState>(`/me/course-state/${encodeURIComponent(slug)}`);
         const lessonId = state.enrolment?.continueLessonId;
         router.push(lessonId ? `/learn/${slug}/lessons/${lessonId}` : `/learn/${slug}`);
+      } else if (enrolment.status === 'AWAITING_APPROVAL') {
+        toast.success(t('requestSent'));
+        onRequested?.();
       } else if (enrolment.status === 'AWAITING_PAYMENT' || enrolment.status === 'EXPIRED') {
         router.push(`/pay/${enrolment.id}`);
       } else {
         router.push('/dashboard');
       }
       router.refresh();
+      setBusy(false);
     } catch (error) {
       toast.error(errorMessage(error));
       setBusy(false);
@@ -50,7 +60,7 @@ export function EnrolButton({
 
   return (
     <Button size="lg" fullWidth={fullWidth} loading={busy} onClick={enrol}>
-      {isFree ? t('enrolFree') : t('payAndEnrol')}
+      {isFree ? t('requestToJoin') : t('payAndEnrol')}
     </Button>
   );
 }

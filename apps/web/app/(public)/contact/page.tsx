@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { ContactDetails } from '@/components/public/contact-details';
 import { ContactForm } from '@/components/public/contact-form';
+import { NextSteps } from '@/components/public/next-steps';
 import { PageHero } from '@/components/public/page-hero';
 import { PublicSection } from '@/components/public/section';
 
@@ -19,6 +20,7 @@ export default async function ContactPage() {
         <ContactForm />
         <ContactDetails />
       </PublicSection>
+      <NextSteps items={['courses', 'level']} />
     </>
   );
 }

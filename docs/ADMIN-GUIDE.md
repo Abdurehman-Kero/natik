@@ -1,6 +1,6 @@
 # Admin guide
 
-One task per section. Sign in at the website with your phone number and password; you land on the Dashboard.
+One task per section. Sign in at the website with your email and password; you land on the Dashboard.
 
 ## Check payments (daily)
 

@@ -35,7 +35,7 @@ export function TrailerPlayer({ embedUrl, title }: { embedUrl: string; title: st
           posterUrl={youtubeThumbnail(embedUrl)}
           title={title}
           durationSec={null}
-          label={t('watchTrailer')}
+          label={`${t('watchTrailer')}: ${title}`}
           onPlay={() => setPlaying(true)}
         />
       )}

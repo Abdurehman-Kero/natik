@@ -18,31 +18,33 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { formatPrice } from '@natik/shared';
+import { formatPrice, formatDate, MAX_SESSIONS_PER_WEEK } from '@natik/shared';
 import {
   AudioLines,
   BookOpen,
+  CalendarDays,
   Eye,
   EyeOff,
   FileText,
   GripVertical,
   Image as ImageIcon,
   Lock,
+  MessagesSquare,
   MoreHorizontal,
   MoveVertical,
+  Paperclip,
   Pencil,
   Plus,
   Presentation,
-  UsersRound,
   Trash2,
   Type,
+  UsersRound,
   Video,
 } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Button, IconButton, LinkButton } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -79,6 +81,7 @@ const BLOCK_ICON: Record<BlockKind, typeof Type> = {
   AUDIO: AudioLines,
   IMAGE: ImageIcon,
   SLIDES: Presentation,
+  FILE: Paperclip,
 };
 
 type Dialogs =
@@ -97,6 +100,7 @@ type Dialogs =
 export function OutlineEditor({ initial }: { initial: Outline }) {
   const t = useTranslations('outline');
   const ts = useTranslations('teachStudents');
+  const tg = useTranslations('groups');
   const errorMessage = useErrorMessage();
   const router = useRouter();
   const [outline, setOutline] = useState(initial);
@@ -224,6 +228,9 @@ export function OutlineEditor({ initial }: { initial: Outline }) {
           <>
             <LinkButton href={`/teach/courses/${course.id}/students`} variant="secondary">
               <UsersRound aria-hidden /> {ts('title')}
+            </LinkButton>
+            <LinkButton href={`/teach/groups?c=${course.id}`} variant="secondary">
+              <MessagesSquare aria-hidden /> {tg('courseGroup')}
             </LinkButton>
             <Button onClick={() => setDialog({ kind: 'addUnit' })}>
               <Plus aria-hidden /> {t('addUnit')}
@@ -374,8 +381,11 @@ export function OutlineEditor({ initial }: { initial: Outline }) {
                                           {lesson.blockTypes.length === 0 ? (
                                             <span className="text-xs">{t('noBlocks')}</span>
                                           ) : null}
-                                          {lesson.isFreePreview ? (
-                                            <Badge tone="accent">{t('freePreview')}</Badge>
+                                          {lesson.sessionDate ? (
+                                            <span className="inline-flex items-center gap-1 text-xs">
+                                              <CalendarDays className="size-3.5" aria-hidden />
+                                              {formatDate(lesson.sessionDate)}
+                                            </span>
                                           ) : null}
                                         </span>
                                       </span>
@@ -468,14 +478,23 @@ export function OutlineEditor({ initial }: { initial: Outline }) {
                         </SortableContext>
                       </DndContext>
 
-                      <div className="border-t border-border px-3 py-2">
+                      <div className="flex flex-wrap items-center gap-2 border-t border-border px-3 py-2">
                         <Button
                           variant="ghost"
                           size="sm"
+                          disabled={unit.lessons.length >= MAX_SESSIONS_PER_WEEK}
                           onClick={() => setDialog({ kind: 'addLesson', unit })}
                         >
                           <Plus aria-hidden /> {t('addLesson')}
                         </Button>
+                        <span className="ms-auto text-xs text-muted">
+                          {unit.lessons.length >= MAX_SESSIONS_PER_WEEK
+                            ? t('weekFull')
+                            : t('sessionsOf', {
+                                count: unit.lessons.length,
+                                max: MAX_SESSIONS_PER_WEEK,
+                              })}
+                        </span>
                       </div>
                     </Card>
                   )}

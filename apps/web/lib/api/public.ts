@@ -59,17 +59,10 @@ export interface PublicCourseDetail extends PublicCourse {
   outline: {
     id: string;
     title: string;
-    lessons: { id: string; title: string; isFreePreview: boolean }[];
+    lessons: { id: string; title: string; sessionDate: string | null }[];
   }[];
-  /** The first video of the first free lesson, playable on the course page. */
-  previewVideo: {
-    lessonId: string;
-    videoId: string;
-    title: string;
-    status: string;
-    durationSec: number | null;
-    posterUrl: string | null;
-  } | null;
+  /** Sessions are still being added week by week. */
+  ongoing: boolean;
 }
 
 export interface PublicAnnouncement {
@@ -96,9 +89,16 @@ export interface PublicSiteContent {
     tiktok?: string;
     youtube?: string;
   } | null;
+  /** The how-to videos for the Help tab (YouTube or Vimeo links). */
+  help: { studentVideoUrl?: string; teacherVideoUrl?: string } | null;
 }
 
-export const EMPTY_SITE_CONTENT: PublicSiteContent = { home: null, about: null, contact: null };
+export const EMPTY_SITE_CONTENT: PublicSiteContent = {
+  home: null,
+  about: null,
+  contact: null,
+  help: null,
+};
 
 export interface PublicFaqItem {
   id: string;
@@ -111,28 +111,14 @@ export interface PublicTestimonial {
   name: string;
   quote: string;
   courseLabel: string | null;
+  /** The student's picture, if the admin uploaded one. */
+  photoUrl: string | null;
 }
 
 export interface PublicPolicy {
   title: string;
   html: string;
   updatedAt: string;
-}
-
-export interface PublicFreeLesson {
-  id: string;
-  title: string;
-  blockTypes: string[];
-  /** The still picture of the lesson's first video, if it has one. */
-  posterUrl: string | null;
-  durationSec: number | null;
-  course: {
-    slug: string;
-    title: string;
-    imageUrl: string | null;
-    language: { name: string; code: string; direction: 'LTR' | 'RTL' };
-    level: string;
-  };
 }
 
 export interface PublicStats {

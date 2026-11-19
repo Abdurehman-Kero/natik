@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ClientMessages } from '@/components/client-messages';
 import { StaffShell } from '@/components/layout/shells';
 import { apiFetch } from '@/lib/api/server';
 import { requireRole } from '@/lib/auth';
@@ -11,20 +12,24 @@ const count = (path: string) =>
 /** Admin area: admins only. The menu shows how many messages, payments and certificates need attention. */
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const user = await requireRole(['ADMIN'], '/admin');
-  const [messages, payments, marking, chat, certificates] = await Promise.all([
+  const [messages, payments, marking, chat, certificates, enrolments, groups] = await Promise.all([
     count('/admin/messages/count'),
     count('/admin/payments/count'),
     count('/teach/marking/count'),
     count('/chat/unread-count'),
     count('/admin/certificate-requests/count'),
+    count('/admin/enrolments/requests/count'),
+    count('/groups/unread-count'),
   ]);
   return (
-    <StaffShell
-      area="admin"
-      user={{ name: user.fullName, photoUrl: user.photoUrl }}
-      badges={{ messages, payments, marking, chat, certificates }}
-    >
-      {children}
-    </StaffShell>
+    <ClientMessages area="admin">
+      <StaffShell
+        area="admin"
+        user={{ name: user.fullName, photoUrl: user.photoUrl }}
+        badges={{ messages, payments, marking, chat, certificates, enrolments, groups }}
+      >
+        {children}
+      </StaffShell>
+    </ClientMessages>
   );
 }

@@ -44,7 +44,7 @@ export function Logo({ variant = 'compact', height, href = '/', priority, classN
             <span className="font-heading text-xl font-bold tracking-wide text-primary">
               {t('wordmark')}
             </span>
-            <span className="mt-1 text-[0.625rem] font-semibold tracking-[0.2em] text-muted uppercase">
+            <span className="mt-1 text-[0.625rem] font-semibold tracking-[0.2em] text-muted uppercase max-[400px]:hidden">
               {t('centre')}
             </span>
           </span>

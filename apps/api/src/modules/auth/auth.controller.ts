@@ -2,7 +2,6 @@ import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/
 import { ApiTags } from '@nestjs/swagger';
 import {
   forgotPasswordSchema,
-  normalizePhone,
   registerSchema,
   setPasswordSchema,
   signInSchema,
@@ -75,7 +74,7 @@ export class AuthController {
   @Post('password/forgot')
   @HttpCode(HttpStatus.OK)
   async forgot(@Body() dto: ForgotPasswordDto, @Req() req: AuthedRequest) {
-    await this.auth.forgotPassword(normalizePhone(dto.phone)!, clientOf(req));
+    await this.auth.forgotPassword(dto, clientOf(req));
     return { ok: true };
   }
 
@@ -83,7 +82,7 @@ export class AuthController {
   @Post('password/verify-code')
   @HttpCode(HttpStatus.OK)
   verifyResetCode(@Body() dto: VerifyResetCodeDto, @Req() req: AuthedRequest) {
-    return this.auth.verifyResetCode(normalizePhone(dto.phone)!, dto.code, clientOf(req));
+    return this.auth.verifyResetCode(dto, dto.code, clientOf(req));
   }
 
   /** Used by the reset flow and by the SMS "set your password" link. */

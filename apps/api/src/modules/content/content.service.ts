@@ -1,6 +1,6 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { HttpStatus, Injectable, Inject } from '@nestjs/common';
-import { MAX_SLIDES_PER_BLOCK, publishCheckMessages } from '@natik/shared';
+import { MAX_SESSIONS_PER_WEEK, MAX_SLIDES_PER_BLOCK, publishCheckMessages } from '@natik/shared';
 import type { Queue } from 'bullmq';
 import { AccessPolicy, type Actor } from '../../common/access/access-policy';
 import { AppException } from '../../common/errors/app.exception';
@@ -25,7 +25,7 @@ export interface SlideInput {
 }
 
 interface BlockCreate {
-  type: 'TEXT' | 'VIDEO' | 'PDF' | 'AUDIO' | 'IMAGE' | 'SLIDES';
+  type: 'TEXT' | 'VIDEO' | 'PDF' | 'AUDIO' | 'IMAGE' | 'SLIDES' | 'FILE';
   stage?: Stage | null;
   textJson?: unknown;
   fileId?: string;
@@ -37,7 +37,13 @@ const FILE_PURPOSE_FOR_BLOCK = {
   PDF: 'LESSON_PDF',
   AUDIO: 'LESSON_AUDIO',
   IMAGE: 'LESSON_IMAGE',
+  FILE: 'LESSON_FILE',
 } as const;
+
+const weekFull = () =>
+  new AppException('BAD_REQUEST', HttpStatus.BAD_REQUEST, {
+    message: `A week has up to ${MAX_SESSIONS_PER_WEEK} sessions. Add the next session to a new week.`,
+  });
 
 /** Units, lessons and blocks: what teachers build (FR-TEACH-002/003/004/008, FR-LEARN-006…011). */
 @Injectable()
@@ -101,6 +107,7 @@ export class ContentService {
         priceSantim: true,
         accessDays: true,
         featured: true,
+        ongoing: true,
         language: { select: { name: true, code: true, direction: true } },
         level: { select: { name: true } },
         units: {
@@ -117,7 +124,7 @@ export class ContentService {
                 title: true,
                 status: true,
                 position: true,
-                isFreePreview: true,
+                sessionDate: true,
                 blocks: { orderBy: { position: 'asc' }, select: { type: true } },
               },
             },
@@ -136,6 +143,7 @@ export class ContentService {
         accessDays: course.accessDays,
         language: course.language,
         level: course.level.name,
+        ongoing: course.ongoing,
         canEditSettings: this.access.canEditCourseSettings(actor),
       },
       units: course.units.map((u) => ({
@@ -146,7 +154,7 @@ export class ContentService {
           id: l.id,
           title: l.title,
           status: l.status,
-          isFreePreview: l.isFreePreview,
+          sessionDate: l.sessionDate,
           blockTypes: l.blocks.map((b) => b.type),
         })),
       })),
@@ -243,6 +251,8 @@ export class ContentService {
   async createLesson(actor: Actor, unitId: string, title: string) {
     const unit = await this.unitOf(unitId);
     await this.access.assertCanEditCourseContent(actor, unit.courseId);
+    const inWeek = await this.prisma.lesson.count({ where: { unitId } });
+    if (inWeek >= MAX_SESSIONS_PER_WEEK) throw weekFull();
     const max = await this.prisma.lesson.aggregate({ where: { unitId }, _max: { position: true } });
     const lesson = await this.prisma.lesson.create({
       data: { unitId, courseId: unit.courseId, title, position: (max._max.position ?? 0) + 1 },
@@ -293,7 +303,7 @@ export class ContentService {
             questionCount: lesson.quiz._count.questions,
           }
         : null,
-      isFreePreview: lesson.isFreePreview,
+      sessionDate: lesson.sessionDate,
       downloadsAllowed: lesson.downloadsAllowed,
       description: lesson.description,
       objectives: lesson.objectives,
@@ -354,6 +364,7 @@ export class ContentService {
       objectives?: string[];
       estimatedMinutes?: number | null;
       alwaysOpen?: boolean;
+      sessionDate?: string | null;
     },
   ) {
     const lesson = await this.lessonOf(lessonId);
@@ -372,6 +383,9 @@ export class ContentService {
           ? {}
           : { estimatedMinutes: input.estimatedMinutes }),
         ...(input.alwaysOpen === undefined ? {} : { alwaysOpen: input.alwaysOpen }),
+        ...(input.sessionDate === undefined
+          ? {}
+          : { sessionDate: input.sessionDate ? new Date(input.sessionDate) : null }),
       },
     });
     return this.getLesson(actor, lessonId);
@@ -421,6 +435,19 @@ export class ContentService {
         },
       });
       await this.afterVisibilityChange(actor, lesson.courseId, 'Lesson', lessonId, to);
+      // The first time a session goes live, tell the course group.
+      if (to === 'PUBLISHED' && !lesson.publishedAt) {
+        await this.prisma.groupMessage
+          .create({
+            data: {
+              courseId: lesson.courseId,
+              senderId: actor.id,
+              kind: 'SYSTEM',
+              body: `New session: ${lesson.title}`,
+            },
+          })
+          .catch(() => undefined);
+      }
     }
     // A lesson is only seen inside a published unit. Publishing the first lesson of a brand-new unit
     // publishes the unit too, so "This lesson is live" is true. A unit the teacher hid stays hidden.
@@ -477,6 +504,7 @@ export class ContentService {
     if (!units.every((u) => unitIds.has(u.unitId))) {
       throw new AppException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
     }
+    if (units.some((u) => u.lessonIds.length > MAX_SESSIONS_PER_WEEK)) throw weekFull();
     const moved = units.flatMap((u) => u.lessonIds);
     if (new Set(moved).size !== moved.length)
       throw new AppException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
@@ -546,7 +574,7 @@ export class ContentService {
     } else {
       if (!input.fileId) throw new AppException('VALIDATION_FAILED', HttpStatus.BAD_REQUEST);
       const file = await this.prisma.fileAsset.findUnique({ where: { id: input.fileId } });
-      const wanted = FILE_PURPOSE_FOR_BLOCK[input.type as 'PDF' | 'AUDIO' | 'IMAGE'];
+      const wanted = FILE_PURPOSE_FOR_BLOCK[input.type as 'PDF' | 'AUDIO' | 'IMAGE' | 'FILE'];
       // A file can only be attached to a lesson of the course it was uploaded for.
       const belongsHere = file?.storageKey.startsWith(`lessons/${lesson.courseId}/`);
       if (!file || file.purpose !== wanted || !belongsHere) {

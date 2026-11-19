@@ -166,6 +166,7 @@ export class AdminCoursesService {
       imageFileId: input.imageFileId ?? null,
       ...(input.lessonOrder === undefined ? {} : { lessonOrder: input.lessonOrder }),
       ...(input.showPrice === undefined ? {} : { showPrice: input.showPrice }),
+      ...(input.ongoing === undefined ? {} : { ongoing: input.ongoing }),
       ...(input.trailerUrl === undefined ? {} : { trailerUrl: input.trailerUrl?.trim() || null }),
     };
   }
@@ -178,6 +179,8 @@ export class AdminCoursesService {
       : await this.uniqueSlug(slugify(input.title));
     const course = await this.prisma.course.create({
       data: {
+        // New courses run week by week: sessions keep being added until an admin says it is finished.
+        ongoing: true,
         ...this.data(input),
         slug,
         branchId: branch.id,

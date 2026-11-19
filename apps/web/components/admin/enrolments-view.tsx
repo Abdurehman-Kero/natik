@@ -9,6 +9,8 @@ import {
   UserPlus,
   UsersRound,
   X,
+  Check,
+  Inbox,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -41,6 +43,7 @@ import { StatusPill } from '@/components/ui/status-pill';
 import { toast } from '@/components/ui/toast';
 import { adminEnrolSchema, extendEnrolmentSchema } from '@natik/shared';
 import { api, useErrorMessage } from '@/lib/api/client';
+import { refreshCounts } from '@/lib/use-live-counts';
 import type { AdminEnrolment, StudentChoice } from '@/lib/api/learn-types';
 import type { Paged } from '@/lib/api/types';
 import { apiFieldErrors, type FieldErrors, validate } from '@/lib/forms';
@@ -53,6 +56,7 @@ export interface EnrolmentFilters {
 }
 
 const STATUSES = [
+  'AWAITING_APPROVAL',
   'AWAITING_PAYMENT',
   'PAYMENT_SUBMITTED',
   'ACTIVE',
@@ -66,10 +70,13 @@ export function EnrolmentsView({
   data,
   filters,
   courses,
+  requests = 0,
 }: {
   data: Paged<AdminEnrolment>;
   filters: EnrolmentFilters;
   courses: { id: string; title: string }[];
+  /** Students waiting to be accepted into a free course. */
+  requests?: number;
 }) {
   const t = useTranslations('adminEnrolments');
   const ts = useTranslations('status.enrolment');
@@ -81,6 +88,7 @@ export function EnrolmentsView({
   const [studentOpen, setStudentOpen] = useState(false);
   const [extending, setExtending] = useState<AdminEnrolment | null>(null);
   const [cancelling, setCancelling] = useState<AdminEnrolment | null>(null);
+  const [declining, setDeclining] = useState<AdminEnrolment | null>(null);
 
   function go(changes: Record<string, string>) {
     const next = new URLSearchParams(search.toString());
@@ -100,6 +108,30 @@ export function EnrolmentsView({
       router.refresh();
     } catch (error) {
       toast.error(errorMessage(error));
+    }
+  }
+
+  async function approve(item: AdminEnrolment) {
+    try {
+      await api(`/admin/enrolments/${item.id}/approve`, { method: 'POST' });
+      toast.success(t('approved', { name: item.student.fullName }));
+      refreshCounts();
+      router.refresh();
+    } catch (error) {
+      toast.error(errorMessage(error));
+    }
+  }
+
+  async function decline(reason?: string) {
+    if (!declining) return;
+    try {
+      await api(`/admin/enrolments/${declining.id}/decline`, { method: 'POST', json: { reason } });
+      toast.success(t('declined'));
+      refreshCounts();
+      router.refresh();
+    } catch (error) {
+      toast.error(errorMessage(error));
+      throw error;
     }
   }
 
@@ -133,6 +165,25 @@ export function EnrolmentsView({
           </Button>
         }
       />
+
+      {requests > 0 && filters.status !== 'AWAITING_APPROVAL' ? (
+        <button
+          type="button"
+          onClick={() => go({ status: 'AWAITING_APPROVAL' })}
+          className="mb-5 flex w-full card-hover items-center gap-4 rounded-2xl border border-accent bg-accent-soft p-4 text-start"
+        >
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent text-white">
+            <Inbox className="size-5" aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold text-ink">
+              {t('requestsTitle', { count: requests })}
+            </span>
+            <span className="block text-sm text-muted">{t('requestsText')}</span>
+          </span>
+          <span className="font-semibold text-primary">{t('requestsOpen')}</span>
+        </button>
+      ) : null}
 
       <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Select
@@ -178,7 +229,11 @@ export function EnrolmentsView({
             const canExtend =
               (item.status === 'ACTIVE' || item.status === 'COMPLETED') && !!item.endAt;
             const canRenew = item.status === 'EXPIRED' || (item.status === 'COMPLETED' && lapsed);
-            const canCancel = item.status !== 'COMPLETED' && item.status !== 'CANCELLED';
+            const canCancel =
+              item.status !== 'COMPLETED' &&
+              item.status !== 'CANCELLED' &&
+              item.status !== 'AWAITING_APPROVAL';
+            const asking = item.status === 'AWAITING_APPROVAL';
             return (
               <li key={item.id}>
                 <Card>
@@ -205,6 +260,20 @@ export function EnrolmentsView({
                         {item.startAt ? ' · ' : ''}
                         {item.endAt ? t('until', { date: formatDate(item.endAt) }) : t('unlimited')}
                       </p>
+                      {asking ? (
+                        <span className="flex gap-2">
+                          <Button size="sm" variant="secondary" onClick={() => setDeclining(item)}>
+                            <X aria-hidden /> {t('decline')}
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => void approve(item)}
+                            aria-label={t('approveLabel', { name: item.student.fullName })}
+                          >
+                            <Check aria-hidden /> {t('approve')}
+                          </Button>
+                        </span>
+                      ) : null}
                       {canExtend || canRenew || canCancel ? (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -252,6 +321,17 @@ export function EnrolmentsView({
         }}
       />
       <ExtendDialog item={extending} onClose={() => setExtending(null)} />
+      <ConfirmDialog
+        open={declining !== null}
+        onOpenChange={(open) => !open && setDeclining(null)}
+        title={t('declineTitle')}
+        description={declining ? t('declineText', { name: declining.student.fullName }) : ''}
+        confirmLabel={t('decline')}
+        tone="danger"
+        requireReason
+        reasonLabel={t('declineReason')}
+        onConfirm={decline}
+      />
       <ConfirmDialog
         open={cancelling !== null}
         onOpenChange={(open) => !open && setCancelling(null)}

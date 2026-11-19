@@ -6,9 +6,15 @@ import type { UserView } from '@/lib/api/types';
 let pending: Promise<UserView | null> | null = null;
 let loadedAt = 0;
 
-/** Drop the remembered answer, e.g. right after signing in or registering. */
+const listeners = new Set<() => void>();
+
+/**
+ * Drop the remembered answer, e.g. right after signing in or registering. Parts of the page that
+ * are already showing ask again, so the header turns into "Dashboard" without a reload.
+ */
 export function forgetSession() {
   pending = null;
+  listeners.forEach((listener) => listener());
 }
 
 /** Asks the API who is signed in, once per page load. Visitors (401) and failures both mean "nobody". */
@@ -36,11 +42,15 @@ export function useSession(): { user: UserView | null; ready: boolean } {
   });
   useEffect(() => {
     let active = true;
-    void loadSession().then((user) => {
-      if (active) setState({ user, ready: true });
-    });
+    const load = () =>
+      void loadSession().then((user) => {
+        if (active) setState({ user, ready: true });
+      });
+    load();
+    listeners.add(load);
     return () => {
       active = false;
+      listeners.delete(load);
     };
   }, []);
   return state;

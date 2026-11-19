@@ -35,7 +35,6 @@ const roles = [
     routes: [
       '/',
       '/courses',
-      '/free-lessons',
       '/about',
       '/news',
       '/contact',
@@ -60,6 +59,8 @@ const roles = [
       '/my-courses',
       '/browse',
       '/browse/everyday-english',
+      '/groups',
+      '/guide',
       '/chat',
       '/announcements',
       '/profile',
@@ -71,7 +72,29 @@ const roles = [
   {
     name: 'teacher',
     account: { phone: '+251911000001', password: 'Teacher2026' },
-    routes: ['/teach', '/teach/courses', '/teach/marking', '/teach/announcements', '/teach/chat'],
+    routes: [
+      '/teach',
+      '/teach/courses',
+      '/teach/marking',
+      '/teach/groups',
+      '/teach/announcements',
+      '/teach/chat',
+      '/teach/guide',
+    ],
+    // Pages that need a real course or lesson: the first ones this teacher has.
+    discover: async (get) => {
+      const list = await get('/teach/courses?pageSize=1');
+      const course = list?.items?.[0];
+      if (!course) return [];
+      const routes = [`/teach/courses/${course.id}`, `/teach/courses/${course.id}/students`];
+      const outline = await get(`/teach/courses/${course.id}/outline`);
+      const lesson = outline?.units?.flatMap((u) => u.lessons ?? [])?.[0];
+      if (lesson) {
+        routes.push(`/teach/courses/${course.id}/lessons/${lesson.id}`);
+        routes.push(`/teach/courses/${course.id}/lessons/${lesson.id}/preview`);
+      }
+      return routes;
+    },
   },
   {
     name: 'admin',
@@ -82,6 +105,7 @@ const roles = [
       '/admin',
       '/admin/users',
       '/admin/enrolments',
+      '/admin/groups',
       '/admin/courses',
       '/admin/courses/new',
       '/admin/payments',
@@ -126,7 +150,19 @@ for (const role of roles) {
     }
   }
   console.log(`\n${role.name}`);
-  for (const path of role.routes) {
+  const routes = [...role.routes];
+  if (role.discover) {
+    const get = async (path) => {
+      try {
+        const res = await fetch(`${base}/api/v1${path}`, { headers: { cookie } });
+        return res.ok ? await res.json() : null;
+      } catch {
+        return null;
+      }
+    };
+    routes.push(...(await role.discover(get).catch(() => [])));
+  }
+  for (const path of routes) {
     const t = Date.now();
     try {
       const res = await fetch(base + path, {

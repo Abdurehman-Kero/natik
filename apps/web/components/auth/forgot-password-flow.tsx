@@ -8,7 +8,7 @@ import { type FormEvent, useState } from 'react';
 import { Alert } from '@/components/ui/alert';
 import { Button, LinkButton } from '@/components/ui/button';
 import { OtpField } from '@/components/ui/otp-field';
-import { PhoneField } from '@/components/ui/phone-field';
+import { TextField } from '@/components/ui/input';
 import { Stepper } from '@/components/ui/stepper';
 import { toast } from '@/components/ui/toast';
 import { api, useErrorMessage } from '@/lib/api/client';
@@ -16,16 +16,16 @@ import { type FieldErrors, validate } from '@/lib/forms';
 import { formatCountdown, useCountdown } from '@/lib/use-countdown';
 import { NewPasswordForm } from './new-password-form';
 
-type Step = 'phone' | 'code' | 'password' | 'done';
+type Step = 'email' | 'code' | 'password' | 'done';
 
-/** Forgot password in three short steps on one page: phone, SMS code, new password. */
+/** Forgot password in three short steps on one page: email, SMS code, new password. */
 export function ForgotPasswordFlow() {
   const t = useTranslations('auth.forgot');
   const tv = useTranslations('auth.code');
   const ta = useTranslations('auth');
   const errorMessage = useErrorMessage();
-  const [step, setStep] = useState<Step>('phone');
-  const [phone, setPhone] = useState('');
+  const [step, setStep] = useState<Step>('email');
+  const [email, setEmail] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [code, setCode] = useState('');
   const [token, setToken] = useState('');
@@ -33,12 +33,12 @@ export function ForgotPasswordFlow() {
   const [busy, setBusy] = useState(false);
   const [seconds, restart] = useCountdown(0);
 
-  const stepIndex = { phone: 0, code: 1, password: 2, done: 3 }[step];
+  const stepIndex = { email: 0, code: 1, password: 2, done: 3 }[step];
 
   async function sendCode(event?: FormEvent) {
     event?.preventDefault();
     setError(null);
-    const { data, errors: found } = validate(forgotPasswordSchema, { phone });
+    const { data, errors: found } = validate(forgotPasswordSchema, { email });
     setErrors(found);
     if (!data) return;
     setBusy(true);
@@ -60,7 +60,7 @@ export function ForgotPasswordFlow() {
     try {
       const result = await api<{ token: string }>('/auth/password/verify-code', {
         method: 'POST',
-        json: { phone, code: value },
+        json: { email, code: value },
       });
       setToken(result.token);
       setStep('password');
@@ -93,22 +93,27 @@ export function ForgotPasswordFlow() {
   return (
     <div className="flex flex-col gap-6">
       <Stepper
-        steps={[t('steps.phone'), t('steps.code'), t('steps.password')]}
+        steps={[t('steps.email'), t('steps.code'), t('steps.password')]}
         current={stepIndex}
       />
 
-      {step === 'phone' ? (
+      {step === 'email' ? (
         <form onSubmit={sendCode} noValidate className="flex flex-col gap-5">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-bold md:text-[1.75rem]">{t('title')}</h1>
-            <p className="text-muted">{t('phoneText')}</p>
+            <p className="text-muted">{t('emailText')}</p>
           </div>
           {error ? <Alert tone="danger">{error}</Alert> : null}
-          <PhoneField
-            label={ta('phone')}
-            value={phone}
-            onValueChange={setPhone}
-            error={errors.phone}
+          <TextField
+            label={ta('email')}
+            type="email"
+            inputMode="email"
+            autoComplete="username"
+            autoCapitalize="none"
+            spellCheck={false}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email}
             autoFocus
           />
           <Button type="submit" size="lg" fullWidth loading={busy}>
@@ -172,7 +177,7 @@ export function ForgotPasswordFlow() {
             onInvalidToken={() => {
               setCode('');
               setError(null);
-              setStep('phone');
+              setStep('email');
             }}
           />
         </div>

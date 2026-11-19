@@ -107,7 +107,30 @@ describe('enrolment, payments and learning', () => {
     const user = await h.makeUser({ role: 'ADMIN' });
     return { ...user, agent: await h.signIn(user.phone, user.password) };
   }
-  const enrol = (agent: Agent, courseId: string) => agent.post(`/api/v1/courses/${courseId}/enrol`);
+  /** Asks to join without anyone accepting: for the approval tests. */
+  const ask = (agent: Agent, courseId: string) => agent.post(`/api/v1/courses/${courseId}/enrol`);
+  let approver: Agent | undefined;
+  /**
+   * Enrols the way the rest of these tests need: a paid course waits for payment as before; a free
+   * course asks to join and is accepted by an admin (a request answered twice at once is fine).
+   */
+  function enrol(agent: Agent, courseId: string) {
+    const run = async () => {
+      const res = await ask(agent, courseId);
+      if (res.status !== 200 || res.body.status !== 'AWAITING_APPROVAL') return res;
+      if (!approver) approver = (await admin()).agent;
+      const accepted = await approver.post(`/api/v1/admin/enrolments/${res.body.id}/approve`);
+      return accepted.status === 200 ? accepted : res;
+    };
+    const promise = run();
+    return Object.assign(promise, {
+      expect: async (code: number) => {
+        const res = await promise;
+        expect(res.status).toBe(code);
+        return res;
+      },
+    });
+  }
 
   function pay(
     agent: Agent,
@@ -170,6 +193,45 @@ describe('enrolment, payments and learning', () => {
       );
       const dashboard = await s.agent.get('/api/v1/me/dashboard').expect(200);
       expect(dashboard.body.continue.courseSlug).toBe(course.slug);
+    });
+
+    it('a free course needs an admin to accept the student; they can also turn the request down', async () => {
+      const course = await makeCourse({ access: 'FREE' });
+      const s = await student();
+      const a = await admin();
+      const asked = (await ask(s.agent, course.id).expect(200)).body;
+      expect(asked).toMatchObject({ status: 'AWAITING_APPROVAL', startAt: null });
+      // Nothing opens yet, with the reason.
+      const blocked = await s.agent.get(`/api/v1/learn/lessons/${course.lessonIds[0]}`).expect(403);
+      expect(blocked.body.error.code).toBe('COURSE_ACCESS_DENIED');
+      const outline = await s.agent.get(`/api/v1/learn/${course.slug}`).expect(200);
+      expect(outline.body.access).toMatchObject({ allowed: false, reason: 'AWAITING_APPROVAL' });
+      // Asking again returns the same request.
+      expect((await ask(s.agent, course.id).expect(200)).body.id).toBe(asked.id);
+      // The admin sees how many wait; students can't accept themselves.
+      expect(
+        (await a.agent.get('/api/v1/admin/enrolments/requests/count').expect(200)).body.count,
+      ).toBeGreaterThanOrEqual(1);
+      await s.agent.post(`/api/v1/admin/enrolments/${asked.id}/approve`).expect(403);
+      const accepted = await a.agent
+        .post(`/api/v1/admin/enrolments/${asked.id}/approve`)
+        .expect(200);
+      expect(accepted.body.status).toBe('ACTIVE');
+      expect(accepted.body.startAt).toBeTruthy();
+      await a.agent.post(`/api/v1/admin/enrolments/${asked.id}/approve`).expect(409);
+      await s.agent.get(`/api/v1/learn/lessons/${course.lessonIds[0]}`).expect(200);
+
+      // Another student is turned down with a reason, and can ask again later.
+      const other = await student();
+      const second = (await ask(other.agent, course.id).expect(200)).body;
+      await a.agent.post(`/api/v1/admin/enrolments/${second.id}/decline`).send({}).expect(400);
+      await a.agent
+        .post(`/api/v1/admin/enrolments/${second.id}/decline`)
+        .send({ reason: 'This group is full' })
+        .expect(200);
+      const again = (await ask(other.agent, course.id).expect(200)).body;
+      expect(again.status).toBe('AWAITING_APPROVAL');
+      expect(again.id).not.toBe(second.id);
     });
 
     it('tapping twice, even at once, makes only one enrolment', async () => {

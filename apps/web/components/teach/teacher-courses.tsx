@@ -34,6 +34,7 @@ export async function TeacherCourses({ courses }: { courses: TeacherCourse[] }) 
                   fill
                   unoptimized
                   sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
+                  quality={60}
                   className="card-hover-image object-cover"
                 />
               ) : (

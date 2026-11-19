@@ -1,11 +1,12 @@
 'use client';
 
 import { PageFade } from '@/components/brand/page-fade';
-import { Bell, LogOut, MessageCircle, UserRound } from 'lucide-react';
+import { Bell, HelpCircle, LogOut, MessageCircle, UserRound, UsersRound } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Logo } from '@/components/brand/logo';
+import { TourProvider, useTour } from '@/components/tour/site-tour';
 import { Avatar } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -16,6 +17,8 @@ import {
 import { Container } from '@/components/ui/layout';
 import { useLiveCounts } from '@/lib/use-live-counts';
 import { BottomTabs } from './bottom-tabs';
+import { LanguageMenu } from './language-switcher';
+import { StudentMenu } from './student-menu';
 import { studentNav } from './nav';
 import { SidebarNav } from './sidebar';
 
@@ -32,27 +35,50 @@ export interface StudentShellProps {
   unread?: number;
   /** Unread chat messages. */
   chatUnread?: number;
+  /** Unread messages in the course groups. */
+  groupsUnread?: number;
 }
 
-/** Student area: top bar with announcements + account; 4 bottom tabs on phones, sidebar on desktop. */
-export function StudentShell({
+/**
+ * Student area: a menu button (phones and tablets) or a sidebar (desktop), news and account at the
+ * top, and five labelled tabs along the bottom on phones. A short tour is offered the first time.
+ */
+export function StudentShell(props: StudentShellProps) {
+  return (
+    <TourProvider variant="student">
+      <StudentShellInner {...props} />
+    </TourProvider>
+  );
+}
+
+function StudentShellInner({
   children,
   user,
   unread = 0,
   chatUnread: chatUnreadInitial = 0,
+  groupsUnread: groupsUnreadInitial = 0,
 }: StudentShellProps) {
-  const chatUnread = useLiveCounts({ chat: chatUnreadInitial }).chat ?? 0;
+  const counts = useLiveCounts({ chat: chatUnreadInitial, groups: groupsUnreadInitial });
+  const chatUnread = counts.chat ?? 0;
+  const groupsUnread = counts.groups ?? 0;
   const t = useTranslations('nav');
   const name = user?.name ?? '';
+  const tour = useTour();
 
   return (
     <div className="flex min-h-dvh">
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-surface lg:flex">
+      <aside
+        data-tour="student-nav"
+        className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-surface lg:flex"
+      >
         <div className="flex h-[4.5rem] items-center px-5">
           <Logo href="/dashboard" />
         </div>
         <div className="flex-1 overflow-y-auto px-3 py-4">
-          <SidebarNav groups={[{ label: null, items: studentNav }]} badges={{ chat: chatUnread }} />
+          <SidebarNav
+            groups={[{ label: null, items: studentNav }]}
+            badges={{ chat: chatUnread, groups: groupsUnread }}
+          />
         </div>
         <div className="border-t border-border p-3">
           <Link
@@ -69,13 +95,33 @@ export function StudentShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 border-b border-border bg-surface">
           <Container className="flex h-16 items-center gap-2">
+            <StudentMenu user={user} badges={{ chat: chatUnread, groups: groupsUnread }} />
             <Logo href="/dashboard" variant="mark" className="sm:hidden" />
             <Logo href="/dashboard" className="hidden sm:inline-flex lg:hidden" />
             <div className="ml-auto flex items-center gap-1">
+              <LanguageMenu className="px-2" />
+              <Link
+                prefetch
+                href="/groups"
+                className="relative hidden size-11 items-center justify-center rounded-xl text-ink hover:bg-primary-soft hover:text-primary sm:flex"
+                aria-label={
+                  groupsUnread > 0
+                    ? `${t('student.courseGroups')} (${groupsUnread} ${t('unread')})`
+                    : t('student.courseGroups')
+                }
+              >
+                <UsersRound className="size-5" aria-hidden />
+                {groupsUnread > 0 ? (
+                  <span
+                    className="absolute top-2.5 right-2.5 size-2.5 rounded-full bg-accent ring-2 ring-surface"
+                    aria-hidden
+                  />
+                ) : null}
+              </Link>
               <Link
                 prefetch
                 href="/chat"
-                className="relative flex size-11 items-center justify-center rounded-xl text-ink hover:bg-primary-soft hover:text-primary"
+                className="relative hidden size-11 items-center justify-center rounded-xl text-ink hover:bg-primary-soft hover:text-primary sm:flex"
                 aria-label={
                   chatUnread > 0
                     ? `${t('student.chat')} (${chatUnread} ${t('unread')})`
@@ -93,6 +139,7 @@ export function StudentShell({
               <Link
                 prefetch
                 href="/announcements"
+                data-tour="student-bell"
                 className="relative flex size-11 items-center justify-center rounded-xl text-ink hover:bg-primary-soft hover:text-primary"
                 aria-label={
                   unread > 0
@@ -110,6 +157,7 @@ export function StudentShell({
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger
+                  data-tour="student-account"
                   className="flex size-11 items-center justify-center rounded-xl hover:bg-primary-soft"
                   aria-label={t('accountMenu')}
                 >
@@ -125,6 +173,10 @@ export function StudentShell({
                       <UserRound aria-hidden />
                       {t('student.profile')}
                     </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={tour.start}>
+                    <HelpCircle aria-hidden />
+                    {t('student.howItWorks')}
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/sign-out" prefetch={false}>
@@ -149,7 +201,7 @@ export function StudentShell({
         </main>
       </div>
 
-      <BottomTabs className="lg:hidden" />
+      <BottomTabs className="lg:hidden" badges={{ chat: chatUnread, groups: groupsUnread }} />
     </div>
   );
 }

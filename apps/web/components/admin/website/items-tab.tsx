@@ -3,6 +3,10 @@
 import { ArrowDown, ArrowUp, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, type ReactNode, useState } from 'react';
+import { UPLOAD_LIMITS } from '@natik/shared';
+import { Avatar } from '@/components/ui/avatar';
+import { FileDrop } from '@/components/ui/file-drop';
+import { uploadFile } from '@/lib/api/upload';
 import type { ZodType } from 'zod';
 import { Alert } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +21,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { EmptyState } from '@/components/ui/empty-state';
-import { FormActions } from '@/components/ui/form-field';
+import { FormActions, FormField } from '@/components/ui/form-field';
 import { TextareaField, TextField } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/components/ui/toast';
@@ -60,7 +64,11 @@ export interface ItemsTabProps<T extends { id: string; published: boolean }> {
   };
   /** Also applies `published` so the item can be hidden without deleting it. */
   blank: Record<string, string>;
+  /** Items with a picture (testimonials): adds an upload field and shows the picture in the list. */
+  photo?: { label: string; hint: string; add: string; replace: string; remove: string };
 }
+
+type WithPhoto = { photoFileId?: string | null; photoUrl?: string | null };
 
 /**
  * A list of items an admin adds, edits, reorders, hides and deletes (FAQ, testimonials).
@@ -105,6 +113,14 @@ export function ItemsTab<T extends { id: string; published: boolean }>(props: It
           {items.map((item, index) => (
             <li key={item.id}>
               <Card className="flex items-start gap-2 p-4">
+                {props.photo ? (
+                  <Avatar
+                    name={titleOf(item)}
+                    src={(item as WithPhoto).photoUrl}
+                    size="md"
+                    decorative
+                  />
+                ) : null}
                 <div className="min-w-0 flex-1">
                   <p className="flex flex-wrap items-center gap-2 font-semibold text-ink">
                     <span className="break-words">{titleOf(item)}</span>
@@ -183,6 +199,7 @@ function ItemDialog<T extends { id: string; published: boolean }>({
   schema,
   copy,
   blank,
+  photo: photoCopy,
   item,
   onClose,
 }: ItemsTabProps<T> & { item: T | null; onClose: () => void }) {
@@ -196,6 +213,32 @@ function ItemDialog<T extends { id: string; published: boolean }>({
       : blank,
   );
   const [published, setPublished] = useState(item?.published ?? true);
+  const [photo, setPhoto] = useState<{ fileId: string | null; url: string | null }>({
+    fileId: (item as WithPhoto | null)?.photoFileId ?? null,
+    url: (item as WithPhoto | null)?.photoUrl ?? null,
+  });
+  const [photoProgress, setPhotoProgress] = useState<number | undefined>();
+  const [photoError, setPhotoError] = useState<string | undefined>();
+
+  async function choosePhoto(files: File[]) {
+    const file = files[0];
+    if (!file) return;
+    setPhotoError(undefined);
+    setPhotoProgress(0);
+    try {
+      const uploaded = await uploadFile<{ id: string; url: string }>(
+        '/files',
+        file,
+        { purpose: 'SITE_IMAGE' },
+        setPhotoProgress,
+      ).promise;
+      setPhoto({ fileId: uploaded.id, url: uploaded.url });
+    } catch (error) {
+      setPhotoError(errorMessage(error));
+    } finally {
+      setPhotoProgress(undefined);
+    }
+  }
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -203,7 +246,11 @@ function ItemDialog<T extends { id: string; published: boolean }>({
   async function submit(event: FormEvent) {
     event.preventDefault();
     setFormError(null);
-    const body = { ...values, published };
+    const body = {
+      ...values,
+      published,
+      ...(photoCopy ? { photoFileId: photo.fileId } : {}),
+    };
     const { data, errors: found } = validate(schema, body);
     setErrors(found);
     if (!data) return;
@@ -266,6 +313,35 @@ function ItemDialog<T extends { id: string; published: boolean }>({
               />
             ),
           )}
+          {photoCopy ? (
+            <FormField label={photoCopy.label} hint={photoCopy.hint} error={photoError} optional>
+              <div className="flex flex-col gap-3">
+                {photo.url ? (
+                  <div className="flex items-center gap-4">
+                    <Avatar name={values.name ?? ''} src={photo.url} size="lg" decorative />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setPhoto({ fileId: null, url: null })}
+                    >
+                      <Trash2 aria-hidden /> {photoCopy.remove}
+                    </Button>
+                  </div>
+                ) : null}
+                <FileDrop
+                  label={photo.url ? photoCopy.replace : photoCopy.add}
+                  hideLabel
+                  accept={UPLOAD_LIMITS.image.mimeTypes.join(',')}
+                  typesLabel="JPG, PNG, WebP"
+                  maxBytes={UPLOAD_LIMITS.image.maxBytes}
+                  progress={photoProgress}
+                  files={[]}
+                  onFilesChange={choosePhoto}
+                />
+              </div>
+            </FormField>
+          ) : null}
           <Switch
             label={copy.published}
             description={copy.publishedHint}

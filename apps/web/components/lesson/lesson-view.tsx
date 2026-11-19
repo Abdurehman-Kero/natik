@@ -10,6 +10,7 @@ import { AudioPlayer } from './audio-player';
 import { isGuided, type LessonStep, lessonSteps } from './lesson-steps';
 import { PdfViewer } from './pdf-viewer';
 import { SlideViewer } from './slide-viewer';
+import { DocumentCard } from './document-card';
 import { VideoEmbed } from './video-embed';
 
 interface VideoProps {
@@ -62,6 +63,15 @@ function BlockView({
           name={block.name}
           sizeBytes={block.sizeBytes}
           downloadUrl={block.downloadUrl}
+        />
+      );
+    case 'FILE':
+      return (
+        <DocumentCard
+          url={block.url}
+          name={block.name}
+          sizeBytes={block.sizeBytes}
+          caption={block.caption}
         />
       );
     case 'AUDIO':

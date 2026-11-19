@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { ClientMessages } from '@/components/client-messages';
 import { Providers } from '@/components/providers';
 import { OPEN_GRAPH_LOCALE, type Locale } from '@/i18n/config';
 import { fontVariables } from '@/lib/fonts';
@@ -45,9 +45,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         >
           {t('skipToContent')}
         </a>
-        <NextIntlClientProvider>
+        <ClientMessages area="root">
           <Providers>{children}</Providers>
-        </NextIntlClientProvider>
+        </ClientMessages>
       </body>
     </html>
   );

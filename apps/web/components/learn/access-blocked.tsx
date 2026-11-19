@@ -18,6 +18,17 @@ export function AccessBlocked({ info }: { info: BlockedInfo }) {
 
   const view = (() => {
     switch (info.reason) {
+      case 'AWAITING_APPROVAL':
+        return {
+          icon: Clock,
+          title: t('AWAITING_APPROVAL.title'),
+          text: t('AWAITING_APPROVAL.text'),
+          action: (
+            <LinkButton href="/dashboard" size="lg">
+              {t('AWAITING_APPROVAL.button')}
+            </LinkButton>
+          ),
+        };
       case 'AWAITING_PAYMENT':
         return {
           icon: Wallet,

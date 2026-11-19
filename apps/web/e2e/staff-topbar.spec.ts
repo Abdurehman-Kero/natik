@@ -2,10 +2,10 @@ import { expect, type Page, test } from '@playwright/test';
 import {
   expectNoHorizontalScroll,
   expectNoSeriousA11yIssues,
-  newPhone,
   SEED,
   signInAs,
   waitForPageReady,
+  newContact,
 } from './helpers';
 
 const unique = () => Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -14,7 +14,7 @@ async function registerStudent(page: Page) {
   const res = await page.request.post('/api/v1/auth/register', {
     data: {
       fullName: `Bar Student ${unique()}`,
-      phone: newPhone(),
+      ...newContact(),
       password: 'Passw0rd123',
       acceptTerms: true,
       confirmAge: true,
@@ -113,17 +113,23 @@ test.describe('admin and teacher top bar', () => {
     await adminPage.goto(`/admin/chat?c=${id}`);
     await waitForPageReady(adminPage);
     await expect(adminPage.getByText('Hello, I want to ask about payment').last()).toBeVisible();
-    const unreadForThisChat = await admin.get('/api/v1/chat/conversations');
-    const row = (
-      (await unreadForThisChat.json()) as { items: { id: string; unread: number }[] }
-    ).items.find((c) => c.id === id);
-    expect(row?.unread).toBe(0);
+    // Marking the chat as read is a background call, so look until it has gone through.
+    await expect(async () => {
+      const response = await admin.get('/api/v1/chat/conversations');
+      const row = (
+        (await response.json()) as { items: { id: string; unread: number }[] }
+      ).items.find((c) => c.id === id);
+      expect(row?.unread).toBe(0);
+    }).toPass({ timeout: 10_000 });
     await adminPage.context().close();
 
     // Premium courses show no amount on the public pages, and point to support instead.
     await page.goto('/courses?type=premium');
     await waitForPageReady(page);
-    await expect(page.getByRole('heading', { name: 'Premium courses' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Premium/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
     await expect(
       page.getByRole('link', { name: /Professional English/ }).first(),
     ).not.toContainText('ETB');

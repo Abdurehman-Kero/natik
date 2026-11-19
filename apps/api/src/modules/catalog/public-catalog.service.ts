@@ -1,13 +1,9 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import type { VideoStatus } from '@natik/shared';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { AppException } from '../../common/errors/app.exception';
 import type { Prisma } from '../../generated/prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { LessonViewService } from '../content/lesson-view.service';
 import { renderRichText } from '../content/rich-text';
 import { parseExternalVideo } from '../content/video/external-video';
-import { videoPosterUrl } from '../content/video/video-poster';
-import { VIDEO_PROVIDER, type VideoProvider } from '../content/video/video-provider';
 
 const courseSelect = {
   id: true,
@@ -24,6 +20,7 @@ const courseSelect = {
   lessonOrder: true,
   showPrice: true,
   trailerUrl: true,
+  ongoing: true,
   language: { select: { name: true, code: true, direction: true } },
   level: { select: { name: true } },
 } satisfies Prisma.CourseSelect;
@@ -49,11 +46,7 @@ function withImage<
 /** Everything here is public, so only published content is ever returned (FR-WEB-006). */
 @Injectable()
 export class PublicCatalogService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly lessonViews: LessonViewService,
-    @Inject(VIDEO_PROVIDER) private readonly videoProvider: VideoProvider,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async filters() {
     const [languages, levels, counts] = await Promise.all([
@@ -122,30 +115,7 @@ export class PublicCatalogService {
             lessons: {
               where: { status: 'PUBLISHED' },
               orderBy: { position: 'asc' },
-              select: {
-                id: true,
-                title: true,
-                isFreePreview: true,
-                blocks: {
-                  where: { type: 'VIDEO', video: { status: 'READY' } },
-                  orderBy: { position: 'asc' },
-                  take: 1,
-                  select: {
-                    video: {
-                      select: {
-                        id: true,
-                        title: true,
-                        status: true,
-                        durationSec: true,
-                        provider: true,
-                        providerVideoId: true,
-                        externalUrl: true,
-                        posterFileId: true,
-                      },
-                    },
-                  },
-                },
-              },
+              select: { id: true, title: true, sessionDate: true },
             },
           },
         },
@@ -158,157 +128,13 @@ export class PublicCatalogService {
       trailerEmbedUrl: trailerUrl ? (parseExternalVideo(trailerUrl)?.embedUrl ?? null) : null,
       descriptionHtml: renderRichText(description),
       teachers: teachers.map((t) => ({ name: t.teacher.fullName, bio: t.teacher.bio })),
+      // Introduction only: the outline lists weeks and session titles, never their content.
       outline: units.map((u) => ({
         id: u.id,
         title: u.title,
-        lessons: u.lessons.map((l) => ({
-          id: l.id,
-          title: l.title,
-          isFreePreview: l.isFreePreview,
-        })),
+        lessons: u.lessons.map((l) => ({ id: l.id, title: l.title, sessionDate: l.sessionDate })),
       })),
-      previewVideo: this.previewVideo(units),
+      ongoing: rest.ongoing,
     };
-  }
-
-  /** The first video of the course's first free lesson: visitors can watch it on the course page. */
-  private previewVideo(
-    units: {
-      lessons: {
-        id: string;
-        isFreePreview: boolean;
-        blocks: {
-          video: {
-            id: string;
-            title: string;
-            status: VideoStatus;
-            durationSec: number | null;
-            provider: string;
-            providerVideoId: string;
-            externalUrl: string | null;
-            posterFileId: string | null;
-          } | null;
-        }[];
-      }[];
-    }[],
-  ) {
-    for (const unit of units) {
-      for (const lesson of unit.lessons) {
-        const video = lesson.isFreePreview ? lesson.blocks[0]?.video : null;
-        if (video) {
-          return {
-            lessonId: lesson.id,
-            videoId: video.id,
-            title: video.title,
-            status: video.status,
-            durationSec: video.durationSec,
-            posterUrl: videoPosterUrl(video, this.videoProvider),
-          };
-        }
-      }
-    }
-    return null;
-  }
-
-  private firstVideo(
-    blocks: {
-      video: {
-        status: VideoStatus;
-        durationSec: number | null;
-        provider: string;
-        providerVideoId: string;
-        externalUrl: string | null;
-        posterFileId: string | null;
-      } | null;
-    }[],
-  ) {
-    const video = blocks.find((b) => b.video?.status === 'READY')?.video;
-    return {
-      posterUrl: video ? videoPosterUrl(video, this.videoProvider) : null,
-      durationSec: video?.durationSec ?? null,
-    };
-  }
-
-  /** Every lesson a teacher marked as a free preview, in a published unit of a published course (FR-CAT-005). */
-  async freeLessons() {
-    const lessons = await this.prisma.lesson.findMany({
-      where: {
-        isFreePreview: true,
-        status: 'PUBLISHED',
-        unit: { status: 'PUBLISHED' },
-        course: { status: 'PUBLISHED' },
-      },
-      orderBy: [{ course: { publishedAt: 'desc' } }, { position: 'asc' }],
-      take: 60,
-      select: {
-        id: true,
-        title: true,
-        blocks: {
-          orderBy: { position: 'asc' },
-          select: {
-            type: true,
-            video: {
-              select: {
-                id: true,
-                title: true,
-                status: true,
-                durationSec: true,
-                provider: true,
-                providerVideoId: true,
-                externalUrl: true,
-                posterFileId: true,
-              },
-            },
-          },
-        },
-        course: {
-          select: {
-            slug: true,
-            title: true,
-            imageFileId: true,
-            language: { select: { name: true, code: true, direction: true } },
-            level: { select: { name: true } },
-          },
-        },
-      },
-    });
-    return {
-      items: lessons.map((l) => ({
-        id: l.id,
-        title: l.title,
-        blockTypes: [...new Set(l.blocks.map((b) => b.type))],
-        // The lesson's first ready video: its still picture is shown on the card.
-        ...this.firstVideo(l.blocks),
-        course: {
-          slug: l.course.slug,
-          title: l.course.title,
-          imageUrl: l.course.imageFileId ? `/api/v1/files/${l.course.imageFileId}` : null,
-          language: l.course.language,
-          level: l.course.level.name,
-        },
-      })),
-    };
-  }
-
-  /**
-   * One free-preview lesson for anyone. Anything else (paid, draft, hidden, unknown) answers
-   * "not found" with no hint that it exists (FR-WEB-006).
-   */
-  async freeLesson(id: string) {
-    const lesson = await this.prisma.lesson.findFirst({
-      where: {
-        id,
-        isFreePreview: true,
-        status: 'PUBLISHED',
-        unit: { status: 'PUBLISHED' },
-        course: { status: 'PUBLISHED' },
-      },
-      select: {
-        id: true,
-        course: { select: { slug: true, title: true, access: true, priceSantim: true } },
-      },
-    });
-    if (!lesson) throw new AppException('NOT_FOUND', HttpStatus.NOT_FOUND);
-    return { lesson: await this.lessonViews.build(lesson.id), course: lesson.course };
   }
 }

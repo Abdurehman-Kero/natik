@@ -1,7 +1,8 @@
 'use client';
 
 import { Clock, PencilLine } from 'lucide-react';
-import Link from '@/components/ui/link';
+import { AuthButton } from '@/components/auth/auth-button';
+import { AuthLink } from '@/components/auth/auth-dialog';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { EnrolButton, RenewButton } from '@/components/learn/enrol-buttons';
@@ -30,7 +31,8 @@ export function CourseAction({
   const { user, ready } = useSession();
   const [state, setState] = useState<CourseState | null>(null);
   const [failed, setFailed] = useState(false);
-  const next = encodeURIComponent(`/courses/${slug}`);
+  // Bumped after "Request to join" so the button shows the new state at once.
+  const [version, setVersion] = useState(0);
 
   useEffect(() => {
     if (!ready || !user) return;
@@ -41,24 +43,25 @@ export function CourseAction({
     return () => {
       active = false;
     };
-  }, [ready, user, slug]);
+  }, [ready, user, slug, version]);
 
   if (!ready) return <Skeleton className="h-13 w-full" />;
 
   if (!user) {
     return (
       <div className="flex flex-col gap-2">
-        <LinkButton href={`/register?next=${next}`} size="lg" fullWidth>
+        <AuthButton mode="register" next={`/courses/${slug}`} size="lg" fullWidth>
           {t('registerToEnrol')}
-        </LinkButton>
+        </AuthButton>
         <p className="text-center text-sm text-muted">
           {t('haveAccount')}{' '}
-          <Link
-            href={`/sign-in?next=${next}`}
+          <AuthLink
+            mode="sign-in"
+            next={`/courses/${slug}`}
             className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
           >
             {t('signIn')}
-          </Link>
+          </AuthLink>
         </p>
       </div>
     );
@@ -90,7 +93,14 @@ export function CourseAction({
 
   const enrolment = state.enrolment;
   if (!enrolment) {
-    return <EnrolButton courseId={courseId} slug={slug} isFree={isFree} />;
+    return (
+      <EnrolButton
+        courseId={courseId}
+        slug={slug}
+        isFree={isFree}
+        onRequested={() => setVersion((v) => v + 1)}
+      />
+    );
   }
 
   const lapsed = !!enrolment.endAt && new Date(enrolment.endAt) < new Date();
@@ -99,6 +109,16 @@ export function CourseAction({
       <LinkButton href={`/pay/${enrolment.id}`} size="lg" fullWidth>
         {tb('payAndEnrol')}
       </LinkButton>
+    );
+  }
+  if (enrolment.status === 'AWAITING_APPROVAL') {
+    return (
+      <div className="flex flex-col gap-2">
+        <Button size="lg" fullWidth disabled>
+          <Clock aria-hidden /> {tb('waitingApproval')}
+        </Button>
+        <p className="text-center text-sm text-muted">{tb('waitingApprovalHint')}</p>
+      </div>
     );
   }
   if (

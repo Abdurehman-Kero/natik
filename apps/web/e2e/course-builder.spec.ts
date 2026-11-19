@@ -114,23 +114,23 @@ test.describe('course builder', () => {
     await expectNoSeriousA11yIssues(page);
 
     // ── Units and a lesson ─────────────────────────────────────────────
-    await page.getByRole('button', { name: 'Add unit' }).first().click();
-    await page.getByLabel('Unit title').fill('Letters and sounds');
+    await page.getByRole('button', { name: 'Add week' }).first().click();
+    await page.getByLabel('Week title').fill('Letters and sounds');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(page.getByRole('heading', { name: /Letters and sounds/ })).toBeVisible();
-    await page.getByRole('button', { name: 'Add lesson' }).click();
-    await page.getByLabel('Lesson title').fill('The alphabet');
+    await page.getByRole('button', { name: 'Add session' }).click();
+    await page.getByLabel('Session title').fill('The alphabet');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(page).toHaveURL(/\/lessons\/[a-z0-9]+$/);
-    await expect(page.getByRole('textbox', { name: 'Lesson title' })).toHaveValue('The alphabet');
+    await expect(page.getByRole('textbox', { name: 'Session title' })).toHaveValue('The alphabet');
 
     // Publishing an empty lesson explains what is missing.
     await page.getByRole('button', { name: 'Publish', exact: true }).last().click();
     await expect(page.getByText('Add at least one block')).toBeVisible();
 
     // Arabic text, set right to left
-    await page.getByRole('button', { name: 'Text', exact: true }).click();
-    const editor = page.getByRole('textbox', { name: 'Lesson text' });
+    await page.getByRole('button', { name: 'Notes', exact: true }).click();
+    const editor = page.getByRole('textbox', { name: 'Notes' });
     await editor.click();
     await page.getByRole('button', { name: 'Right to left' }).click();
     await page.keyboard.type('الفتحة ـَ');
@@ -161,7 +161,7 @@ test.describe('course builder', () => {
     // ── Preview: exactly what students see ─────────────────────────────
     await page.getByRole('link', { name: 'Preview' }).first().click();
     await expect(page).toHaveURL(/\/preview$/);
-    await expect(page.getByText('Preview: this is how students see the lesson.')).toBeVisible();
+    await expect(page.getByText('Preview: this is how students see the session.')).toBeVisible();
     await expect(page.getByRole('heading', { level: 1, name: 'The alphabet' })).toBeVisible();
     await expect(page.locator('.lesson-prose [dir="rtl"]').first()).toContainText('الفتحة');
     await expect(page.locator('article')).toHaveAttribute('dir', 'rtl');
@@ -184,13 +184,13 @@ test.describe('course builder', () => {
     // ── Publish, hide, publish again ───────────────────────────────────
     await page.getByRole('link', { name: 'Back to editor' }).click();
     await page.getByRole('button', { name: 'Publish', exact: true }).last().click();
-    await expect(page.getByText('Lesson published.')).toBeVisible();
-    await expect(page.getByText('This lesson is live.')).toBeVisible();
+    await expect(page.getByText('Session published. Students see it now.')).toBeVisible();
+    await expect(page.getByText(/This session is live/)).toBeVisible();
     await page.getByRole('button', { name: 'Hide', exact: true }).last().click();
-    await expect(page.getByText('Lesson hidden.')).toBeVisible();
+    await expect(page.getByText('Session hidden.')).toBeVisible();
     // A toast can sit over the sticky bar on a phone, so the click is sent to the button itself.
     await page.getByRole('button', { name: 'Publish again' }).last().dispatchEvent('click');
-    await expect(page.getByText('Lesson published.').last()).toBeVisible();
+    await expect(page.getByText('Session published. Students see it now.').last()).toBeVisible();
 
     // A published lesson can be hidden but not deleted
     await page.goto(`/teach/courses/${courseId}`);

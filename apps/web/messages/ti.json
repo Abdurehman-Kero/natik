@@ -1,0 +1,940 @@
+{
+  "meta": {
+    "siteName": "ናጢቅ ማእከል ቋንቋ",
+    "title": "ናጢቅ ማእከል ቋንቋ",
+    "description": "ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን ምስ መምህራን ናጢቅ ብኦንላይን ወይ ኣብ ክፍሊ ተማሃሩ።"
+  },
+  "brand": {
+    "name": "ናጢቅ",
+    "wordmark": "NATIK",
+    "centre": "ማእከል ቋንቋ",
+    "fullName": "ናጢቅ ማእከል ቋንቋ",
+    "languages": "ዓረብኛ · እንግሊዝኛ · ኣፋን ኦሮሞ",
+    "homeLink": "ናጢቅ ማእከል ቋንቋ፣ ቤት",
+    "homeSuffix": "፣ ቤት"
+  },
+  "common": {
+    "loading": "ይጽዓን ኣሎ…",
+    "saving": "ይዕቀብ ኣሎ…",
+    "saved": "ተዓቂቡ",
+    "close": "ዕጸው",
+    "cancel": "ሰርዝ",
+    "confirm": "ኣረጋግጽ",
+    "continue": "ቀጽል",
+    "back": "ተመለስ",
+    "next": "ቀጻሊ",
+    "previous": "ዝቐደመ",
+    "more": "ተወሳኺ",
+    "moreActions": "ተወሳኺ ተግባራት",
+    "clear": "ሰርዝ",
+    "copy": "ቀድሕ",
+    "copied": "ተቐዲሑ",
+    "optional": "ኣማራጺ",
+    "free": "ብነጻ",
+    "tryAgain": "ደጊምካ ፈትን",
+    "seeAll": "ኩሉ ርአ",
+    "comingSoon": "ቀልጢፉ ይመጽእ"
+  },
+  "nav": {
+    "language": "ቋንቋ",
+    "skipToContent": "ናብ ትሕዝቶ ሕለፍ",
+    "mainNavigation": "ቀንዲ መምርሒ",
+    "openMenu": "ሜኑ ክፈት",
+    "closeMenu": "ሜኑ ዕጸው",
+    "collapseSidebar": "ጎድናዊ ሜኑ ኣጽብብ",
+    "expandSidebar": "ጎድናዊ ሜኑ ኣስፍሕ",
+    "notifications": "ሓበሬታታት",
+    "unread": "ዘይተነበበ",
+    "accountMenu": "ሜኑ ኣካውንት",
+    "signOut": "ውጻእ",
+    "public": {
+      "courses": "ኮርሳት",
+      "freeLessons": "ነጻ ትምህርታት",
+      "about": "ብዛዕባና",
+      "contact": "ርኸቡና",
+      "signIn": "ኣታዉ",
+      "register": "ተመዝገብ",
+      "dashboard": "ዳሽቦርድ",
+      "help": "ሓገዝ"
+    },
+    "student": {
+      "home": "ገጽ ቤት",
+      "myCourses": "ኮርሳተይ",
+      "courses": "ኮርሳት",
+      "certificates": "ሰርቲፊኬታት",
+      "profile": "ፕሮፋይል",
+      "browse": "ኮርሳት ድለዩ",
+      "announcements": "ሓበሬታታት",
+      "payments": "ክፍሊታተይ",
+      "chat": "መልእኽትታት",
+      "courseGroups": "ጉጅለታት ኮርስ",
+      "explore": "ድለዩ",
+      "groupsShort": "ጉጅለታት",
+      "groupLearn": "ተማሃር",
+      "groupAccount": "ኣካውንተይ",
+      "menuTitle": "ሜኑኹም",
+      "viewProfile": "ፕሮፋይለይ ርአ",
+      "howItWorks": "እዚ ከመይ ይሰርሕ",
+      "tourHint": "ናይ 30 ሴኮንድ መምርሒ",
+      "help": "ሓገዝ"
+    },
+    "teacher": {
+      "dashboard": "ዳሽቦርድ",
+      "courses": "ኮርሳተይ",
+      "marking": "ምእራም",
+      "announcements": "ሓበሬታታት",
+      "profile": "ፕሮፋይል",
+      "chat": "መልእኽትታት",
+      "courseGroups": "ጉጅለታት ኮርስ",
+      "help": "ሓገዝ"
+    },
+    "admin": {
+      "groups": {
+        "overview": "ሓፈሻዊ ርእይቶ",
+        "people": "ሰባት",
+        "learning": "ትምህርቲ",
+        "money": "ገንዘብ",
+        "communication": "ርክብ",
+        "website": "መርበብ ሓበሬታ",
+        "insights": "ትንተና",
+        "system": "ስርዓት"
+      },
+      "dashboard": "ዳሽቦርድ",
+      "users": "ተጠቀምቲ",
+      "enrolments": "ምዝገባታት",
+      "courses": "ኮርሳት",
+      "marking": "ምእራም",
+      "payments": "ክሕሹ ዘለዎም ክፍሊታት",
+      "announcements": "ሓበሬታታት",
+      "messages": "መልእኽትታት",
+      "website": "ትሕዝቶ መርበብ ሓበሬታ",
+      "reports": "ጸብጻባት",
+      "activity": "ምዝገባ ንጥፈታት",
+      "settings": "ቅጥዕታት",
+      "certificates": "ሰርቲፊኬታት",
+      "chat": "ዕላላት",
+      "courseGroups": "ጉጅለታት ኮርስ"
+    },
+    "signingOut": "ይወጽእ ኣሎ",
+    "areaAdmin": "ኣስተዳደሪ",
+    "areaTeacher": "መምህር",
+    "viewSite": "መርበብ ሓበሬታ ርአ",
+    "quickNavigation": "ቅልጡፍ መምርሒ",
+    "staff": {
+      "home": "ገጽ ቤት",
+      "courses": "ኮርሳት",
+      "marking": "ምእራም",
+      "groups": "ጉጅለታት",
+      "messages": "መልእኽትታት",
+      "enrolments": "ምዝገባታት",
+      "payments": "ክፍሊታት",
+      "more": "ተወሳኺ"
+    }
+  },
+  "footer": {
+    "contactHeading": "ርኸቡና",
+    "followHeading": "ሰዓብትና",
+    "linksHeading": "ኣብ ኣካይዳ",
+    "legalHeading": "ጠቓሚ ርእስታት",
+    "tagline": "ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን ምስ መምህራን ናጢቅ ተማሃሩ።",
+    "courses": "ኮርሳት",
+    "freeLessons": "ነጻ ትምህርታት",
+    "about": "ብዛዕባና",
+    "news": "ዜና",
+    "contact": "ርኸቡና",
+    "faq": "ሕቶታት",
+    "privacy": "ናይ ምስጢር መግለጺ",
+    "terms": "ናይ ኣጠቓቕማ ሕጊታት",
+    "verify": "ምስክር ወረቐት ኣረጋግጽ",
+    "register": "ኣካውንት ክፈት",
+    "signIn": "ኣታዉ",
+    "noDetails": "መልእኽቲ ሰዲዱልና፣ ቀልጢፍና ንምላስ።",
+    "copyright": "© {year} ናጢቅ ማእከል ቋንቋ",
+    "findLevel": "ደረጃኹም ፍለጡ",
+    "teachers": "መምህራን",
+    "help": "ማእከል ሓገዝ"
+  },
+  "site": {
+    "nav": {
+      "courses": "ኮርሳት",
+      "level": "ደረጃኹም ፍለጡ",
+      "teachers": "መምህራን",
+      "about": "ብዛዕባና",
+      "help": "ሓገዝ",
+      "more": "ሓገዝን ካልእን",
+      "news": "ዜና",
+      "faq": "ሕቶታትን መልስታትን",
+      "helpCentre": "ማእከል ሓገዝ",
+      "contact": "ንጉጅለ መልእኽቲ ልኣኽ",
+      "verify": "ምስክር ወረቐት ኣረጋግጽ",
+      "home": "ገጽ ቤት",
+      "menuHint": "ኩሉ ኣብ ናጢቅ",
+      "breadcrumb": "ኣብዚ ኣለኹም"
+    },
+    "header": {
+      "search": "ድለ",
+      "searchLabel": "ኮርሳት ድለ",
+      "tour": "ምርሓቕ ግበር",
+      "join": "ብነጻ ተሓወሱ",
+      "signIn": "ኣታዉ"
+    },
+    "search": {
+      "title": "ኮርሳት ድለ",
+      "placeholder": "ኮርስ፣ ቋንቋ ወይ ደረጃ ድለ",
+      "empty": "ምስ “{query}” ዝመሳሰል ኮርስ የለን።",
+      "emptyHint": "ካልእ ቃል ፈትኑ፣ ወይ ኩሉ ኮርሳት ርኣዩ።",
+      "all": "ኩሉ ኮርሳት ርአ",
+      "popular": "ፍናን ኮርሳት",
+      "quick": "ቅልጡፍ መተሓሕዚታት",
+      "tip": "ካብ ዝኾነ ገጽ ንምድላይ / ጠውቁ",
+      "count": "{count, plural, one {# ኮርስ} other {# ኮርሳት}}",
+      "free": "ብነጻ",
+      "premium": "ፕሪምየም",
+      "loading": "ኮርሳት ይጽዓን ኣሎ…",
+      "failed": "ኮርሳት ክጽዓኑ ኣይከኣሉን። በጃኹም ደጊምኩም ፈትኑ።"
+    },
+    "auth": {
+      "signInTitle": "እንኳዕ ብደሓን መጻእኩም",
+      "signInText": "ትምህርትኩም ንምቕጻል ኣታዉ።",
+      "registerTitle": "ብነጻ ኣካውንትኩም ክፈቱ",
+      "registerText": "ሓደ ደቒቕ ጥራይ ይወስድ። ድሕሪኡ ናብ ዝኾነ ኮርስ ንምስታፍ ሕተቱ።",
+      "signInTab": "ኣታዉ",
+      "registerTab": "ተመዝገብ",
+      "switchLabel": "ኣታዉ ወይ ተመዝገብ",
+      "welcomeBack": "እንኳዕ ብደሓን መጻእኩም!",
+      "welcomeNew": "ኣካውንትኩም ተዳልዩ። እንኳዕ ናብ ናጢቅ ብደሓን መጻእኩም!"
+    },
+    "tour": {
+      "offerTitle": "ንናጢቅ ሓድሽ ዲኹም?",
+      "offerText": "ኣብዚ ትምህርቲ ከመይ ከም ዝሰርሕ ናይ 30 ሴኮንድ ዑደት ግበሩ።",
+      "offerStart": "ኣርእዩኒ",
+      "offerSkip": "ኣይፋል፣ የቀንየለይ",
+      "step": "ስጉምቲ {n} ካብ {total}",
+      "next": "ቀጻሊ",
+      "back": "ተመለስ",
+      "done": "ወድእ",
+      "skip": "ዑደት ሕለፍ",
+      "close": "ዑደት ዕጸው",
+      "steps": {
+        "welcome": {
+          "title": "እንኳዕ ናብ ናጢቅ ብደሓን መጻእኩም",
+          "text": "ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን ምስ ናይ ናጢቅ መምህራን ተማሃሩ። ከመይ ከም እተንቀሳቀሱ እንሆ።"
+        },
+        "browse": {
+          "title": "ኮርስኩም ርከቡ",
+          "text": "ኮርሳት፣ መምህራን፣ መርመራ ደረጃን ሓገዝን ኩሉ ኣብዚ ሜኑ ኣለዉ።"
+        },
+        "search": {
+          "title": "ብሓደ ንክዕ ድለዩ",
+          "text": "ኮርስ፣ ቋንቋ ወይ ደረጃ ጽሓፉ ድማ ብቕልጡፍ ክፈቱ።"
+        },
+        "language": {
+          "title": "ቋንቋኹም",
+          "text": "ኩሉ መርበብ ሓበሬታ ናብ እንግሊዝኛ፣ ኣምሓርኛ፣ ትግርኛ፣ ኣፋን ኦሮሞ ወይ ሶማልኛ ኣብ ዝኾነ ግዜ ቀይሩ።"
+        },
+        "account": {
+          "title": "ኣካውንትኩም",
+          "text": "ብነጻ ተመዝገቡ፣ ወይ ዝደኸምኩምሉ ንምቕጻል ኣታዉ።"
+        },
+        "journey": {
+          "title": "ትምህርቲ ከመይ ይሰርሕ",
+          "text": "ካብ ናይ መጀመርታ ጠውቒ ክሳብ ምስክር ወረቐትኩም ኣርባዕተ ቀሊል ስጉምታት።"
+        }
+      },
+      "journey": [
+        "ናብ ኮርስ ንምስታፍ ሕተቱ",
+        "ጉጅለ ናጢቅ ይቕበለኩም",
+        "ሰሙን ብሰሙን ተማሃሩ፣ ምስ ክፍልኹም ተዛተዩ",
+        "ወድኡ፣ ምስክር ወረቐትኩም ተቐበሉ"
+      ],
+      "createAccount": "ብነጻ ኣካውንት ክፈት",
+      "browseCourses": "ኮርሳት ርአ",
+      "restartHint": "ነዚ ዑደት ኣብ ዝኾነ ግዜ ካብ ናይ ሓገዝ መጠወቒ ደጊምኩም ክትገብርዎ ትኽእሉ።",
+      "studentOfferTitle": "ኣብዚ መጀመርታኹም ዲዩ?",
+      "studentOfferText": "ናይ ትምህርቲ ቦታኹም ናይ 30 ሴኮንድ ዑደት ግበሩ።"
+    },
+    "message": {
+      "title": "ንጉጅለ መልእኽቲ ልኣኽ",
+      "text": "ዝኾነ ሕተቱና። ብተሌፎንን መልእኽትን ንምልስ።"
+    },
+    "flow": {
+      "levelTitle": "ካበይ ከም እትጅምሩ ርግጸኛ ዲኹም?",
+      "levelText": "ቁሩብ ሕቶታት መልሱ፣ ደረጃኹም ንሕብረኩም።",
+      "levelCta": "ደረጃኹም ፍለጡ",
+      "joinTitle": "ንምትምሃር ድሉዋት ዲኹም?",
+      "joinText": "ብነጻ ኣካውንት ክፈቱ፣ ድሕሪኡ ዘፍቅርዎ ኮርስ ንምስታፍ ሕተቱ።",
+      "joinCta": "ብነጻ ኣካውንት ክፈቱ",
+      "questionTitle": "ክሳብ ሕጂ ሕቶ ኣሎኩም ዲዩ?",
+      "questionText": "ጉጅለ ናጢቅ ብሓጐስ ክሕግዝ ድሉው እዩ።",
+      "questionCta": "ንጉጅለ መልእኽቲ ልኣኽ",
+      "next": "ቀጻሊ ስጉምቲ"
+    },
+    "course": {
+      "stickyFree": "ነጻ ኮርስ",
+      "askQuestion": "ሕቶ ሕተት",
+      "share": "ኣካፍል",
+      "shared": "መላግቦ ተቐዲሑ",
+      "jump": {
+        "about": "ብዛዕባ",
+        "outline": "መእተዊ",
+        "teacher": "መምህር"
+      },
+      "joinBar": "ነዚ ኮርስ ተሓወስ"
+    },
+    "hero": {
+      "searchPlaceholder": "ኮርስ፣ ቋንቋ ወይ ደረጃ ድለዩ",
+      "chipsLabel": "ፍናን ቋንቋታት",
+      "trusted": "{count, plural, one {# ተመሃራይ} other {# ተመሃሮ}} ድሮ ይመሃሩ ኣለዉ፣ ተሓወሱ",
+      "searchCta": "ድለዩ"
+    },
+    "journey": {
+      "eyebrow": "ካብ ናይ መጀመርታ ጠውቒ ክሳብ ምስክር ወረቐት",
+      "title": "ከመይ ይሰርሕ",
+      "steps": [
+        {
+          "title": "ኣካውንትኩም ክፈቱ",
+          "text": "ሽምኩም፣ ተሌፎንኩምን ምስጢራዊ ቃልን። ሓደ ደቒቕ ጥራይ ይወስድ።"
+        },
+        {
+          "title": "ናብ ኮርስ ንምስታፍ ሕተቱ",
+          "text": "ኮርስ ሕረዩ። ጉጅለ ናጢቅ ይቕበለኩም፣ ንፕሪምየም ኮርሳት ድማ ክፍሊትኩም የረጋግጽ።"
+        },
+        {
+          "title": "ኩሉ ሰሙን ተማሃሩ",
+          "text": "ሓደስቲ ዝተቐድሑ ክፍለ ግዜታት፣ PDFን ስላይድን ኩሉ ሰሙን ይበጽሑኹም። ምስ ክፍልኹምን መምህርኩምን ተዛተዩ።"
+        },
+        {
+          "title": "ምስክር ወረቐትኩም ተቐበሉ",
+          "text": "ኮርሱ ወድኡ፣ ሽምኩም ኣረጋግጹ፣ ዝኾነ ሰብ ከረጋግጾ ዝኽእል ምስክር ወረቐት ተቐበሉ።"
+        }
+      ]
+    },
+    "footer": {
+      "quick": "ቅልጡፍ ሓገዝ",
+      "tour": "ዑደት ግበር",
+      "message": "ንጉጅለ መልእኽቲ ልኣኽ",
+      "verify": "ምስክር ወረቐት ኣረጋግጽ",
+      "level": "ደረጃኹም ፍለጡ",
+      "sitemap": "ካርታ ገጽ",
+      "legal": "ሕጋዊ"
+    },
+    "next": {
+      "title": "ቀጺሉ እንታይ ክትገብሩ ትደልዩ?",
+      "level": {
+        "title": "ደረጃኹም ፍለጡ",
+        "text": "ቁሩብ ሕቶታት መልሱ፣ ካበይ ክትጅምሩ ከም እትኽእሉ ንሕብረኩም።"
+      },
+      "courses": {
+        "title": "ኮርሳት ርአ",
+        "text": "ብሰለስተ ቋንቋታት ነጻን ፕሪምየምን ኮርሳት።"
+      },
+      "join": {
+        "title": "ብነጻ ኣካውንት ክፈቱ",
+        "text": "ድሕሪኡ ዘፍቅርዎ ኮርስ ንምስታፍ ሕተቱ።"
+      },
+      "message": {
+        "title": "ንጉጅለ መልእኽቲ ልኣኽ",
+        "text": "ብዛዕባ ኮርሳት፣ ክፍሊት ወይ ካልእ ዝኾነ ሕተቱ።"
+      },
+      "tour": {
+        "title": "ዑደት ግበር",
+        "text": "ኣብዚ ትምህርቲ ከመይ ከም ዝሰርሕ ኣብ 30 ሴኮንድ ርኣዩ።"
+      },
+      "teachers": {
+        "title": "መምህራን ፍለጡ",
+        "text": "እቶም ዘመሃሩኹም ሰባት።"
+      }
+    },
+    "studentTour": {
+      "steps": {
+        "welcome": {
+          "title": "እንኳዕ ናብ ቦታ ትምህርትኩም ብደሓን መጻእኩም",
+          "text": "ንኮርሳትኩም ዘድልይ ኩሉ ኣብ ሓደ ቦታ እዩ። ኣበይ ከም ዘሎ እንሆ።"
+        },
+        "menu": {
+          "title": "ሜኑኹም",
+          "text": "ኮርሳት፣ ጉጅለታት፣ መልእኽትታት፣ ክፍሊታትን ሰርቲፊኬታትን ኩሉ ገጻት ንምኽፋት ኣብ ዝኾነ ግዜ ኣብዚ ጠውቑ።"
+        },
+        "tabs": {
+          "title": "ቅልጡፋት ታባት",
+          "text": "ብሓደ ንክዕ ኣብ መንጎ ገጽ ቤት፣ ኮርሳት፣ ጉጅለታትን መልእኽትታትን ተንቀሳቀሱ።"
+        },
+        "bell": {
+          "title": "ዜና ካብ መምህራንኩም",
+          "text": "ሓደስቲ ሓበሬታታት ኣብዚ ብንእሽተይ ነጥቢ ይረኽቡ።"
+        },
+        "account": {
+          "title": "ኣካውንትኩም",
+          "text": "ሽምኩም፣ ስእልኩም ወይ ምስጢራዊ ቃልኩም ቀይሩ፣ ወይ ውጸኡ።"
+        },
+        "finish": {
+          "title": "ንምትምሃር ድሉዋት ዲኹም?",
+          "text": "ሰለስተ ስጉምታት ጥራይ እሞ ኣቲኹም።"
+        }
+      },
+      "list": ["ድለዩ ክፈቱ ድማ ኮርስ ሕረዩ", "ንምስታፍ ሕተቱ። ጉጅለ ናጢቅ ይቕበለኩም", "ኩሉ ሰሙን ተማሃሩ፣ ምስ ክፍልኹም ተዛተዩ"],
+      "browse": "ኮርሳት ድለዩ"
+    },
+    "bottom": {
+      "label": "ቅልጡፍ መምርሒ"
+    }
+  },
+  "home": {
+    "heroEyebrow": "ናጢቅ ማእከል ቋንቋ",
+    "heroTitle": "ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን ተማሃሩ",
+    "heroSubtitle": "ጽሩያት ትምህርታት ካብ ናይ ናጢቅ መምህራን። ብተሌፎንኩም፣ ብናይ ባዕልኹም ቅልጣፈ ተማሃሩ።",
+    "browseCourses": "ኮርሳት ርአ",
+    "tryFreeLesson": "ነጻ ትምህርቲ ፈትን",
+    "trust": {
+      "languages": "ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን",
+      "free": "ኩሉ ሰሙን ሓደስቲ ክፍለ ግዜታት",
+      "certificates": "ክረጋገጽ ዝኽእል ምስክር ወረቐት"
+    },
+    "languagesTitle": "ቋንቋ ሕረዩ",
+    "languagesText": "ክትዛረብዎ ዝደለኹሞ ቋንቋ ጀምሩ።",
+    "courseCount": "{count, plural, one {# ኮርስ} other {# ኮርሳት}}",
+    "comingSoon": "ቀልጢፉ ይመጽእ",
+    "featuredTitle": "ፍሉያት ኮርሳት",
+    "allCourses": "ኩሉ ኮርሳት",
+    "howTitle": "ከመይ ይሰርሕ",
+    "steps": [
+      {
+        "title": "ኣካውንት ክፈቱ",
+        "text": "ሽምኩም፣ ተሌፎንኩምን ምስጢራዊ ቃልን። ሓደ ደቒቕ ጥራይ ይወስድ።"
+      },
+      {
+        "title": "ኮርስ ሕረዩ",
+        "text": "ነጻ ኮርሳት ብቕልጡፍ ይኽፈቱ። ዝኽፈልዎም ኮርሳት ድሕሪ ምርግጋጽ ክፍሊትኩም ይኽፈቱ።"
+      },
+      {
+        "title": "ተማሃሩ ምስክር ወረቐት ድማ ተቐበሉ",
+        "text": "ርኣዩ፣ ኣንብቡ፣ ሰምዑ ድማ ፈተና ተፈተኑ። ምስክር ወረቐት ንምርካብ ኮርሱ ወድኡ።"
+      }
+    ],
+    "payTitle": "ሕቶ ኣሎኩም ዲዩ ብዛዕባ ክፍሊት?",
+    "payText": "ፕሪምየም ኮርሳት ብወርሒ ይኽፈሉ። ንጉጅለ ናጢቅ ኣብ WhatsApp፣ Telegram ወይ ዕላል ሕተቱ፣ ንመርሕኩም።",
+    "whyTitle": "ስለምንታይ ናጢቅ",
+    "why": [
+      {
+        "title": "ሰለስተ ቋንቋታት፣ ሓደ ቦታ",
+        "text": "ዓረብኛ፣ እንግሊዝኛን ኣፋን ኦሮሞን ኮርሳት ካብ ናይ ናጢቅ መምህራን።"
+      },
+      {
+        "title": "ንተሌፎንኩም ዝተዳለወ",
+        "text": "ቀሊል ገጻት ኣብ ድኹም ኢንተርነት እውን ቀልጢፎም ይጽዓኑ። መምህር ምስ ዝፈቅድ PDFን ድምጽን ኣውርዱ።"
+      },
+      {
+        "title": "ሓቀኛ ርእይቶ",
+        "text": "ፈተናታት ባዕሎም ይማርኹ። መምህራን ጽሑፋዊ መልስታትኩም ኣንቢቦም ርእይቶ ይህቡ።"
+      },
+      {
+        "title": "ክረጋገጽ ዝኽእል ምስክር ወረቐት",
+        "text": "ኮርስ ምስ ወደኣኹም ዝኾነ ሰብ ምስክር ወረቐትኩም ብቁጽሩ ኣብ ኦንላይን ከረጋግጽ ይኽእል።"
+      },
+      {
+        "title": "ኩሉ ሰሙን ሓደስቲ ክፍለ ግዜታት",
+        "text": "ዝተቐድሑ ክፍለ ግዜታት፣ PDFን ስላይድን መምህርኩም ምስ ዝውስኽ ይበጽሑኹም። ፈጺምኩም ኣይትደኽሙን።"
+      },
+      {
+        "title": "ምስኡ ዝትምህርዎ ክፍሊ",
+        "text": "ኩሉ ኮርስ ምስ መምህርኩምን መሳርሕትኩምን ናይ ባዕሉ ጉጅለ ዕላል ኣለዎ፣ ከም ሓቀኛ ክፍሊ።"
+      }
+    ],
+    "freeTitle": "ቅድሚ ምምዝጋብ ፈትኑ",
+    "freeText": "ነጻ ናይ ኣብነት ትምህርቲ ክፈቱ። ኣካውንት ኣየድልን።",
+    "freeCta": "ነጻ ትምህርታት ርኣዩ",
+    "testimonialsTitle": "ተመሃሮና እንታይ ይብሉ",
+    "newsTitle": "እዋናዊ ዜና",
+    "allNews": "ኩሉ ዜና",
+    "faqTitle": "ሕቶታት ኣለኩም ዲዩ? መልሲ ኣሎና",
+    "allFaq": "ኩሉ ሕቶታት ርኣዩ",
+    "ctaTitle": "ንምጅማር ድሉዋት ዲኹም?",
+    "ctaText": "ነጻ ኣካውንት ክፈቱ ድማ ናይ መጀመርታ ኮርስኩም ሎሚ ተሓወሱ።",
+    "ctaRegister": "ነጻ ኣካውንት ክፈቱ",
+    "ctaContact": "ርኸቡና",
+    "allFreeLessons": "ኩሉ ነጻ ትምህርታት",
+    "findLevel": "ካበይ ከም እትጅምሩ ርግጸኛ ዲኹም? ደረጃኹም ፍለጡ",
+    "flowTitle": "ትምህርቲ ከመይ ይሰርሕ",
+    "flow": [
+      {
+        "title": "ርኣዩ",
+        "text": "ደጋጊምኩም ክትጻወትዎም እትኽእሉ ሓጸርቲ ቪድዮ ትምህርታት።"
+      },
+      {
+        "title": "ተማሃሩ",
+        "text": "ንነፍሲ ወከፍ ትምህርቲ ስላይድታት፣ ኣብነታትን ቁልፊ ቃላትን።"
+      },
+      {
+        "title": "ፈተና ተፈተኑ",
+        "text": "ዝተማህርኩምዎ ፈትሹ ድማ ውጽኢትኩም ብቅልጡፍ ርኣዩ።"
+      },
+      {
+        "title": "ምስክር ወረቐትኩም ተቐበሉ",
+        "text": "ኮርሱ ወድኡ ድማ ምስክር ወረቐትኩም ኣውርዱ።"
+      }
+    ],
+    "pathTitle": "ካብ ጀማሪ ክሳብ ላዕለዋይ ዝኸይድ መንገድኹም",
+    "pathText": "ኣብ ዝሰማምዐኩም ደረጃ ጀምሩ፣ ምስ ተዳለኹም ድማ ደየቡ።",
+    "seeCoursesAt": "ኮርሳት ርኣዩ",
+    "teachersTitle": "መምህራንና ፍለጡ",
+    "allTeachers": "ኩሎም መምህራን",
+    "statLearners": "ተመሃሮ",
+    "statCourses": "ኮርሳት",
+    "statLessons": "ትምህርታት",
+    "statLanguages": "ቋንቋታት",
+    "communityTitle": "ሕብረተሰብና ተሓወሱ",
+    "communityText": "ዜና፣ ነጻ ምኽሪታትን ቅልጡፍ መልስታትን ካብ ጉጅለ ናጢቅ ተቐበሉ።",
+    "joinTelegram": "ናብ ቴሌግራም ቻነልና ተሓወሱ",
+    "askWhatsapp": "ኣብ WhatsApp ሕተቱና",
+    "installTitle": "ናጢቅ ናብ ተሌፎንኩም ወስኹ",
+    "installText": "ትምህርታት ካብ መኽፈቲ ገጽኩም ከም ኣፕ ክፈቱ።",
+    "installCta": "ናብ መኽፈቲ ገጽ ወስኽ",
+    "findLevelButton": "ደረጃኹም ፍለጡ",
+    "openFreeLesson": "ነጻ ትምህርቲ ርኣዩ፦ {title}",
+    "languagesEyebrow": "ቋንቋታት",
+    "exploreLanguage": "ኮርሳት ድለዩ",
+    "coursesEyebrow": "እንታይ ክትገብሩ ትኽእሉ",
+    "coursesTitle": "ኣብ ናጢቅ እንታይ ክትገብሩ ከም እትኽእሉ ርኣዩ",
+    "coursesText": "ሓደ መድረኽ። ነጻን ፕሪምየምን ኮርሳትን ንተመሃሮ ዝሓስቡ መምህራንን።",
+    "tabFree": "ነጻ",
+    "tabPremium": "ፕሪምየም",
+    "seeAllFree": "ኩሉ ነጻ ኮርሳት ርአ",
+    "seeAllPremium": "ኩሉ ፕሪምየም ኮርሳት ርአ",
+    "howEyebrow": "ምጅማር",
+    "freeEyebrow": "ነጻ ትምህርታት",
+    "whyEyebrow": "ስለምንታይ ናጢቅ",
+    "testimonialsEyebrow": "ሓቀኛ ታሪኽ",
+    "newsEyebrow": "ዜና",
+    "faqEyebrow": "ተደጋጋሚ ሕቶታት",
+    "flowEyebrow": "ኣብ ውሽጢ ትምህርቲ",
+    "pathEyebrow": "መንገድኹም",
+    "teachersEyebrow": "መምህራን",
+    "communityEyebrow": "ሕብረተሰብ",
+    "sliderPrev": "ዝሓለፈ ርእይቶ",
+    "sliderNext": "ቀጻሊ ርእይቶ",
+    "sliderPause": "ስላይድ ሾው ኣቋርጽ",
+    "sliderPlay": "ስላይድ ሾው ጻወት",
+    "weeklyEyebrow": "ኮርስ ከመይ ይካየድ",
+    "weeklyTitle": "ሰሙን ብሰሙን ተማሃሩ",
+    "weeklyText": "ናብ ኮርስ ንምስታፍ ሕተቱ፣ ጉጅለ ናጢቅ ይቕበለኩም። ድሕሪኡ ኩሉ ሰሙን ምስ መምህርኩም ሓደስቲ ክፍለ ግዜታት ይመጽኡ።",
+    "weeklyPoints": [
+      "ክሳብ 3 ክፍለ ግዜታት ኣብ ሰሙን፣ ነፍሲ ወከፎም ብቪድዮ ዝተቐድሑ",
+      "PDFን ስላይድን ማስታወሻታትን ናይ ነፍሲ ወከፍ ክፍለ ግዜ",
+      "ሓደስቲ ክፍለ ግዜታት ምስ ተወሰኹ ቅልጥፍ ይበጽሑኹም"
+    ],
+    "tabTeachers": "መምህራን",
+    "testimonialsText": "ሓቀኛ ታሪኽ ካብ ሕብረተሰብና።",
+    "sliderDot": "ርእይቶ {n} ካብ {total} ርአ",
+    "audience": {
+      "eyebrow": "ንኹሉ ሓደ መድረኽ",
+      "title": "ኣብ ናጢቅ ቦታኹም ርከቡ",
+      "cards": [
+        {
+          "label": "ንሓደስቲ ተመሃሮ",
+          "title": "ካበይ ከም እትጅምሩ ርግጸኛ ዲኹም? ኢና ንሕግዘኩም",
+          "stat": "ቋንቋታት",
+          "points": [
+            "ነጻ መርመራ ደረጃ፣ ኣካውንት ኣየድልን",
+            "ካብ ጀማሪ ክሳብ ላዕለዋይ ዝኾኑ ኮርሳት",
+            "ቅድሚ ምስታፍኩም ዙርያኹም ርኣዩ"
+          ],
+          "cta": "ደረጃኹም ፍለጡ"
+        },
+        {
+          "label": "ንተመሃሮ",
+          "title": "ሰሙን ሰሙን ምስ ዝፈልጠኩም መምህር ተማሃሩ",
+          "stat": "ኮርሳት",
+          "points": [
+            "ሰሙናዊ ክፍለ ግዜታት ምስ ቪድዮ፣ PDFን ስላይድን",
+            "ምስ ክፍልኹም ጉጅለ ዕላል",
+            "ዝኾነ ሰብ ከረጋግጾ ዝኽእል ምስክር ወረቐት"
+          ],
+          "cta": "ምምሃር ጀምሩ"
+        },
+        {
+          "label": "ንመምህራን",
+          "title": "ብዝደለኹምዎ መንገዲ ምሃሩ፣ እቲ ተረፈ ንሕና ንሕዞ",
+          "stat": "መምህራን",
+          "points": [
+            "ኩሉ ሰሙን ክፍለ ግዜታት፣ ስላይድን ማስታወሻን ወስኹ",
+            "ኣብ ጉጅለአም ምስ ተመሃሮኹም ተዛተዩ",
+            "ፈተናታት ኣርምዑ ርእይቶ ድማ ሃቡ"
+          ],
+          "cta": "ምስ ናጢቅ ምሃሩ"
+        },
+        {
+          "label": "ንኹሉ",
+          "title": "ሕቶ ኣሎኩም ዲዩ? ጉጅለ ናጢቅ ሓደ መልእኽቲ ጥራይ እያ ርሕቀቱ",
+          "stat": "ክፍለ ግዜታት",
+          "points": [
+            "መልስታት ኣብ WhatsApp፣ Telegram ን ዕላልን",
+            "ሓገዝ ብዛዕባ ክፍሊትን ምስታፍን",
+            "ዝኾነ ምስክር ወረቐት ብኦንላይን ኣረጋግጹ"
+          ],
+          "cta": "መልስታት ኣንብቡ"
+        }
+      ]
+    },
+    "statsEyebrow": "ናጢቅ ብቑጽሪ",
+    "statsTitle": "ዝዓቢ ዘሎ ማሕበረሰብ ትምህርቲ"
+  },
+  "status": {
+    "enrolment": {
+      "AWAITING_PAYMENT": "ክፍሊት የድሊ",
+      "PAYMENT_SUBMITTED": "ክፍሊት ኣብ መርመራ",
+      "ACTIVE": "ንጡፍ",
+      "COMPLETED": "ተወዲኡ",
+      "EXPIRED": "ኣብቂዑ",
+      "CANCELLED": "ተሰሪዙ",
+      "AWAITING_APPROVAL": "ምርግጋጽ ይጽበ"
+    },
+    "payment": {
+      "SUBMITTED": "ኣብ መርመራ",
+      "CONFIRMED": "ተረጋጊጹ",
+      "REJECTED": "ተነጺጉ"
+    },
+    "content": {
+      "DRAFT": "ጽሑፍ",
+      "PUBLISHED": "ተሓቲሙ",
+      "HIDDEN": "ተሸሊሉ"
+    },
+    "quiz": {
+      "passed": "ሓሊፉ",
+      "failed": "ኣይሓለፈን",
+      "waiting": "ምምራቕ ይጽበ"
+    }
+  },
+  "auth": {
+    "phone": "ቁጽሪ ተሌፎን",
+    "password": "ምስጢራዊ ቃል",
+    "fullName": "ምሉእ ሽም",
+    "email": "ኢሜይል",
+    "learn": "ክምሃር ዝደሊ",
+    "passwordHint": "8+ ፊደላት፣ ሓደ ፊደልን ሓደ ቁጽርን",
+    "show": "ኣርእይ",
+    "newPassword": "ሓዲስ ምስጢራዊ ቃል",
+    "register": {
+      "title": "ኣካውንትኩም ክፈቱ",
+      "cta": "ኣካውንት ክፈት",
+      "haveAccount": "ኣካውንት ኣለኩም ዲዩ?",
+      "signIn": "ኣታዉ",
+      "termsLink": "ሕግታት",
+      "privacyLink": "ናይ ምስጢር መግለጺ",
+      "termsError": "በጃኹም ንምቕጻል ተሰማምዑ።",
+      "phoneTaken": "እዚ ቁጽሪ ድሮ ኣካውንት ኣለዎ።",
+      "signInInstead": "ኣታዉ",
+      "resetInstead": "ምስጢራዊ ቃል ዳግም ምምዕባል",
+      "termsPre": "ዕድመይ 16 ወይ ልዕሊኡ እዩ፣ ድማ እቕበል",
+      "termsAnd": "ድማ",
+      "subtitle": "ብነጻ ኣካውንት ንምክፋት ሓበሬታኹም ኣእትዉ።",
+      "personalInfo": "ውልቃዊ ሓበሬታ",
+      "accountInfo": "ሓበሬታ ኣካውንት",
+      "passwordMismatch": "እቶም ክልተ ምስጢራዊ ቃላት ሓደ ኣይኮኑን።",
+      "emailTaken": "እዚ ኢሜይል ኣቐዲሙ ሕሳብ ኣለዎ።"
+    },
+    "signIn": {
+      "title": "እንኳዕ ብደሓን መጻእኩም",
+      "keep": "ኣቲየ ከም ዝጸናሕ ግበረኒ",
+      "forgot": "ምስጢራዊ ቃል ረሲዕኩም ዲኹም?",
+      "cta": "ኣታዉ",
+      "newHere": "ሓድሽ ዲኹም?",
+      "create": "ኣካውንት ክፈቱ",
+      "locked": "ኣዚዮም ብዙሕ ፈተናታት። ድሕሪ 15 ደቒቕ ፈትኑ ወይ ምስጢራዊ ቃልኩም ዳግም ኣዳልዉ።",
+      "subtitle": "ንምቕጻል ኢመይልኩምን ምስጢራዊ ቃልኩምን ኣእትዉ።"
+    },
+    "forgot": {
+      "title": "ምስጢራዊ ቃል ዳግም ኣዳልው",
+      "steps": {
+        "phone": "ተሌፎን",
+        "code": "ኮድ",
+        "password": "ምስጢራዊ ቃል",
+        "email": "ኢሜይል"
+      },
+      "phoneText": "ብጽሑፍ መልእኽቲ ኮድ ንሰደልኩም።",
+      "sendCode": "ኮድ ሰዲድ",
+      "codeTitle": "ኮድኩም ኣእትዉ",
+      "codeCta": "ቀጽል",
+      "newTitle": "ሓድሽ ምስጢራዊ ቃል ሕረዩ",
+      "save": "ምስጢራዊ ቃል ዓቅብ",
+      "backToSignIn": "ናብ ምእታው ተመለስ",
+      "doneTitle": "ምስጢራዊ ቃል ተዓቂቡ",
+      "doneText": "ሕጂ ክትኣትዉ ትኽእሉ።",
+      "goSignIn": "ኣታዉ",
+      "sentNote": "እዚ ኢሜይል ሕሳብ እንተለዎ፣ ኮድ ብኤስኤምኤስ ይመጽእ ኣሎ።",
+      "emailText": "ዝተመዝገብኩምሉ ኢሜይል ኣእትዉ። ኣብ ሕሳብኩም ዘሎ ቁጽሪ ተሌፎን ኮድ ብጽሑፍ መልእኽቲ ክንሰዶ ኢና።"
+    },
+    "setPassword": {
+      "title": "ምስጢራዊ ቃልኩም ኣዳልዉ",
+      "save": "ምስጢራዊ ቃል ዓቅብ",
+      "doneTitle": "ምስጢራዊ ቃል ተዓቂቡ",
+      "doneText": "ሕጂ ክትኣትዉ ትኽእሉ።",
+      "goSignIn": "ኣታዉ",
+      "invalidTitle": "እዚ ሊንክ ኣብቂዑ",
+      "invalidText": "ሓድሽ ሕተቱ።",
+      "missingToken": "እዚ ሊንክ ምሉእ ኣይኮነን።",
+      "requestNew": "ምስጢራዊ ቃል ዳግም ኣዳልው"
+    },
+    "code": {
+      "resendIn": "ኮድ ኣብ {time} ደጊምኩም ሰድዱ",
+      "resend": "ኮድ ደጊምኩም ሰድዱ",
+      "resent": "ሓድሽ ኮድ ተሰዲዱ"
+    },
+    "firstName": "ቀዳማይ ሽም",
+    "lastName": "ሽም ኣቦ",
+    "gender": "ጾታ",
+    "male": "ተባዕታይ",
+    "female": "ኣንስታይ",
+    "chooseOne": "ሕረዩ…",
+    "country": "ሃገር",
+    "chooseCountry": "ሃገር ምረጽ",
+    "city": "ከተማ ወይ ዓዲ",
+    "confirmPassword": "ምስጢራዊ ቃል ኣረጋግጹ"
+  },
+  "courseButton": {
+    "enrolFree": "ንምስታፍ ሕተቱ",
+    "payAndEnrol": "ክፍሊትኩም ከፊልኩም ተመዝገቡ",
+    "paymentUnderReview": "ክፍሊት ኣብ መርመራ",
+    "continueLearning": "ትምህርቲ ቀጽሉ",
+    "renewAccess": "መእተዊ ሓድሽ",
+    "openEditor": "ኣርምዕ ክፈት",
+    "enrolled": "ተመዝጊብኩም ኣለኹም። ጽቡቕ ትምህርቲ!",
+    "renewed": "መእተዊኹም ዳግም ተኸፊቱ።",
+    "checking": "ኮርስኩም ይፈለጥ ኣሎ…",
+    "requestToJoin": "ንምስታፍ ሕተቱ",
+    "requestSent": "ሕቶኹም ተላኢኹ። ጉጅለ ናጢቅ ብቕልጡፍ ይቕበለኩም።",
+    "waitingApproval": "ምርግጋጽ ይጽበ",
+    "waitingApprovalHint": "ጉጅለ ናጢቅ ነፍሲ ወከፍ ሕቶ ይመርምር። ምስ ተቐበልኩም ጽሑፍ መልእኽቲ ትረኽቡ።"
+  },
+  "studentHome": {
+    "title": "ገጽ ቤት",
+    "greeting": "ሰላም፣ {name}",
+    "continueTitle": "ትምህርቲ ቀጽሉ",
+    "lessonLine": "{course} · {lesson}",
+    "continueButton": "ቀጽል",
+    "myCourses": "ኮርሳተይ",
+    "seeAll": "ኩሉ ርአ",
+    "news": "ዜና",
+    "newCount": "{count, plural, one {# ሓድሽ} other {# ሓደስቲ}}",
+    "noNews": "ክሳብ ሕጂ ዜና የለን።",
+    "emptyTitle": "ክሳብ ሕጂ ኮርስ የለን",
+    "emptyText": "ንምጅማር ሓደ ሕረዩ።",
+    "browse": "ኮርሳት ድለዩ",
+    "tryFree": "ነጻ ትምህርቲ ፈትን",
+    "certificates": "ሰርቲፊኬታት",
+    "certificatesText": "ሰርቲፊኬታትኩም ኣብዚ ይረኽቡ።",
+    "results": "ዝሓለፉ ውጽኢታት",
+    "resultsText": "ውጽኢት ፈተናኹም ኣብዚ ይረኽብ።",
+    "resultPassed": "ሓሊፉ",
+    "resultNotPassed": "ኣይሓለፈን",
+    "resultWaiting": "ምምራቕ ይጽበ",
+    "certificateReadyTitle": "ሰርቲፊኬትኩም ቀሪቡ ኣሎ",
+    "certificateReadyText": "{course} ወዲእኩም። ኣብ ሰርቲፊኬትኩም ዝሕተም ሽም ኣረጋግጹ።",
+    "certificateReadyButton": "ሽመይ ኣረጋግጽ",
+    "newSessionsTitle": "ሓደስቲ ክፍለ ግዜታት",
+    "new": "ሓድሽ",
+    "start": {
+      "title": "ንጀምር",
+      "text": "ሰለስተ ቀሊል ስጉምታት። ንመርሕኩም ኢና።",
+      "steps": [
+        {
+          "title": "ኮርስ ሕረዩ",
+          "text": "ነጻን ፕሪምየምን ኮርሳት ርኣዩ።",
+          "cta": "ኮርሳት ድለዩ"
+        },
+        {
+          "title": "ንምስታፍ ሕተቱ",
+          "text": "ኣብ ኮርስ “ንምስታፍ ሕተቱ” ጠውቑ። ጉጅለ ናጢቅ ይቕበለኩም፣ መልእኽቲ ድማ ንሰደልኩም።"
+        },
+        {
+          "title": "ተማሃሩ ተዛተዩ ድማ",
+          "text": "ሓደስቲ ክፍለ ግዜታት ኩሉ ሰሙን ይመጹ። ኣብ ጉጅለ ኮርስኩም ሕቶታት ሕተቱ።"
+        }
+      ],
+      "tour": "ኣርእዩኒ"
+    }
+  },
+  "notFound": {
+    "title": "ገጽ ኣይተረኽበን",
+    "text": "ናብ ዝቐንዐ መገዲ ንመልሰኩም።",
+    "home": "ናብ ገጽ ቤት ተመለስ",
+    "contact": "ርኸቡና"
+  },
+  "errorPage": {
+    "title": "ገለ ነገር ጌጉ",
+    "text": "በጃኹም ደጊምኩም ፈትኑ። እንተ ተደጊሙ ርኸቡና።",
+    "tryAgain": "ደጊምካ ፈትን",
+    "home": "ናብ ገጽ ቤት ተመለስ"
+  },
+  "fields": {
+    "phone": {
+      "prefix": "+251",
+      "prefixLabel": "ናይ ኢትዮጵያ ቁጽሪ፣ ብ+251 ዝጅምር",
+      "placeholder": "91 234 5678"
+    },
+    "password": {
+      "show": "ምስጢራዊ ቃል ኣርእይ",
+      "hide": "ምስጢራዊ ቃል ሕቐቕ"
+    },
+    "otp": {
+      "digit": "ኣሃዝ {index} ካብ {count}"
+    },
+    "file": {
+      "choose": "ፋይል ምረጽ",
+      "drop": "ወይ ኣብዚ ስሓብ",
+      "limits": "{types} · ክሳብ {max} MB",
+      "remove": "{name} ኣውጽእ",
+      "retry": "ደጊምካ ፈትን",
+      "uploading": "ይጽዓን ኣሎ… {progress}%",
+      "tooLarge": "እዚ ፋይል {size} MB እዩ። ዝለዓለ {max} MB እዩ።",
+      "wrongType": "እዚ ዓይነት ፋይል ኣብዚ ኣይፍቀድን።"
+    },
+    "search": {
+      "placeholder": "ድለይ…",
+      "clear": "ምድላይ ሰርዝ"
+    },
+    "money": {
+      "currency": "ብር"
+    },
+    "select": {
+      "placeholder": "ሕረዩ…"
+    }
+  },
+  "pagination": {
+    "label": "ምቕያር ገጽ",
+    "previous": "ዝቐደመ ገጽ",
+    "next": "ቀጻሊ ገጽ",
+    "page": "ገጽ {page}",
+    "summary": "ገጽ {page} ካብ {total}"
+  },
+  "dialog": {
+    "reasonLabel": "ምኽንያት",
+    "reasonRequired": "በጃኹም ምኽንያት ሃቡ።"
+  },
+  "courses": {
+    "title": "ኮርሳት",
+    "subtitle": "ኣብ ዓረብኛ፣ እንግሊዝኛ ወይ ኣፋን ኦሮሞ ዝሰማምዕ ኮርስ ርከቡ።",
+    "all": "ኩሉ",
+    "language": "ቋንቋ",
+    "level": "ደረጃ",
+    "anyLevel": "ዝኾነ ደረጃ",
+    "found": "{count, plural, one {# ኮርስ} other {# ኮርሳት}}",
+    "emptyTitle": "ዝሰማምዕ ኮርስ የለን",
+    "emptyText": "ካልእ ቋንቋ ወይ ደረጃ ፈትኑ።",
+    "clear": "ማጽሪያ ኣጽሪ",
+    "noneTitle": "ኮርሳት ኣብ መገዲ ኣለዉ",
+    "noneText": "ሓደስቲ ኮርሳት ብቕልጡፍ ኣብዚ ይመጹ። ንምድላው ኣካውንት ክፈቱ።",
+    "weeks": "ግዜ",
+    "free": "ነጻ",
+    "overview": "ብዛዕባ እዚ ኮርስ",
+    "learnTitle": "እንታይ ከም እትመሃሩ",
+    "outlineTitle": "ዝርዝር ኮርስ",
+    "outlineEmpty": "እቶም ሰሙናዊ ክፍለ ግዜታት ምስ ተወሰኹ ኣብዚ ይዝርዘሩ።",
+    "freePreview": "ነጻ ቅድመ ርእይቶ",
+    "teacherTitle": "መምህርኩም",
+    "teachersTitle": "መምህራንኩም",
+    "access": "መእተዊ",
+    "accessDays": "{days} መዓልታት",
+    "accessUnlimited": "ዶብ ግዜ የለን",
+    "price": "ዋጋ",
+    "registerToEnrol": "ንምስታፍ ተመዝገብ",
+    "haveAccount": "ኣካውንት ኣለኩም ዲዩ?",
+    "signedInNote": "ምዝገባ ብቕልጡፍ ይኽፈት።",
+    "backToCourses": "ኩሉ ኮርሳት",
+    "lessonsCount": "{count, plural, one {# ትምህርቲ} other {# ትምህርታት}}",
+    "quickFacts": "ብሓጺሩ",
+    "aboutTitle": "ብዛዕባ እዚ ኮርስ",
+    "signIn": "ኣታዉ",
+    "watchTrailer": "ትሬለር ርአ",
+    "inOrderNote": "ትምህርታት ሓደ ድሕሪ ሓደ ይኽፈቱ",
+    "relatedTitle": "ተወሳኺ ኮርሳት ብዚ ቋንቋ",
+    "kindAll": "ኩሉ",
+    "kindFree": "ነጻ",
+    "kindPremium": "ፕሪምየም",
+    "freeGroupTitle": "ነጻ ኮርሳት",
+    "freeGroupText": "ብቕልጡፍ ይኽፈት። ኣካውንት ክፈቱ ሎሚ ድማ ምምሃር ጀምሩ።",
+    "premiumGroupTitle": "ፕሪምየም ኮርሳት",
+    "premiumGroupText": "ብወርሒ ይኽፈል። ብዛዕባ ክፍሊት ንጉጅለ ናጢቅ ኣብ WhatsApp፣ Telegram ወይ ዕላል ሕተቱ።",
+    "kindNav": "ዓይነት ኮርስ",
+    "priceOnRequest": "ዝርዝር ሕተቱ",
+    "premiumCourse": "ፕሪምየም ኮርስ",
+    "payQuestionTitle": "ሕቶ ኣሎኩም ዲዩ ብዛዕባ ክፍሊት?",
+    "payQuestionText": "ፕሪምየም ኮርሳት ብወርሒ ይኽፈሉ። ንጉጅለ ናጢቅ ሕተቱ፣ ንመርሕኩም።",
+    "clearFilters": "ኣጽሪ",
+    "weekN": "ሰሙን {n}",
+    "sessionN": "ክፍለ ግዜ {n}",
+    "sessionsCount": "{count, plural, one {# ክፍለ ግዜ} other {# ክፍለ ግዜታት}}",
+    "weeksAndSessions": "{weeks, plural, one {# ሰሙን} other {# ሰሙናት}} · {sessions, plural, one {# ክፍለ ግዜ} other {# ክፍለ ግዜታት}}",
+    "weeklyNote": "ሓደስቲ ክፍለ ግዜታት ኩሉ ሰሙን ይውሰኹ።",
+    "membersOnly": "ቪድዮታት፣ PDFን ስላይድን ድሕሪ ምስታፍኩምን ጉጅለ ናጢቅ ምቕባልኩምን ይኽፈቱ።",
+    "searchPlaceholder": "ኮርስ፣ ቋንቋ ወይ ደረጃ ድለዩ",
+    "filters": "ማጽሪያታት",
+    "filtersTitle": "ኮርሳት ኣጽሩ",
+    "priceFilter": "ዋጋ",
+    "priceMin": "ዝተሓተ",
+    "priceMax": "ዝለዓለ",
+    "priceUnder": "ትሕቲ ETB {max}",
+    "priceBetween": "ETB {min} ክሳብ {max}",
+    "priceOver": "ETB {min} ን ልዕሊኡን",
+    "showResults": "{count, plural, one {# ኮርስ} other {# ኮርሳት}} ኣርእዩ",
+    "viewCourse": "ኮርስ ርአ",
+    "levelLabel": "ደረጃ፦ {level}",
+    "searchCourses": "ኮርሳት ድለዩ…",
+    "view": "ርአ",
+    "tabOverview": "ሓፈሻዊ ርእይቶ",
+    "tabContent": "ትሕዝቶ",
+    "tabInstructor": "መምህር",
+    "includesTitle": "እዚ ኮርስ ዝሓቝፎ",
+    "includeDuration": "ግዜ",
+    "includeSessions": "ክፍለ ግዜታት",
+    "includeCertificate": "ምስ ወድኡ ምስክር ወረቐት",
+    "includeAccess": "መእተዊ",
+    "includeLanguage": "ቋንቋ",
+    "includeLevel": "ደረጃ",
+    "includeDevices": "ሞባይልን ኮምፒተርን",
+    "includeGroup": "ጉጅለ ዕላል ኮርስ",
+    "shareTitle": "እዚ ኮርስ ኣካፍሉ",
+    "share": "ኣካፍል",
+    "showMore": "ተወሳኺ ኣርእይ",
+    "showLess": "ውሑድ ኣርእይ",
+    "howTitle": "ኣብዚ ከመይ ይሰርሕ",
+    "howSteps": ["ንዚ ኮርስ ንምስታፍ ሕተቱ", "ጉጅለ ናጢቅ ይቕበለኩም", "ኩሉ ሰሙን ተማሃሩ፣ ምስ ክፍልኹም ተዛተዩ"],
+    "contentCount": "{weeks, plural, one {# ሰሙን} other {# ሰሙናት}} · {sessions, plural, one {# ክፍለ ግዜ} other {# ክፍለ ግዜታት}}",
+    "instructorTitle": "መምህር",
+    "similarTitle": "ተመሳሳሊ ኮርሳት",
+    "previous": "ዝቐደመ",
+    "next": "ቀጻሊ"
+  },
+  "guide": {
+    "title": "ሓገዝ",
+    "tabVideo": "ቪድዮ",
+    "tabWritten": "ጽሑፋዊ መምርሒ"
+  },
+  "adminPayments": {
+    "receiptTitle": "ደረሰኛ",
+    "receiptOpen": "ኣብ ሓድሽ ታብ ክፈት",
+    "receiptPdf": "ደረሰኛ PDF"
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "ኢሜይል ወይ ምስጢራዊ ቃል ትኽክል ኣይኮነን።",
+    "EMAIL_ALREADY_REGISTERED": "እዚ ኢሜይል ኣቐዲሙ ሕሳብ ኣለዎ።"
+  },
+  "people": {
+    "title": "መግለጺ",
+    "openProfile": "መግለጺ {name} ክፈት",
+    "loadFailed": "እዚ መግለጺ ክኽፈት ኣይከኣለን።",
+    "about": "ብዛዕባ",
+    "teaches": "ዘምህሮ",
+    "sharedCourses": "ሓባራዊ ኮርሳት",
+    "from": "ካብ",
+    "contact": "ርክብ",
+    "contactHint": "ንጉጅለ ናጢቅ ጥራይ ዝርአ።",
+    "message": "መልእኽቲ ልኣኽ",
+    "editMine": "መግለጺየ ኣዐርይ",
+    "memberSince": "ካብ {date} ኣባል",
+    "role": {
+      "STUDENT": "ተምሃራይ",
+      "TEACHER": "መምህር",
+      "ADMIN": "ጉጅለ ናጢቅ"
+    }
+  }
+}

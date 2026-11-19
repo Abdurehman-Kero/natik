@@ -1,5 +1,5 @@
 /** The languages the website's menus, buttons and public pages can be shown in. */
-export const LOCALES = ['en', 'am', 'om', 'so'] as const;
+export const LOCALES = ['en', 'am', 'ti', 'om', 'so'] as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const DEFAULT_LOCALE: Locale = 'en';
@@ -9,6 +9,7 @@ export const LOCALE_COOKIE = 'NEXT_LOCALE';
 export const LOCALE_NAMES: Record<Locale, string> = {
   en: 'English',
   am: 'አማርኛ',
+  ti: 'ትግርኛ',
   om: 'Afaan Oromoo',
   so: 'Soomaali',
 };
@@ -17,6 +18,7 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 export const LOCALE_SHORT: Record<Locale, string> = {
   en: 'EN',
   am: 'አማ',
+  ti: 'ትግ',
   om: 'OM',
   so: 'SO',
 };
@@ -24,6 +26,7 @@ export const LOCALE_SHORT: Record<Locale, string> = {
 export const OPEN_GRAPH_LOCALE: Record<Locale, string> = {
   en: 'en_GB',
   am: 'am_ET',
+  ti: 'ti_ET',
   om: 'om_ET',
   so: 'so_SO',
 };

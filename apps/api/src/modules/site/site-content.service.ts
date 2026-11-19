@@ -10,6 +10,13 @@ import { isValidRichText, renderRichText } from '../content/rich-text';
 
 type Ordered = 'faqItem' | 'testimonial';
 
+const photoUrl = (id: string | null) => (id ? `/api/v1/files/${id}` : null);
+/** A testimonial as the editor and the website see it: the picture as an address, not an id. */
+const withPhoto = <T extends { photoFileId: string | null }>(row: T) => ({
+  ...row,
+  photoUrl: photoUrl(row.photoFileId),
+});
+
 /**
  * The text and lists admins edit without a developer (FR-WEB-005): headline, about text, contact
  * details, FAQ, testimonials, policies and the featured courses.
@@ -26,10 +33,15 @@ export class SiteContentService {
   /** Home, About and contact text. A missing entry means "use the built-in wording". */
   async publicSite() {
     const rows = await this.prisma.siteContent.findMany({
-      where: { key: { in: ['home', 'about', 'contact'] } },
+      where: { key: { in: ['home', 'about', 'contact', 'help'] } },
     });
     const byKey = Object.fromEntries(rows.map((r) => [r.key, r.value]));
-    return { home: byKey.home ?? null, about: byKey.about ?? null, contact: byKey.contact ?? null };
+    return {
+      home: byKey.home ?? null,
+      about: byKey.about ?? null,
+      contact: byKey.contact ?? null,
+      help: byKey.help ?? null,
+    };
   }
 
   async publicFaq() {
@@ -46,9 +58,11 @@ export class SiteContentService {
       where: { published: true },
       orderBy: { position: 'asc' },
       take: 12,
-      select: { id: true, name: true, quote: true, courseLabel: true },
+      select: { id: true, name: true, quote: true, courseLabel: true, photoFileId: true },
     });
-    return { items: rows };
+    return {
+      items: rows.map(({ photoFileId, ...rest }) => ({ ...rest, photoUrl: photoUrl(photoFileId) })),
+    };
   }
 
   async publicPolicy(slug: string) {
@@ -144,37 +158,68 @@ export class SiteContentService {
   }
 
   async listTestimonials() {
-    return { items: await this.prisma.testimonial.findMany({ orderBy: { position: 'asc' } }) };
+    const rows = await this.prisma.testimonial.findMany({ orderBy: { position: 'asc' } });
+    return { items: rows.map(withPhoto) };
+  }
+
+  /** The picture must be an uploaded site picture; anything else is refused. */
+  private async checkPhoto(photoFileId: string | null | undefined) {
+    if (!photoFileId) return;
+    const file = await this.prisma.fileAsset.findUnique({ where: { id: photoFileId } });
+    if (!file || file.purpose !== 'SITE_IMAGE') {
+      throw new AppException('VALIDATION_FAILED', HttpStatus.BAD_REQUEST, {
+        fields: { photoFileId: ['Upload the picture again.'] },
+      });
+    }
   }
 
   async createTestimonial(
     actor: SessionUser,
-    input: { name: string; quote: string; courseLabel?: string; published: boolean },
+    input: {
+      name: string;
+      quote: string;
+      courseLabel?: string;
+      photoFileId?: string | null;
+      published: boolean;
+    },
   ) {
+    await this.checkPhoto(input.photoFileId);
     const max = await this.prisma.testimonial.aggregate({ _max: { position: true } });
     const item = await this.prisma.testimonial.create({
       data: {
         ...input,
         courseLabel: input.courseLabel ?? null,
+        photoFileId: input.photoFileId ?? null,
         position: (max._max.position ?? 0) + 1,
       },
     });
     await this.log(actor, 'TESTIMONIAL_CREATED', 'Testimonial', item.id);
-    return item;
+    return withPhoto(item);
   }
 
   async updateTestimonial(
     actor: SessionUser,
     id: string,
-    input: { name: string; quote: string; courseLabel?: string; published: boolean },
+    input: {
+      name: string;
+      quote: string;
+      courseLabel?: string;
+      photoFileId?: string | null;
+      published: boolean;
+    },
   ) {
     await this.mustExist(this.prisma.testimonial.findUnique({ where: { id } }));
+    await this.checkPhoto(input.photoFileId);
     const item = await this.prisma.testimonial.update({
       where: { id },
-      data: { ...input, courseLabel: input.courseLabel ?? null },
+      data: {
+        ...input,
+        courseLabel: input.courseLabel ?? null,
+        photoFileId: input.photoFileId ?? null,
+      },
     });
     await this.log(actor, 'TESTIMONIAL_UPDATED', 'Testimonial', id);
-    return item;
+    return withPhoto(item);
   }
 
   async deleteTestimonial(actor: SessionUser, id: string) {

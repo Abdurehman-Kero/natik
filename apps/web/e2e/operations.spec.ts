@@ -5,6 +5,7 @@ import {
   newPhone,
   SEED,
   signInAs,
+  emailFor,
 } from './helpers';
 
 const unique = () => Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -12,7 +13,14 @@ const unique = () => Math.random().toString(36).slice(2, 8).toUpperCase();
 async function registerStudent(page: Page, name = `E2E Ops ${unique()}`) {
   const phone = newPhone();
   const res = await page.request.post('/api/v1/auth/register', {
-    data: { fullName: name, phone, password: 'Passw0rd123', acceptTerms: true, confirmAge: true },
+    data: {
+      fullName: name,
+      phone,
+      email: emailFor(phone),
+      password: 'Passw0rd123',
+      acceptTerms: true,
+      confirmAge: true,
+    },
   });
   expect(res.status(), await res.text()).toBe(201);
   return { name, phone };

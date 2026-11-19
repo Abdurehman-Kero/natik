@@ -46,7 +46,7 @@ export class EnrolmentMachine {
       branchId: string;
       studentId: string;
       courseId: string;
-      to: Extract<EnrolmentStatus, 'ACTIVE' | 'AWAITING_PAYMENT'>;
+      to: Extract<EnrolmentStatus, 'ACTIVE' | 'AWAITING_PAYMENT' | 'AWAITING_APPROVAL'>;
       actorId?: string | null;
       reason?: string | null;
       startAt?: Date | null;

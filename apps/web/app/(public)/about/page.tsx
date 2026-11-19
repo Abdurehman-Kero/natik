@@ -6,6 +6,7 @@ import { FeatureGrid } from '@/components/public/feature-grid';
 import { PageHero } from '@/components/public/page-hero';
 import { PublicSection } from '@/components/public/section';
 import { Avatar } from '@/components/ui/avatar';
+import { AuthButton } from '@/components/auth/auth-button';
 import { LinkButton } from '@/components/ui/button';
 import { publicFetch } from '@/lib/api/public';
 import { getSiteContent } from '@/lib/site-config-live';
@@ -89,9 +90,9 @@ export default async function AboutPage() {
       </PublicSection>
 
       <CtaBand title={th('ctaTitle')} text={th('ctaText')}>
-        <LinkButton href="/register" variant="onDark" size="lg">
+        <AuthButton mode="register" variant="onDark" size="lg">
           {th('ctaRegister')}
-        </LinkButton>
+        </AuthButton>
       </CtaBand>
     </>
   );

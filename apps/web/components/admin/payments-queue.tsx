@@ -2,7 +2,16 @@
 
 import { refreshCounts } from '@/lib/use-live-counts';
 import { formatDate, formatMoney } from '@natik/shared';
-import { Check, CircleAlert, FileImage, Phone, Plus, X } from 'lucide-react';
+import {
+  Check,
+  CircleAlert,
+  ExternalLink,
+  FileImage,
+  FileText,
+  Phone,
+  Plus,
+  X,
+} from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -10,7 +19,13 @@ import { useEffect, useRef, useState } from 'react';
 import { CashPaymentDialog } from '@/components/admin/cash-payment-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ConfirmDialog } from '@/components/ui/dialog';
+import {
+  ConfirmDialog,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { PageHeader } from '@/components/ui/layout';
 import { Pagination } from '@/components/ui/pagination';
@@ -220,14 +235,7 @@ export function PaymentsQueue({ data, tab }: { data: Paged<AdminPayment>; tab: T
 
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       {p.receiptUrl ? (
-                        <a
-                          href={p.receiptUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary hover:underline"
-                        >
-                          <FileImage className="size-5" aria-hidden /> {t('receipt')}
-                        </a>
+                        <ReceiptPreview url={p.receiptUrl} isPdf={p.receiptIsPdf} />
                       ) : (
                         <span className="text-sm text-muted">{t('noReceipt')}</span>
                       )}
@@ -264,6 +272,73 @@ export function PaymentsQueue({ data, tab }: { data: Paged<AdminPayment>; tab: T
         onConfirm={reject}
       />
       <CashPaymentDialog open={cashOpen} onOpenChange={setCashOpen} />
+    </>
+  );
+}
+
+/**
+ * The receipt the student sent: a small picture that opens large in a dialog (so the admin can read the
+ * reference and amount without leaving the queue), or a PDF that opens in its own tab.
+ */
+function ReceiptPreview({ url, isPdf }: { url: string; isPdf: boolean }) {
+  const t = useTranslations('adminPayments');
+  const [open, setOpen] = useState(false);
+
+  if (isPdf) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary hover:underline"
+      >
+        <FileText className="size-5" aria-hidden /> {t('receiptPdf')}
+      </a>
+    );
+  }
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label={t('receipt')}
+        className="group relative flex items-center gap-3 rounded-xl text-left font-semibold text-primary"
+      >
+        <span className="relative block size-16 shrink-0 overflow-hidden rounded-lg border border-border bg-subtle">
+          {/* eslint-disable-next-line @next/next/no-img-element -- a private file: it is loaded with the admin's own session, which the image optimiser would not have */}
+          <img
+            src={url}
+            alt=""
+            loading="lazy"
+            className="size-full object-cover transition group-hover:scale-105"
+          />
+        </span>
+        <span className="inline-flex items-center gap-1.5 group-hover:underline">
+          <FileImage className="size-5" aria-hidden /> {t('receipt')}
+        </span>
+      </button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogTitle>{t('receiptTitle')}</DialogTitle>
+          <DialogDescription className="sr-only">{t('receiptTitle')}</DialogDescription>
+          {open ? (
+            // eslint-disable-next-line @next/next/no-img-element -- see above
+            <img
+              src={url}
+              alt={t('receiptTitle')}
+              className="mt-4 max-h-[70dvh] w-full rounded-lg bg-subtle object-contain"
+            />
+          ) : null}
+          <a
+            href={url}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex min-h-11 items-center gap-2 font-semibold text-primary hover:underline"
+          >
+            <ExternalLink className="size-4" aria-hidden /> {t('receiptOpen')}
+          </a>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

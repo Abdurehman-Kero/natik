@@ -1,6 +1,11 @@
 'use client';
 
-import { aboutContentSchema, contactContentSchema, homeContentSchema } from '@natik/shared';
+import {
+  aboutContentSchema,
+  contactContentSchema,
+  helpContentSchema,
+  homeContentSchema,
+} from '@natik/shared';
 import { ArrowDown, ArrowUp, Plus, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
@@ -25,7 +30,7 @@ function TextBlockForm({
   initial,
   children,
 }: {
-  siteKey: 'home' | 'about' | 'contact';
+  siteKey: 'home' | 'about' | 'contact' | 'help';
   schema: ZodType;
   initial: Values;
   children: (state: {
@@ -359,6 +364,47 @@ export function FeaturedTab({
             </Button>
           </div>
         ) : null}
+      </CardContent>
+    </Card>
+  );
+}
+
+/** The how-to videos students and teachers see in their Help tab. */
+export function HelpTab({ initial }: { initial: Values }) {
+  const t = useTranslations('websiteEditor');
+  return (
+    <Card className="max-w-3xl">
+      <CardHeader>
+        <CardTitle>{t('helpTitle')}</CardTitle>
+        <CardDescription>{t('helpHint')}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <TextBlockForm siteKey="help" schema={helpContentSchema} initial={initial}>
+          {({ values, set, errors }) => (
+            <>
+              <TextField
+                label={t('studentVideo')}
+                optional
+                hint={t('studentVideoHint')}
+                placeholder="https://www.youtube.com/watch?v=…"
+                value={values.studentVideoUrl ?? ''}
+                onChange={(e) => set('studentVideoUrl', e.target.value)}
+                error={errors.studentVideoUrl}
+                autoComplete="off"
+              />
+              <TextField
+                label={t('teacherVideo')}
+                optional
+                hint={t('teacherVideoHint')}
+                placeholder="https://www.youtube.com/watch?v=…"
+                value={values.teacherVideoUrl ?? ''}
+                onChange={(e) => set('teacherVideoUrl', e.target.value)}
+                error={errors.teacherVideoUrl}
+                autoComplete="off"
+              />
+            </>
+          )}
+        </TextBlockForm>
       </CardContent>
     </Card>
   );

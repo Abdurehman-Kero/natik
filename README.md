@@ -27,13 +27,15 @@ pnpm dev              # web + API (+ worker) with hot reload
 | File storage console       | http://localhost:9011 (natik / natik-dev-secret) |
 | Email inbox (Mailpit)      | http://localhost:8026                            |
 
-Development accounts (local seed only; passwords never used elsewhere):
+Development accounts (local seed only; passwords never used elsewhere). People sign in with their **email**:
 
-| Role        | Phone                                           | Password                   |
-| ----------- | ----------------------------------------------- | -------------------------- |
-| Owner admin | from `SEED_OWNER_PHONE` (default +251911000000) | from `SEED_OWNER_PASSWORD` |
-| Teacher     | +251911000001                                   | Teacher2026                |
-| Student     | +251911000002                                   | Student2026                |
+| Role        | Email                                                | Password                   |
+| ----------- | ---------------------------------------------------- | -------------------------- |
+| Owner admin | from `SEED_OWNER_EMAIL` (default `owner@natik.test`) | from `SEED_OWNER_PASSWORD` |
+| Teacher     | `teacher@natik.test`                                 | Teacher2026                |
+| Student     | `student@natik.test`                                 | Student2026                |
+
+(The phone numbers, for example +251911000001, stay on the accounts: password-reset codes are texted to them. The API still accepts a phone number at sign-in for accounts that have no email.)
 
 ## Sending real SMS
 

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { expect, type Page, test } from '@playwright/test';
-import { SEED, signInAs, waitForPageReady } from './helpers';
+import { joinCourse, SEED, signInAs, waitForPageReady, newContact } from './helpers';
 
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
@@ -57,7 +57,7 @@ test.describe('video pictures', () => {
     );
   });
 
-  test('an uploaded video shows its own picture; visitors see it on the course page and click to play', async ({
+  test('an uploaded video shows its own picture; students see it in the session and click to play', async ({
     page,
   }, testInfo) => {
     test.setTimeout(180_000);
@@ -109,11 +109,11 @@ test.describe('video pictures', () => {
     await page.context().clearCookies();
     await signInAs(page, SEED.teacher);
     await page.goto(`/teach/courses/${course.id}`);
-    await page.getByRole('button', { name: 'Add unit' }).first().click();
-    await page.getByLabel('Unit title').fill('Greetings');
+    await page.getByRole('button', { name: 'Add week' }).first().click();
+    await page.getByLabel('Week title').fill('Greetings');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
-    await page.getByRole('button', { name: 'Add lesson' }).click();
-    await page.getByLabel('Lesson title').fill('Saying hello');
+    await page.getByRole('button', { name: 'Add session' }).click();
+    await page.getByLabel('Session title').fill('Saying hello');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
     await expect(page).toHaveURL(/\/lessons\/[a-z0-9]+$/);
     const lessonEditor = new URL(page.url()).pathname;
@@ -124,55 +124,48 @@ test.describe('video pictures', () => {
       .getByTestId('file-video')
       .setInputFiles({ name: 'Saying hello.webm', mimeType: 'video/webm', buffer: video });
     await expect(page.getByText('Ready', { exact: true })).toBeVisible({ timeout: 30_000 });
-    const editorPicture = page.locator('img[src^="/api/v1/files/"]').first();
+    const editorPicture = page.locator('main img[src^="/api/v1/files/"]').first();
     await expect(editorPicture).toBeVisible({ timeout: 20_000 });
     await expect(page.getByText('Picture shown before the video plays.')).toBeVisible();
     await shot('1-editor-picture-from-video');
 
-    // A free preview, published.
-    await page.getByRole('switch', { name: /Free preview/ }).click();
+    // Published, then the course too.
     await page.getByRole('button', { name: 'Publish', exact: true }).last().click();
-    await expect(page.getByText('Lesson published.')).toBeVisible();
-
+    await expect(page.getByText('Session published. Students see it now.')).toBeVisible();
     await page.context().clearCookies();
     await signInAs(page, SEED.owner);
     expect((await page.request.post(`/api/v1/admin/courses/${course.id}/publish`)).ok()).toBe(true);
 
-    // A visitor sees the video's own picture on the course page, and it plays on a click.
+    // A student who joined (and was accepted) sees the video's own picture, and it plays on a click.
     await page.context().clearCookies();
-    await expect(async () => {
-      await page.goto(`/courses/${course.slug}`);
-      await expect(page.getByRole('button', { name: /Play video: Saying hello/ })).toBeVisible({
-        timeout: 2000,
-      });
-    }).toPass({ timeout: 30_000 });
+    const student = await page.request.post('/api/v1/auth/register', {
+      data: {
+        fullName: `Poster Student ${stamp}`,
+        ...newContact(),
+        password: 'Passw0rd123',
+        acceptTerms: true,
+        confirmAge: true,
+      },
+    });
+    expect(student.status()).toBe(201);
+    await joinCourse(page, course.id);
+    await page.goto(lessonEditor.replace(/^\/teach\/courses\/[^/]+/, `/learn/${course.slug}`));
     const play = page.getByRole('button', { name: /Play video: Saying hello/ });
+    await expect(play).toBeVisible({ timeout: 15_000 });
     await expect(play.locator('img')).toHaveAttribute('src', /^\/api\/v1\/files\//);
     await expect
       .poll(() => play.locator('img').evaluate((img) => (img as HTMLImageElement).naturalWidth))
       .toBeGreaterThan(0);
-    await shot('2-course-page-video-picture');
+    await shot('2-session-video-picture');
     await play.click();
     await expect(page.locator('video')).toHaveCount(1);
     await expect(page.locator('video')).toHaveAttribute('poster', /^\/api\/v1\/files\//);
-
-    // The free lessons page shows the same picture on the lesson's card.
-    await expect(async () => {
-      await page.goto('/free-lessons');
-      await expect(page.getByRole('link', { name: /Saying hello/ }).first()).toBeVisible({
-        timeout: 2000,
-      });
-    }).toPass({ timeout: 30_000 });
-    const card = page.getByRole('link', { name: /Saying hello/ }).first();
-    await expect(card.locator('img').first()).toHaveAttribute('src', /^\/api\/v1\/files\//);
-    await card.scrollIntoViewIfNeeded();
-    await shot('3-free-lessons-card');
 
     // The teacher can choose another picture instead.
     await signInAs(page, SEED.teacher);
     await page.goto(lessonEditor);
     await waitForPageReady(page);
-    const editorPicture2 = page.locator('img[src^="/api/v1/files/"]').first();
+    const editorPicture2 = page.locator('main img[src^="/api/v1/files/"]').first();
     await expect(editorPicture2).toBeVisible();
     const before = await editorPicture2.getAttribute('src');
     await page.getByTestId('video-poster').setInputFiles({
@@ -181,7 +174,7 @@ test.describe('video pictures', () => {
       buffer: PNG,
     });
     await expect(page.getByText('Picture saved.')).toBeVisible();
-    await expect(page.locator('img[src^="/api/v1/files/"]').first()).not.toHaveAttribute(
+    await expect(page.locator('main img[src^="/api/v1/files/"]').first()).not.toHaveAttribute(
       'src',
       before!,
     );

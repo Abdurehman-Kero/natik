@@ -7,28 +7,38 @@ export interface Feature {
   icon: LucideIcon;
 }
 
-/** Icon, short title, one sentence, all centred. Two columns on tablets, four on desktop. */
-export function FeatureGrid({ items, columns = 4 }: { items: Feature[]; columns?: 3 | 4 }) {
+/**
+ * Why Natik: cards with a soft icon tile, a short title and one sentence. The tiles alternate between
+ * navy and gold tints. One column on phones, two on tablets, three (or four) on desktop.
+ */
+export function FeatureGrid({ items, columns = 3 }: { items: Feature[]; columns?: 3 | 4 }) {
   return (
     <ul
       className={cn(
-        'grid gap-5 sm:grid-cols-2',
+        'grid gap-4 sm:grid-cols-2 md:gap-5',
         columns === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3',
       )}
     >
-      {items.map(({ title, text, icon: Icon }) => (
+      {items.map(({ title, text, icon: Icon }, index) => (
         <li
           key={title}
-          className="group flex flex-col items-center gap-4 rounded-2xl border border-border bg-surface p-7 text-center shadow-card"
+          className="group flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-raised md:p-7"
         >
           <span
-            className="flex size-14 items-center justify-center rounded-2xl bg-linear-to-br from-primary to-[#1f5277] text-white shadow-raised transition group-hover:scale-105"
+            className={cn(
+              'flex size-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110',
+              index % 2 === 0
+                ? 'bg-primary-soft text-primary'
+                : 'bg-accent-soft text-accent-strong',
+            )}
             aria-hidden
           >
             <Icon className="size-6" />
           </span>
-          <h3 className="font-sans text-lg font-semibold">{title}</h3>
-          <p className="text-muted">{text}</p>
+          <div className="flex flex-col gap-1.5">
+            <h3 className="font-sans text-lg font-bold">{title}</h3>
+            <p className="text-muted">{text}</p>
+          </div>
         </li>
       ))}
     </ul>

@@ -74,10 +74,21 @@ describe('quizzes, marking and certificates', () => {
     return { course, lessonIds, teacher, teacherAgent };
   }
 
+  let approver: Agent | undefined;
+  /** A student; with a course, they ask to join and an admin accepts them (every course needs it). */
   async function student(courseId?: string) {
     const user = await h.makeUser({});
     const agent = await h.signIn(user.phone, user.password);
-    if (courseId) await agent.post(`/api/v1/courses/${courseId}/enrol`).expect(200);
+    if (courseId) {
+      const asked = (await agent.post(`/api/v1/courses/${courseId}/enrol`).expect(200)).body;
+      if (asked.status === 'AWAITING_APPROVAL') {
+        if (!approver) {
+          const admin = await h.makeUser({ role: 'ADMIN' });
+          approver = await h.signIn(admin.phone, admin.password);
+        }
+        await approver.post(`/api/v1/admin/enrolments/${asked.id}/approve`).expect(200);
+      }
+    }
     return { ...user, agent };
   }
 

@@ -4,7 +4,7 @@ import { bytesToMb, changePasswordSchema, UPLOAD_LIMITS, updateProfileSchema } f
 import { Camera, KeyRound, LogOut, Pencil, Wallet } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useRef, useState } from 'react';
 import { Alert } from '@/components/ui/alert';
 import { Avatar } from '@/components/ui/avatar';
@@ -22,9 +22,12 @@ import { FormActions } from '@/components/ui/form-field';
 import { TextField } from '@/components/ui/input';
 import { KeyValue } from '@/components/ui/key-value';
 import { PasswordField } from '@/components/ui/password-field';
+import { SelectField } from '@/components/ui/select';
 import { toast } from '@/components/ui/toast';
 import { api, useErrorMessage } from '@/lib/api/client';
 import type { UserView } from '@/lib/api/types';
+import { flagOf } from '@/lib/countries';
+import { useCountryName, useCountryOptions } from '@/lib/use-country-options';
 import { apiFieldErrors, type FieldErrors, validate } from '@/lib/forms';
 
 export function ProfileView({ user }: { user: UserView }) {
@@ -32,6 +35,9 @@ export function ProfileView({ user }: { user: UserView }) {
   const te = useTranslations('errors');
   const errorMessage = useErrorMessage();
   const router = useRouter();
+  const locale = useLocale();
+  const nameOfCountry = useCountryName(locale);
+  const ta = useTranslations('auth');
   const fileInput = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
@@ -107,6 +113,17 @@ export function ProfileView({ user }: { user: UserView }) {
               items={[
                 { label: t('phone'), value: user.phone },
                 { label: 'Email', value: user.email },
+                {
+                  label: t('country'),
+                  value: user.country
+                    ? `${flagOf(user.country)} ${nameOfCountry(user.country)}`
+                    : null,
+                },
+                { label: t('city'), value: user.city },
+                {
+                  label: t('gender'),
+                  value: user.gender ? ta(user.gender === 'MALE' ? 'male' : 'female') : null,
+                },
               ]}
             />
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -163,8 +180,13 @@ function EditDetailsDialog({
   const tc = useTranslations('common');
   const errorMessage = useErrorMessage();
   const router = useRouter();
+  const locale = useLocale();
+  const countries = useCountryOptions(locale, user.country ?? undefined);
   const [fullName, setFullName] = useState(user.fullName);
   const [email, setEmail] = useState(user.email ?? '');
+  const [gender, setGender] = useState<string>(user.gender ?? '');
+  const [country, setCountry] = useState(user.country ?? '');
+  const [city, setCity] = useState(user.city ?? '');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -175,6 +197,9 @@ function EditDetailsDialog({
     const { data, errors: found } = validate(updateProfileSchema, {
       fullName,
       email: email || undefined,
+      gender: gender || null,
+      country: country || null,
+      city: city.trim() || null,
     });
     setErrors(found);
     if (!data) return;
@@ -199,6 +224,9 @@ function EditDetailsDialog({
         if (next) {
           setFullName(user.fullName);
           setEmail(user.email ?? '');
+          setGender(user.gender ?? '');
+          setCountry(user.country ?? '');
+          setCity(user.city ?? '');
           setErrors({});
           setFormError(null);
         }
@@ -218,12 +246,41 @@ function EditDetailsDialog({
           />
           <TextField
             label={ta('email')}
-            optional
             type="email"
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             error={errors.email}
+          />
+          <SelectField
+            key={countries.length}
+            label={ta('country')}
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            placeholder={ta('chooseCountry')}
+            options={countries}
+            error={errors.country}
+          />
+          <TextField
+            label={ta('city')}
+            optional
+            autoComplete="address-level2"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            error={errors.city}
+            maxLength={80}
+          />
+          <SelectField
+            label={ta('gender')}
+            optional
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            placeholder={ta('chooseOne')}
+            options={[
+              { value: 'MALE', label: ta('male') },
+              { value: 'FEMALE', label: ta('female') },
+            ]}
+            error={errors.gender}
           />
           <FormActions>
             <DialogClose asChild>

@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page, request } from '@playwright/test';
 
 /** Pages show the Natik loader for a moment while they are prepared; wait until it has gone. */
 export async function waitForPageReady(page: Page): Promise<void> {
@@ -68,6 +68,30 @@ export function newPhone(): string {
   return `9${String(Math.floor(Math.random() * 1e8)).padStart(8, '0')}`;
 }
 
+/** The email an e2e account uses, worked out from its phone number so both can be found from one. */
+export function emailFor(phone: string): string {
+  return `u${phone.replace(/\D/g, '')}@example.com`;
+}
+
+/** A new phone number together with the email to register it with. */
+export function newContact(): { phone: string; email: string } {
+  const phone = newPhone();
+  return { phone, email: emailFor(phone) };
+}
+
+/** Makes a student account through the API (not signed in anywhere) and returns how to sign in. */
+export async function createStudent(baseURL: string) {
+  const phone = newPhone();
+  const account = { phone, email: emailFor(phone), password: 'Passw0rd123' };
+  const api = await request.newContext({ baseURL });
+  const res = await api.post('/api/v1/auth/register', {
+    data: { fullName: 'E2E Visitor', ...account, acceptTerms: true, confirmAge: true },
+  });
+  expect(res.status(), await res.text()).toBe(201);
+  await api.dispose();
+  return account;
+}
+
 /** Signs in through the API (fast); the browser then keeps the session cookie. */
 export async function signInAs(
   page: Page,
@@ -107,4 +131,34 @@ export async function latestCode(page: Page, nationalPhone: string): Promise<str
 export async function typeCode(page: Page, code: string): Promise<void> {
   await page.getByRole('textbox', { name: 'Digit 1 of 6' }).focus();
   await page.keyboard.type(code);
+}
+
+/**
+ * The signed-in student asks to join a course, and an admin accepts them (every course needs an
+ * admin's approval; a paid course waits for its payment instead and is left as it is).
+ */
+export async function joinCourse(page: Page, courseIdOrSlug: string): Promise<void> {
+  // A slug (like "everyday-english") is looked up; an id is used as it is.
+  const courseId = courseIdOrSlug.includes('-')
+    ? (
+        (await (await page.request.get(`/api/v1/public/courses/${courseIdOrSlug}`)).json()) as {
+          id: string;
+        }
+      ).id
+    : courseIdOrSlug;
+  const asked = (await (await page.request.post(`/api/v1/courses/${courseId}/enrol`)).json()) as {
+    id: string;
+    status: string;
+  };
+  if (asked.status !== 'AWAITING_APPROVAL') return;
+  const admin = await request.newContext({
+    baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+  });
+  try {
+    expect((await admin.post('/api/v1/auth/sign-in', { data: SEED.owner })).ok()).toBe(true);
+    const accepted = await admin.post(`/api/v1/admin/enrolments/${asked.id}/approve`);
+    expect(accepted.ok(), await accepted.text()).toBe(true);
+  } finally {
+    await admin.dispose();
+  }
 }

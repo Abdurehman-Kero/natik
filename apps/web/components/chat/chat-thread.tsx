@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { PersonButton } from '@/components/people/person-card';
 import { toast } from '@/components/ui/toast';
 import { api, useErrorMessage } from '@/lib/api/client';
 import { dayKey, dayLabel } from '@/lib/chat/format';
@@ -236,15 +237,31 @@ export function ChatThread({
         </button>
         {header ? (
           <>
-            {header.team ? (
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                <UsersRound className="size-5" aria-hidden />
-              </span>
-            ) : (
-              <Avatar name={header.title} src={header.avatarUrl} decorative />
-            )}
+            {/* Tap the picture or the name to see who this is (not for the Natik team). */}
+            <PersonButton
+              id={header.personId}
+              name={header.title}
+              decorative
+              className="rounded-full"
+            >
+              {header.team ? (
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                  <UsersRound className="size-5" aria-hidden />
+                </span>
+              ) : (
+                <Avatar name={header.title} src={header.avatarUrl} decorative />
+              )}
+            </PersonButton>
             <div className="flex min-w-0 flex-1 flex-col leading-tight">
-              <h2 className="truncate font-sans text-base font-semibold">{header.title}</h2>
+              <h2 className="truncate font-sans text-base font-semibold">
+                <PersonButton
+                  id={header.personId}
+                  name={header.title}
+                  className="max-w-full truncate"
+                >
+                  {header.title}
+                </PersonButton>
+              </h2>
               <p className="text-sm text-muted">{header.subtitle}</p>
             </div>
             <DropdownMenu>

@@ -33,17 +33,31 @@ const LEVELS = [
 ];
 
 const DEV_USERS = [
-  { fullName: 'Ustaz Ahmed', phone: '+251911000001', password: 'Teacher2026', role: Role.TEACHER },
-  { fullName: 'Abdi Kedir', phone: '+251911000002', password: 'Student2026', role: Role.STUDENT },
+  {
+    fullName: 'Ustaz Ahmed',
+    phone: '+251911000001',
+    email: 'teacher@natik.test',
+    password: 'Teacher2026',
+    role: Role.TEACHER,
+  },
+  {
+    fullName: 'Abdi Kedir',
+    phone: '+251911000002',
+    email: 'student@natik.test',
+    password: 'Student2026',
+    role: Role.STUDENT,
+  },
   {
     fullName: 'Abdushakur Mohammed',
     phone: '+251911000003',
+    email: 'abdushakur@natik.test',
     password: 'Teacher2026',
     role: Role.TEACHER,
   },
   {
     fullName: 'Mohammed Ammin',
     phone: '+251911000004',
+    email: 'ammin@natik.test',
     password: 'Teacher2026',
     role: Role.TEACHER,
   },
@@ -70,19 +84,33 @@ function required(name: string): string {
 async function upsertUser(
   prisma: PrismaClient,
   branchId: string,
-  user: { fullName: string; phone: string; password: string; role: Role; isOwner?: boolean },
+  user: {
+    fullName: string;
+    phone: string;
+    email?: string;
+    password: string;
+    role: Role;
+    isOwner?: boolean;
+  },
 ): Promise<'created' | 'kept'> {
   if (!E164_ETHIOPIA_MOBILE.test(user.phone)) {
     throw new Error(`Phone ${user.phone} must look like +2519XXXXXXXX or +2517XXXXXXXX.`);
   }
   const existing = await prisma.user.findUnique({ where: { phone: user.phone } });
-  if (existing) return 'kept';
+  if (existing) {
+    // People sign in with their email: give an older sample account one if it has none yet.
+    if (!existing.email && user.email) {
+      await prisma.user.update({ where: { id: existing.id }, data: { email: user.email } });
+    }
+    return 'kept';
+  }
   const now = new Date();
   await prisma.user.create({
     data: {
       branchId,
       fullName: user.fullName,
       phone: user.phone,
+      email: user.email ?? null,
       passwordHash: await hashPassword(user.password),
       role: user.role,
       isOwner: user.isOwner ?? false,
@@ -538,9 +566,16 @@ async function main(): Promise<void> {
       });
     }
 
+    // The owner signs in with this email. Only local development may fall back to a sample address.
+    const ownerEmail =
+      process.env.SEED_OWNER_EMAIL?.trim().toLowerCase() ||
+      ((process.env.APP_ENV ?? 'local') === 'local'
+        ? 'owner@natik.test'
+        : required('SEED_OWNER_EMAIL'));
     const owner = await upsertUser(prisma, branch.id, {
       fullName: process.env.SEED_OWNER_NAME?.trim() || 'Natik Owner',
       phone: required('SEED_OWNER_PHONE'),
+      email: ownerEmail,
       password: required('SEED_OWNER_PASSWORD'),
       role: Role.ADMIN,
       isOwner: true,

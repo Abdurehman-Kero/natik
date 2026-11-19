@@ -52,7 +52,16 @@
       "browse": "Koorsoota barbaadi",
       "announcements": "Beeksisawwan",
       "payments": "Kaffaltii koo",
-      "chat": "Ergaawwan"
+      "chat": "Ergaawwan",
+      "courseGroups": "Gareewwan koorsii",
+      "explore": "Qorachuu",
+      "groupsShort": "Gareewwan",
+      "groupLearn": "Baradhu",
+      "groupAccount": "Herrega koo",
+      "menuTitle": "Menu kee",
+      "viewProfile": "Ibsa koo ilaali",
+      "howItWorks": "Kun akkamitti hojjata",
+      "tourHint": "Qajeelfama sekondii 30"
     },
     "teacher": {
       "dashboard": "Gabatee",
@@ -60,19 +69,58 @@
       "marking": "Sirreessuu",
       "announcements": "Beeksisawwan",
       "profile": "Piroofaayilii",
-      "chat": "Ergaawwan"
+      "chat": "Ergaawwan",
+      "courseGroups": "Gareewwan koorsii"
     },
     "signingOut": "Ba'aa jira",
     "areaAdmin": "Bulchaa",
     "areaTeacher": "Barsiisaa",
-    "viewSite": "Weebsaayitii ilaali"
+    "viewSite": "Weebsaayitii ilaali",
+    "admin": {
+      "groups": {
+        "overview": "Walumaagalaa",
+        "people": "Namoota",
+        "learning": "Barnoota",
+        "money": "Maallaqa",
+        "communication": "Walqunnamtii",
+        "website": "Marsariitii",
+        "insights": "Hubannoo",
+        "system": "Sirna"
+      },
+      "dashboard": "Gabatee",
+      "users": "Fayyadamtoota",
+      "enrolments": "Galmeewwan",
+      "courses": "Koorsoota",
+      "marking": "Madaallii",
+      "payments": "Kaffaltiiwwan mirkaneeffamuu qaban",
+      "announcements": "Beeksisoota",
+      "messages": "Ergaawwan",
+      "website": "Qabiyyee marsariitii",
+      "reports": "Gabaasawwan",
+      "activity": "Galmee sochii",
+      "settings": "Qindaa'inoota",
+      "certificates": "Sertifikeetiiwwan",
+      "chat": "Haasaawwan",
+      "courseGroups": "Gareewwan koorsii"
+    },
+    "quickNavigation": "Daandii saffisaa",
+    "staff": {
+      "home": "Mana",
+      "courses": "Koorsoota",
+      "marking": "Madaallii",
+      "groups": "Gareewwan",
+      "messages": "Ergaawwan",
+      "enrolments": "Galmeewwan",
+      "payments": "Kaffaltiiwwan",
+      "more": "Dabalata"
+    }
   },
   "footer": {
     "contactHeading": "Nu quunnamaa",
     "followHeading": "Nu hordofaa",
     "linksHeading": "Qorachuu",
     "legalHeading": "Hidhata barbaachisaa",
-    "tagline": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo barsiisota Naatiik wajjin baradhaa.",
+    "tagline": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo barsiisota Naaxiiq wajjin baradhaa.",
     "courses": "Koorsoota",
     "freeLessons": "Barnoota bilisaa",
     "about": "Waa'ee keenya",
@@ -85,21 +133,23 @@
     "register": "Herrega banadhu",
     "signIn": "Seeni",
     "noDetails": "Ergaa nuuf ergaa; dhiyootti deebii isiniif kennina.",
-    "copyright": "© {year} Wiirtuu Afaanii Naatiik",
+    "copyright": "© {year} Wiirtuu Afaanii Naaxiiq",
     "findLevel": "Sadarkaa kee beeki",
     "teachers": "Barsiisota",
     "help": "Wiirtuu gargaarsaa"
   },
   "brand": {
     "centre": "Wiirtuu Afaanii",
-    "fullName": "Wiirtuu Afaanii Naatiik",
+    "fullName": "Wiirtuu Afaanii Naaxiiq",
     "languages": "Arabiffa · Ingiliffa · Afaan Oromoo",
-    "homeLink": "Wiirtuu Afaanii Naatiik, mana",
-    "homeSuffix": ", mana"
+    "homeLink": "Wiirtuu Afaanii Naaxiiq, mana",
+    "homeSuffix": ", mana",
+    "name": "Naaxiiq",
+    "wordmark": "NATIK"
   },
   "support": {
     "title": "Waa'ee kaffaltii gaaffii qabduu?",
-    "text": "Gareen Naatiik gargaaruuf qophiidha; nuuf barreessaa.",
+    "text": "Gareen Naaxiiq gargaaruuf qophiidha; nuuf barreessaa.",
     "whatsapp": "WhatsApp",
     "telegram": "Telegram",
     "chat": "Haasaa"
@@ -142,9 +192,9 @@
     "unavailableText": "Maaloo koorsoota ilaalaa yookaan nu quunnamaa; filachuuf isin gargaarra."
   },
   "home": {
-    "heroEyebrow": "Wiirtuu Afaanii Naatiik",
+    "heroEyebrow": "Wiirtuu Afaanii Naaxiiq",
     "heroTitle": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo baradhu",
-    "heroSubtitle": "Barnoota ifa ta'e barsiisota Naatiik irraa. Bilbila keessanitti, saffisa keessaniin baradhaa.",
+    "heroSubtitle": "Barnoota ifa ta'e barsiisota Naaxiiq irraa. Bilbila keessanitti, saffisa keessaniin baradhaa.",
     "browseCourses": "Koorsoota barbaadi",
     "tryFreeLesson": "Barnoota bilisaa yaali",
     "trust": {
@@ -174,12 +224,12 @@
       }
     ],
     "payTitle": "Waa'ee kaffaltii gaaffii qabduu?",
-    "payText": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik WhatsApp, Telegram yookaan haasaa irratti gaafadhu; isin qajeelchina.",
-    "whyTitle": "Maaliif Naatiik",
+    "payText": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naaxiiq WhatsApp, Telegram yookaan haasaa irratti gaafadhu; isin qajeelchina.",
+    "whyTitle": "Maaliif Naaxiiq",
     "why": [
       {
         "title": "Afaan sadii, bakka tokko",
-        "text": "Koorsoonni Arabiffaa, Ingiliffaa fi Afaan Oromoo barsiisota Naatiik irraa."
+        "text": "Koorsoonni Arabiffaa, Ingiliffaa fi Afaan Oromoo barsiisota Naaxiiq irraa."
       },
       {
         "title": "Bilbilaaf kan hojjetame",
@@ -192,12 +242,20 @@
       {
         "title": "Waraqaa ragaa mirkaneeffamuu danda'u",
         "text": "Koorsii yeroo xumurtu nama kamiyyuu lakkoofsa isaatiin toora interneetiin mirkaneessuu danda'a."
+      },
+      {
+        "title": "Barnoota haaraa torban hunda",
+        "text": "Barnoonni waraabame, PDF fi suuraan barsiisaan kee akkuma dabaleen sii ga'a. Gonkumaa hin haftu."
+      },
+      {
+        "title": "Kutaa waliin itti baratan",
+        "text": "Koorsiin hundi akka kutaa dhugaa barsiisaa fi hiriyoota kutaa kee wajjin haasaa garee mataa isaa qaba."
       }
     ],
     "freeTitle": "Osoo hin galmaa'in yaali",
     "freeText": "Barnoota fakkeenyaa bilisaa bani. Herrega hin barbaachisu.",
     "freeCta": "Barnoota bilisaa ilaali",
-    "testimonialsTitle": "Barattoonni maal jedhu",
+    "testimonialsTitle": "Barattoonni keenya maal jedhu",
     "newsTitle": "Oduu dhiyoo",
     "allNews": "Oduu hunda",
     "faqTitle": "Gaaffii qabduu? Deebii qabna",
@@ -210,13 +268,22 @@
     "findLevel": "Eessaa jalqabuu akka qabdan hin beektuu? Sadarkaa kee beeki",
     "flowTitle": "Barnoonni akkamitti deema",
     "flow": [
-      { "title": "Ilaali", "text": "Viidiyoo gabaabaa yeroo hedduu deebi'ee ilaaluu dandeessan." },
-      { "title": "Qoradhu", "text": "Barnoota hundaaf suuraa, fakkeenya fi jechoota ijoo." },
+      {
+        "title": "Ilaali",
+        "text": "Viidiyoo gabaabaa yeroo hedduu deebi'ee ilaaluu dandeessan."
+      },
+      {
+        "title": "Qoradhu",
+        "text": "Barnoota hundaaf suuraa, fakkeenya fi jechoota ijoo."
+      },
       {
         "title": "Qormaata fudhadhu",
         "text": "Waan baratte ofii kee qori; bu'aa kee battaluma argadhu."
       },
-      { "title": "Waraqaa ragaa argadhu", "text": "Koorsii xumuradhu, waraqaa ragaa kee buusi." }
+      {
+        "title": "Waraqaa ragaa argadhu",
+        "text": "Koorsii xumuradhu, waraqaa ragaa kee buusi."
+      }
     ],
     "pathTitle": "Daandii kee jalqabaa hanga olaanaatti",
     "pathText": "Sadarkaa siif mijaa'e irraa jalqabi, yeroo qophooftu ol ba'i.",
@@ -228,37 +295,100 @@
     "statLessons": "Barnoota",
     "statLanguages": "Afaanota",
     "communityTitle": "Hawaasa keenyatti makamaa",
-    "communityText": "Oduu, gorsa bilisaa fi deebii saffisaa gareen Naatiik irraa argadhaa.",
+    "communityText": "Oduu, gorsa bilisaa fi deebii saffisaa gareen Naaxiiq irraa argadhaa.",
     "joinTelegram": "Chaanaalii Telegram keenyatti makamaa",
     "askWhatsapp": "WhatsApp irratti nu gaafadhaa",
-    "installTitle": "Naatiik bilbila keessan irratti dabalaa",
+    "installTitle": "Naaxiiq bilbila keessan irratti dabalaa",
     "installText": "Barnoota akka appii fuula jalqabaa bilbilaa irraa banaa.",
     "installCta": "Fuula jalqabaatti dabali",
     "findLevelButton": "Sadarkaa kee beeki",
     "openFreeLesson": "Barnoota bilisaa ilaali: {title}",
     "languagesEyebrow": "Afaanota",
     "exploreLanguage": "Koorsoota qoradhu",
-    "coursesEyebrow": "Koorsoota",
-    "coursesTitle": "Har'a barachuu jalqabi",
-    "coursesText": "Koorsoonni bilisaa battaluma ni banamu. Piremiyeemiif kaffaltii ji'aa waa'ee gareen Naatiik gaafadhu.",
+    "coursesEyebrow": "Waan gochuu dandeessu",
+    "coursesTitle": "Naaxiiq irratti waan gochuu dandeessu ilaali",
+    "coursesText": "Waltajjii tokko. Koorsoota bilisaa fi premiyeemii, fi barsiisota barattootaaf yaadan.",
     "tabFree": "Bilisa",
     "tabPremium": "Piremiyeemii",
     "seeAllFree": "Koorsoota bilisaa hunda ilaali",
     "seeAllPremium": "Koorsoota piremiyeemii hunda ilaali",
     "howEyebrow": "Jalqabuu",
     "freeEyebrow": "Barnoota bilisaa",
-    "whyEyebrow": "Maaliif Naatiik",
-    "testimonialsEyebrow": "Barattoota",
+    "whyEyebrow": "Maaliif Naaxiiq",
+    "testimonialsEyebrow": "Seenaa dhugaa",
     "newsEyebrow": "Oduu",
     "faqEyebrow": "Gaaffilee yeroo baay'ee gaafataman",
     "flowEyebrow": "Barnoota keessatti",
     "pathEyebrow": "Daandii kee",
     "teachersEyebrow": "Barsiisota",
     "communityEyebrow": "Hawaasa",
-    "sliderPrev": "Yaada kan duraa",
+    "sliderPrev": "Yaada duraa",
     "sliderNext": "Yaada itti aanu",
     "sliderPause": "Sararuu dhaabi",
-    "sliderPlay": "Sararuu eegali"
+    "sliderPlay": "Sararuu eegali",
+    "weeklyEyebrow": "Koorsiin akkamitti adeemsifama",
+    "weeklyTitle": "Torban torbaniin baradhu",
+    "weeklyText": "Koorsii makamuuf gaafadhu, gareen Naaxiiq si fudhata. Ergasii torban hundatti barnoonni haaraan barsiisaa kee wajjin ni dhufa.",
+    "weeklyPoints": [
+      "Torbaniif hanga barnoota 3, tokkoon tokkoon isaanii viidiyoodhaan waraabame",
+      "PDF, suuraa fi yaadannoon barnoota hundaa",
+      "Barnoonni haaraan akkuma dabalamuun si ga'a"
+    ],
+    "tabTeachers": "Barsiisota",
+    "testimonialsText": "Seenaa dhugaa hawaasa keenya irraa.",
+    "sliderDot": "Yaada {n} kan {total} agarsiisi",
+    "audience": {
+      "eyebrow": "Waltajjii tokko nama hundaaf",
+      "title": "Naaxiiq irratti iddoo kee argadhu",
+      "cards": [
+        {
+          "label": "Barattoota haaraaf",
+          "title": "Eessaa akka jalqabdu hin beektuu? Ni gargaarra",
+          "stat": "afaanota",
+          "points": [
+            "Qormaata sadarkaa bilisaa, herrega hin barbaachisu",
+            "Koorsoota jalqabaa irraa hanga olaanaatti",
+            "Utuu hin makamin naannoo kee ilaali"
+          ],
+          "cta": "Sadarkaa kee beeki"
+        },
+        {
+          "label": "Barattootaaf",
+          "title": "Torban hunda barsiisaa si beekuun baradhu",
+          "stat": "koorsoota",
+          "points": [
+            "Barnoota torban hunda viidiyoo, PDF fi suuraa waliin",
+            "Haasaa garee kutaa kee wajjin",
+            "Sertifikeetii nama kamiyyuu mirkaneessuu danda'u"
+          ],
+          "cta": "Barachuu jalqabi"
+        },
+        {
+          "label": "Barsiisotaaf",
+          "title": "Akka feetetti barsiisi, kaan nuti ni geggeessina",
+          "stat": "barsiisota",
+          "points": [
+            "Torban hunda barnoota, suuraa fi yaadannoo dabali",
+            "Barattoota kee wajjin garee isaanii keessatti haasa'i",
+            "Qormaata sirreessi, yaada kenni"
+          ],
+          "cta": "Naaxiiq waliin barsiisi"
+        },
+        {
+          "label": "Nama hundaaf",
+          "title": "Gaaffii qabduu? Gareen Naaxiiq ergaa tokko fagoo miti",
+          "stat": "barnoota",
+          "points": [
+            "WhatsApp, Telegram fi haasaa irratti deebii argadhu",
+            "Kaffaltii fi makamuu irratti gargaarsa",
+            "Sertifikeetii kamiyyuu toora interneetiin mirkaneessi"
+          ],
+          "cta": "Deebii dubbisi"
+        }
+      ]
+    },
+    "statsEyebrow": "Naaxiiq lakkoofsaan",
+    "statsTitle": "Hawaasa barnootaa kan guddachaa jiru"
   },
   "courses": {
     "title": "Koorsoota",
@@ -303,60 +433,115 @@
     "freeGroupTitle": "Koorsoota bilisaa",
     "freeGroupText": "Battaluma ni banamu. Herrega banaatii har'a barachuu jalqabi.",
     "premiumGroupTitle": "Koorsoota piremiyeemii",
-    "premiumGroupText": "Ji'aan ji'aan kaffalama. Waa'ee kaffaltii gareen Naatiik WhatsApp, Telegram yookaan haasaa irratti gaafadhu.",
+    "premiumGroupText": "Ji'aan ji'aan kaffalama. Waa'ee kaffaltii gareen Naaxiiq WhatsApp, Telegram yookaan haasaa irratti gaafadhu.",
     "kindNav": "Gosa koorsii",
     "priceOnRequest": "Bal'inaan gaafadhu",
     "premiumCourse": "Koorsii piremiyeemii",
     "payQuestionTitle": "Waa'ee kaffaltii gaaffii qabduu?",
-    "payQuestionText": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik gaafadhu; isin qajeelchina.",
-    "clearFilters": "Calleessaa balleessi"
+    "payQuestionText": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naaxiiq gaafadhu; isin qajeelchina.",
+    "clearFilters": "Calleessaa balleessi",
+    "weekN": "Torban {n}",
+    "sessionN": "Barnoota {n}",
+    "sessionsCount": "{count, plural, one {barnoota #} other {barnoota #}}",
+    "weeksAndSessions": "{weeks, plural, one {torban #} other {torban #}} · {sessions, plural, one {barnoota #} other {barnoota #}}",
+    "weeklyNote": "Barnoonni haaraan torban hundatti ni dabalama.",
+    "membersOnly": "Viidiyoon, PDF fi suuraan kan banamu erga makamtee gareen Naaxiiq si fudhatee booda.",
+    "searchPlaceholder": "Koorsii, afaan ykn sadarkaa barbaadi",
+    "filters": "Calaqqisiisa",
+    "filtersTitle": "Koorsoota calaqqisi",
+    "priceFilter": "Gatii",
+    "priceMin": "Xiqqaa",
+    "priceMax": "Olaanaa",
+    "priceUnder": "ETB {max} gadi",
+    "priceBetween": "ETB {min} hanga {max}",
+    "priceOver": "ETB {min} fi isaa ol",
+    "showResults": "{count, plural, one {Koorsii # agarsiisi} other {Koorsoota # agarsiisi}}",
+    "viewCourse": "Koorsicha ilaali",
+    "levelLabel": "Sadarkaa: {level}",
+    "searchCourses": "Koorsoota barbaadi…",
+    "view": "Ilaali",
+    "tabOverview": "Walumaagalaa",
+    "tabContent": "Qabiyyee",
+    "tabInstructor": "Barsiisaa",
+    "includesTitle": "Koorsiin kun kan of keessaa qabu",
+    "includeDuration": "Turtii",
+    "includeSessions": "Barnoota",
+    "includeCertificate": "Xumuruun sertifikeetii",
+    "includeAccess": "Seensa",
+    "includeLanguage": "Afaan",
+    "includeLevel": "Sadarkaa",
+    "includeDevices": "Bilbilaa fi kompiitaraan",
+    "includeGroup": "Haasaa garee koorsii",
+    "shareTitle": "Koorsii kana qoodi",
+    "share": "Qoodi",
+    "showMore": "Dabalata agarsiisi",
+    "showLess": "Xiqqeessi agarsiisi",
+    "howTitle": "Asitti akkamitti hojjata",
+    "howSteps": [
+      "Koorsii kana makamuuf gaafadhu",
+      "Gareen Naaxiiq si fudhata",
+      "Torban hunda baradhu, garee kee wajjin haasa'i"
+    ],
+    "contentCount": "{weeks, plural, one {torban #} other {torban #}} · {sessions, plural, one {barnoota #} other {barnoota #}}",
+    "instructorTitle": "Barsiisaa",
+    "similarTitle": "Koorsoota walfakkaatan",
+    "previous": "Duraa",
+    "next": "Itti aanu"
   },
   "help": {
     "title": "Wiirtuu gargaarsaa",
-    "subtitle": "Naatiik wajjin barachuuf deebii saffisaa fi qajeelfama tarkaanfii tarkaanfiidhaan.",
+    "subtitle": "Naaxiiq wajjin barachuuf deebii saffisaa fi qajeelfama tarkaanfii tarkaanfiidhaan.",
     "startEyebrow": "Asii jalqabi",
     "startTitle": "Maaliin gargaarsa barbaaddu?",
     "startText": "Mata duree tokko filadhu; gara iddoo sirrii si geessina.",
     "topics": [
       {
         "title": "Herrega banadhu",
-        "text": "Maqaa kee, lakkoofsa bilbilaa fi jecha icciitii. Daqiiqaa tokko qofa fudhata.",
-        "cta": "Herrega banadhu"
+        "text": "Maqaa kee, imeelii, lakkoofsa bilbilaa fi jecha icciitii. Daqiiqaa tokko qofa fudhata.",
+        "cta": "Herrega banadhu",
+        "href": "/register"
       },
       {
         "title": "Barnoota bilisaa yaali",
         "text": "Herrega malee barnoota fakkeenyaa bani.",
-        "cta": "Barnoota bilisaa ilaali"
+        "cta": "Barnoota bilisaa ilaali",
+        "href": "/courses"
       },
       {
         "title": "Koorsii filadhu",
         "text": "Afaan fi sadarkaa hunda keessatti koorsoota bilisaa fi piremiyeemii.",
-        "cta": "Koorsoota barbaadi"
+        "cta": "Koorsoota barbaadi",
+        "href": "/courses"
       },
       {
         "title": "Sadarkaa kee hin beektuu?",
         "text": "Gaaffilee muraasa deebisi; eessaa jalqabuu akka qabdu sitti agarsiifna.",
-        "cta": "Sadarkaa kee beeki"
+        "cta": "Sadarkaa kee beeki",
+        "href": "/find-your-level"
       },
       {
         "title": "Waraqaa ragaa mirkaneessi",
         "text": "Dhugaa ta'uu isaa ilaaluuf lakkoofsa waraqaa ragaa galchi.",
-        "cta": "Waraqaa ragaa mirkaneessi"
+        "cta": "Waraqaa ragaa mirkaneessi",
+        "href": "/verify"
       },
       {
         "title": "Jecha icciitii irraanfatteettaa?",
         "text": "Haaraa kaa'uuf ergaa barreeffamaa siif ergina.",
-        "cta": "Jecha icciitii jijjiiri"
+        "cta": "Jecha icciitii jijjiiri",
+        "href": "/forgot-password"
       },
       {
         "title": "Gaaffilee kaffaltii",
-        "text": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik gaafadhu.",
-        "cta": "Nu quunnamaa"
+        "text": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naaxiiq gaafadhu.",
+        "cta": "Nu quunnamaa",
+        "href": "/contact"
       },
       {
         "title": "Bilbila irratti barachuu",
-        "text": "Naatiik fuula jalqabaa bilbilaa irratti dabali, bakka kamittuu bari.",
-        "cta": "Gaaffilee dubbisi"
+        "text": "Naaxiiq fuula jalqabaa bilbilaa irratti dabali, bakka kamittuu bari.",
+        "cta": "Gaaffilee dubbisi",
+        "href": "/faq"
       }
     ],
     "guidesEyebrow": "Qajeelfama",
@@ -364,7 +549,7 @@
     "guides": [
       {
         "q": "Akkamitti galmaa'a?",
-        "a": "Galmaa'i cuqaasi, maqaa kee, lakkoofsa bilbilaa fi jecha icciitii galchi, haala fayyadamaa fudhadhu, achiis herrega banadhu cuqaasi. Battaluma ni seenta."
+        "a": "Galmaa'i cuqaasi, maqaa kee, imeelii, lakkoofsa bilbilaa fi jecha icciitii galchi, haala fayyadamaa fudhadhu, achiis herrega banadhu cuqaasi. Battaluma ni seenta."
       },
       {
         "q": "Koorsii bilisaa akkamitti jalqaba?",
@@ -372,7 +557,7 @@
       },
       {
         "q": "Koorsii piremiyeemii akkamitti makama?",
-        "a": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naatiik WhatsApp, Telegram yookaan haasaa weebsaayitii kana irratti barreessi. Kaffaltii ibsu, koorsii kees baniif."
+        "a": "Koorsoonni piremiyeemii ji'aan ji'aan kaffalamu. Gareen Naaxiiq WhatsApp, Telegram yookaan haasaa weebsaayitii kana irratti barreessi. Kaffaltii ibsu, koorsii kees baniif."
       },
       {
         "q": "Barnoonni, suuraan fi qormaanni akkamitti hojjata?",
@@ -384,18 +569,1377 @@
       },
       {
         "q": "Jecha icciitii koo irraanfadheera. Maal gochuu qaba?",
-        "a": "Seeni cuqaasi, achii Jecha icciitii irraanfadheera cuqaasi. Lakkoofsa bilbilaa kee galchi; jecha icciitii haaraa filachuuf ergaa barreeffamaa sitti ergina."
+        "a": "Seeni cuqaasi, achii Jecha icciitii irraanfadheera cuqaasi. Imeelii kee galchi; jecha icciitii haaraa filachuuf lakkoofsa bilbilaa herrega kee irratti ergaa barreeffamaa koodii sitti ergina."
       },
       {
-        "q": "Barsiisaa koo yookaan gareen Naatiik akkamitti quunnama?",
+        "q": "Barsiisaa koo yookaan gareen Naaxiiq akkamitti quunnama?",
         "a": "Kutaa barataa kee keessatti Ergaawwan bani, haasaa jalqabi. Barreeffama, suuraa, faayilii fi ergaa sagalee erguu dandeessa."
       },
       {
-        "q": "Naatiik bilbila kootti akkamitti fayyadama?",
-        "a": "Naatiik biraawuzara bilbila kee irratti ni hojjata. Chrome yookaan Safari keessatti Fuula jalqabaatti dabali fayyadamuun akka appii eegi."
+        "q": "Naaxiiq bilbila kootti akkamitti fayyadama?",
+        "a": "Naaxiiq biraawuzara bilbila kee irratti ni hojjata. Chrome yookaan Safari keessatti Fuula jalqabaatti dabali fayyadamuun akka appii eegi."
       }
     ],
     "supportTitle": "Ammayyuu gargaarsa barbaaddu?",
     "supportText": "Gareen keenya gargaaruuf gammachuun qophiidha. WhatsApp, Telegram yookaan haasaa irratti nuuf barreessaa."
+  },
+  "site": {
+    "nav": {
+      "courses": "Koorsoota",
+      "level": "Sadarkaa kee beeki",
+      "teachers": "Barsiisota",
+      "about": "Waa'ee keenya",
+      "help": "Gargaarsa",
+      "more": "Gargaarsaa fi kan biroo",
+      "news": "Oduu",
+      "faq": "Gaaffii fi deebii",
+      "helpCentre": "Wiirtuu gargaarsaa",
+      "contact": "Gareedhaaf ergaa ergi",
+      "verify": "Sertifikeetii mirkaneessi",
+      "home": "Mana",
+      "menuHint": "Waan hundi Naaxiiq irratti",
+      "breadcrumb": "Asitti jirta"
+    },
+    "header": {
+      "search": "Barbaadi",
+      "searchLabel": "Koorsoota barbaadi",
+      "tour": "Daawwannaa godhi",
+      "join": "Bilisaan makamaa",
+      "signIn": "Seeni"
+    },
+    "search": {
+      "title": "Koorsoota barbaadi",
+      "placeholder": "Koorsii, afaan ykn sadarkaa barbaadi",
+      "empty": "Koorsiin “{query}” waliin walsimu hin jiru.",
+      "emptyHint": "Jecha biraa yaali, ykn koorsoota hunda ilaali.",
+      "all": "Koorsoota hunda ilaali",
+      "popular": "Koorsoota beekamoo",
+      "quick": "Hidhata saffisaa",
+      "tip": "Fuula kamirraayyuu barbaaduuf / tuqi",
+      "count": "{count, plural, one {koorsii #} other {koorsoota #}}",
+      "free": "Bilisa",
+      "premium": "Premiyeemii",
+      "loading": "Koorsoonni fe'amaa jiru…",
+      "failed": "Koorsoonni fe'amuu hin dandeenye. Maaloo irra deebi'ii yaali."
+    },
+    "auth": {
+      "signInTitle": "Baga nagaan deebitan",
+      "signInText": "Barnoota keessan itti fufuuf seenaa.",
+      "registerTitle": "Herrega bilisaa kee banadhu",
+      "registerText": "Daqiiqaa tokko qofa fudhata. Ergasii koorsii kamiyyuu makamuuf gaafadhu.",
+      "signInTab": "Seeni",
+      "registerTab": "Galmaa'i",
+      "switchLabel": "Seenaa ykn galmaa'aa",
+      "welcomeBack": "Baga nagaan dhuftan!",
+      "welcomeNew": "Herregni keessan qophaa'eera. Baga gara Naaxiiq dhuftan!"
+    },
+    "tour": {
+      "offerTitle": "Naaxiiq irratti haaraadhaa?",
+      "offerText": "Akka barnoonni asitti hojjatu daawwannaa sekondii 30 godhi.",
+      "offerStart": "Natti agarsiisi",
+      "offerSkip": "Hin barbaadu, galatoomi",
+      "step": "Tarkaanfii {n} kan {total}",
+      "next": "Itti fufi",
+      "back": "Duubatti",
+      "done": "Xumuri",
+      "skip": "Daawwannaa irra darbi",
+      "close": "Daawwannaa cufi",
+      "steps": {
+        "welcome": {
+          "title": "Baga nagaan gara Naaxiiq dhuftan",
+          "text": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo barsiisota Naaxiiq wajjin baradhaa. Akkamitti akka fayyadamtan asii ilaalaa."
+        },
+        "browse": {
+          "title": "Koorsii kee argadhu",
+          "text": "Koorsoonni, barsiisonni, qormaanni sadarkaa fi gargaarsi hundi menu kana keessa jiru."
+        },
+        "search": {
+          "title": "Tuqaa tokkoon barbaadi",
+          "text": "Koorsii, afaan ykn sadarkaa barreessiitii battalumatti bani."
+        },
+        "language": {
+          "title": "Afaan kee",
+          "text": "Marsariitii guutuu Ingiliffaa, Amaaraa, Afaan Oromoo ykn Somaaliyatti yeroo kamiyyuu jijjiiri."
+        },
+        "account": {
+          "title": "Herrega kee",
+          "text": "Bilisaan galmaa'i, ykn bakka dhaabbatte irraa itti fufuuf seeni."
+        },
+        "journey": {
+          "title": "Barnoonni akkamitti hojjata",
+          "text": "Tarkaanfii salphaa afur, tuqaa jalqabaa irraa hanga sertifikeetii keetii."
+        }
+      },
+      "journey": [
+        "Koorsii makamuuf gaafadhu",
+        "Gareen Naaxiiq si fudhata",
+        "Torban torbaniin baradhu, hiriyoota kee wajjin haasa'i",
+        "Xumuri, sertifikeetii kee fudhadhu"
+      ],
+      "createAccount": "Herrega bilisaa banadhu",
+      "browseCourses": "Koorsoota barbaadi",
+      "restartHint": "Daawwannaa kana yeroo kamiyyuu button gargaarsaa irraa irra deebi'ii goochuu ni dandeessa.",
+      "studentOfferTitle": "Asitti yeroo jalqabaa?",
+      "studentOfferText": "Iddoo barnootaa kee daawwannaa sekondii 30 godhi."
+    },
+    "message": {
+      "title": "Gareedhaaf ergaa ergi",
+      "text": "Waan feetu nu gaafadhu. Bilbilaan ykn ergaan deebisna."
+    },
+    "flow": {
+      "levelTitle": "Eessaa akka jalqabdu hin beektuu?",
+      "levelText": "Gaaffii muraasa deebisi, sadarkaa kee si agarsiisna.",
+      "levelCta": "Sadarkaa kee beeki",
+      "joinTitle": "Barachuuf qophiidhaa?",
+      "joinText": "Herrega bilisaa banadhu, ergasii koorsii feetu makamuuf gaafadhu.",
+      "joinCta": "Herrega bilisaa banadhu",
+      "questionTitle": "Ammallee gaaffii qabduu?",
+      "questionText": "Gareen Naaxiiq gargaaruuf gammachuudhaan qophiidha.",
+      "questionCta": "Gareedhaaf ergaa ergi",
+      "next": "Tarkaanfii itti aanu"
+    },
+    "course": {
+      "stickyFree": "Koorsii bilisaa",
+      "askQuestion": "Gaaffii gaafadhu",
+      "share": "Qoodi",
+      "shared": "Hidhatni waraabameera",
+      "jump": {
+        "about": "Waa'ee koorsii",
+        "outline": "Ibsa",
+        "teacher": "Barsiisaa"
+      },
+      "joinBar": "Koorsii kana makami"
+    },
+    "hero": {
+      "searchPlaceholder": "Koorsii, afaan ykn sadarkaa barbaadi",
+      "chipsLabel": "Afaan beekamoo",
+      "trusted": "{count, plural, one {Barataan # amma barachaa jira} other {Barattoonni # amma barachaa jiru}}, makami",
+      "searchCta": "Barbaadi"
+    },
+    "journey": {
+      "eyebrow": "Tuqaa jalqabaa irraa hanga sertifikeetii",
+      "title": "Akkamitti hojjata",
+      "steps": [
+        {
+          "title": "Herrega kee banadhu",
+          "text": "Maqaan kee, bilbilli fi jecha icciitii. Daqiiqaa tokko qofa fudhata."
+        },
+        {
+          "title": "Koorsii makamuuf gaafadhu",
+          "text": "Koorsii filadhu. Gareen Naaxiiq si fudhata, koorsoota premiyeemiitiif immoo kaffaltii kee mirkaneessa."
+        },
+        {
+          "title": "Torban hunda baradhu",
+          "text": "Yeroon waraabame haaraan, PDF fi suuraan torban hunda ni dhufa. Gareen kee fi barsiisaa wajjin haasa'i."
+        },
+        {
+          "title": "Sertifikeetii kee argadhu",
+          "text": "Koorsicha xumuri, maqaa kee mirkaneessi, sertifikeetii nama kamiyyuu mirkaneessuu danda'u fudhadhu."
+        }
+      ]
+    },
+    "footer": {
+      "quick": "Gargaarsa saffisaa",
+      "tour": "Daawwannaa godhi",
+      "message": "Gareedhaaf ergaa ergi",
+      "verify": "Sertifikeetii mirkaneessi",
+      "level": "Sadarkaa kee beeki",
+      "sitemap": "Kaartaa fuulaa",
+      "legal": "Seeraa"
+    },
+    "next": {
+      "title": "Itti aanee maal gochuu barbaaddu?",
+      "level": {
+        "title": "Sadarkaa kee beeki",
+        "text": "Gaaffii muraasa deebisi, eessaa jalqabuu akka qabdu si agarsiisna."
+      },
+      "courses": {
+        "title": "Koorsoota barbaadi",
+        "text": "Koorsoota bilisaa fi premiyeemii afaan sadiin."
+      },
+      "join": {
+        "title": "Herrega bilisaa banadhu",
+        "text": "Ergasii koorsii feetu makamuuf gaafadhu."
+      },
+      "message": {
+        "title": "Gareedhaaf ergaa ergi",
+        "text": "Waa'ee koorsoota, kaffaltii ykn waan biraa gaafadhu."
+      },
+      "tour": {
+        "title": "Daawwannaa godhi",
+        "text": "Akka barnoonni asitti hojjatu sekondii 30 keessatti ilaali."
+      },
+      "teachers": {
+        "title": "Barsiisota beeki",
+        "text": "Namoota si barsiisan."
+      }
+    },
+    "studentTour": {
+      "steps": {
+        "welcome": {
+          "title": "Baga nagaan gara iddoo barnootaa keessanii dhuftan",
+          "text": "Waan koorsoota keessaniif barbaachisu hundi iddoo tokkotti. Eessatti akka argamu asii ilaalaa."
+        },
+        "menu": {
+          "title": "Menu kee",
+          "text": "Koorsoota, garee, ergaa, kaffaltii fi sertifikeetii fuula hunda banuuf yeroo kamiyyuu asitti tuqi."
+        },
+        "tabs": {
+          "title": "Gabatee saffisaa",
+          "text": "Tuqaa tokkoon mana, koorsoota, garee fi ergaawwan gidduutti darbi."
+        },
+        "bell": {
+          "title": "Oduu barsiisota keessanii",
+          "text": "Beeksisni haaraan asitti tuqaa xiqqoodhaan mul'ata."
+        },
+        "account": {
+          "title": "Herrega kee",
+          "text": "Maqaa, suuraa ykn jecha icciitii kee jijjiiri, ykn ba'i."
+        },
+        "finish": {
+          "title": "Barachuuf qophiidhaa?",
+          "text": "Tarkaanfii sadii fi seentee."
+        }
+      },
+      "list": [
+        "Barbaadi banii koorsii filadhu",
+        "Makamuuf gaafadhu. Gareen Naaxiiq si fudhata",
+        "Torban hunda baradhu, garee kee wajjin haasa'i"
+      ],
+      "browse": "Koorsoota barbaadi"
+    },
+    "bottom": {
+      "label": "Daandii saffisaa"
+    }
+  },
+  "meta": {
+    "siteName": "Wiirtuu Afaanii Naaxiiq",
+    "title": "Wiirtuu Afaanii Naaxiiq",
+    "description": "Afaan Arabaa, Ingiliffaa fi Afaan Oromoo barsiisota Naaxiiq wajjin toora interneetiin ykn kutaa keessatti baradhaa."
+  },
+  "account": {
+    "signInTitle": "Baga nagaan dhuftan",
+    "registerTitle": "Herrega kee banadhu",
+    "soonText": "Kun fooyya'iinsa itti aanu keessatti ni banama.",
+    "backHome": "Gara maaniitti deebi'i"
+  },
+  "placeholder": {
+    "studentTitle": "Akkam jirta",
+    "studentText": "Koorsoonni fi adeemsi kee asitti mul'ata.",
+    "teacherTitle": "Gabatee barsiisaa",
+    "teacherText": "Koorsoonni fi madaallii kee asitti mul'ata.",
+    "adminTitle": "Gabatee bulchaa",
+    "adminText": "Barattoonni, kaffaltiiwwan fi ergaawwan asitti mul'atu."
+  },
+  "notFound": {
+    "title": "Fuulli hin argamne",
+    "text": "Karaa kee irra si deebisna.",
+    "home": "Gara mana deebi'i",
+    "contact": "Nu quunnamaa"
+  },
+  "errorPage": {
+    "title": "Wanti tokko dogoggoreera",
+    "text": "Maaloo irra deebi'ii yaali. Yoo itti fufe nu quunnamaa.",
+    "tryAgain": "Irra deebi'ii yaali",
+    "home": "Gara mana deebi'i"
+  },
+  "status": {
+    "enrolment": {
+      "AWAITING_PAYMENT": "Kaffaltiin barbaachisa",
+      "PAYMENT_SUBMITTED": "Kaffaltiin ilaalamaa jira",
+      "ACTIVE": "Hojii irra",
+      "COMPLETED": "Xumurameera",
+      "EXPIRED": "Yeroon isaa darbeera",
+      "CANCELLED": "Haqameera",
+      "AWAITING_APPROVAL": "Mirkaneessuu eeggachaa jira"
+    },
+    "payment": {
+      "SUBMITTED": "Ilaalamaa jira",
+      "CONFIRMED": "Mirkanaa'eera",
+      "REJECTED": "Didameera"
+    },
+    "content": {
+      "DRAFT": "Shaakala",
+      "PUBLISHED": "Maxxanfameera",
+      "HIDDEN": "Dhoksameera"
+    },
+    "quiz": {
+      "passed": "Darbeera",
+      "failed": "Hin darbine",
+      "waiting": "Madaallii eeggachaa jira"
+    }
+  },
+  "table": {
+    "empty": "Asitti homtuu hin jiru",
+    "actions": "Tarkaanfiiwwan",
+    "rowActions": "Tarkaanfiiwwan {name}"
+  },
+  "pagination": {
+    "label": "Fuula jijjiirraa",
+    "previous": "Fuula duraa",
+    "next": "Fuula itti aanu",
+    "page": "Fuula {page}",
+    "summary": "Fuula {page} kan {total}"
+  },
+  "progress": {
+    "complete": "{value}% xumurameera"
+  },
+  "stepper": {
+    "label": "Adeemsa",
+    "summary": "Tarkaanfii {current} kan {total}",
+    "done": "Xumurameera"
+  },
+  "dialog": {
+    "reasonLabel": "Sababa",
+    "reasonRequired": "Maaloo sababa kenni."
+  },
+  "offline": {
+    "quiz": "Toora interneetii hin qabdu. Deebiin kee kuufameera, yeroo walqunnamtu ni ergama."
+  },
+  "news": {
+    "title": "Oduu",
+    "subtitle": "Beeksisoota Wiirtuu Afaanii Naaxiiq irraa.",
+    "emptyTitle": "Ammaaf oduun hin jiru",
+    "emptyText": "Odeeffannoo fi beeksisoota haaraaf dhiyootti deebi'ii ilaali.",
+    "published": "Maxxanfame {date}"
+  },
+  "verify": {
+    "title": "Sertifikeetii mirkaneessi",
+    "subtitle": "Sertifikeetiin Naaxiiq dhugaa ta'uu isaa mirkaneessi.",
+    "label": "Lakkoofsa sertifikeetii",
+    "hint": "NLC-2026-00042 fakkaata.",
+    "cta": "Mirkaneessi",
+    "valid": "Sertifikeetii seera qabeessa",
+    "cancelled": "Sertifikeetiin kun haqameera.",
+    "notFound": "Lakkoofsa kana argachuu hin dandeenye. Mirkaneeffadhuutii irra deebi'ii yaali.",
+    "name": "Kan kenname",
+    "course": "Koorsii",
+    "date": "Kan xumurame",
+    "how": "Sertifikeetiin hundi lakkoofsa addaa qaba. Eenyuuf fi koorsii kamiif akka kennames ilaaluuf galchi."
+  },
+  "noAccess": {
+    "title": "Kana banuu hin dandeessu",
+    "text": "Kan nama biraa ta'uu danda'a, ykn haquu danda'a. Duubatti deebi'ii tarree ofii keessaa filadhu."
+  },
+  "courseButton": {
+    "enrolFree": "Makamuuf gaafadhu",
+    "payAndEnrol": "Kaffaluun galmaa'i",
+    "paymentUnderReview": "Kaffaltiin ilaalamaa jira",
+    "continueLearning": "Barachuu itti fufi",
+    "renewAccess": "Seensa haaromsi",
+    "openEditor": "Gulaalaa bani",
+    "enrolled": "Galmaa'ameetta. Barnoota gaarii!",
+    "renewed": "Seensi kee deebi'ee banameera.",
+    "checking": "Koorsii kee mirkaneessaa jira…",
+    "requestToJoin": "Makamuuf gaafadhu",
+    "requestSent": "Gaaffiin ergameera. Gareen Naaxiiq dhiyootti si fudhata.",
+    "waitingApproval": "Mirkaneessuu eeggachaa jira",
+    "waitingApprovalHint": "Gareen Naaxiiq gaaffii hunda ilaala. Yeroo fudhatamtu ergaa gabaabaa ni argatta."
+  },
+  "blocked": {
+    "NOT_ENROLLED": {
+      "title": "Ammallee hin galmaa'in",
+      "text": "Koorsii kana keessatti ammallee hin galmaa'in."
+    },
+    "AWAITING_PAYMENT": {
+      "title": "Kaffaltiin barbaachisa",
+      "text": "Koorsii kana banuuf kaffaltii kee xumuri.",
+      "button": "Kaffaltii itti fufi"
+    },
+    "PAYMENT_UNDER_REVIEW": {
+      "title": "Kaffaltiin ilaalamaa jira",
+      "text": "Kaffaltiin kee ilaalamaa jira. Yeroo seensi kee qophaa'u ergaa gabaabaa ni argatta.",
+      "button": "Gara gabateetti deebi'i"
+    },
+    "EXPIRED": {
+      "title": "Seensi kee xumurameera",
+      "text": "Seensi kee {date} xumurameera. Barachuu itti fufuuf haaromsi.",
+      "textNoDate": "Seensi koorsii kanaa xumurameera. Barachuu itti fufuuf haaromsi."
+    },
+    "CANCELLED": {
+      "title": "Galmeen haqameera",
+      "text": "Galmeen kun haqameera.",
+      "button": "Nu quunnamaa"
+    },
+    "viewCourse": "Koorsicha ilaali",
+    "AWAITING_APPROVAL": {
+      "title": "Mirkaneessuu eeggachaa jira",
+      "text": "Gareen Naaxiiq gaaffii makamuu hunda ilaala. Akkuma fudhatamtee ergaa gabaabaa ni argatta.",
+      "button": "Gara gabatee kootti deebi'i"
+    }
+  },
+  "studentHome": {
+    "title": "Mana",
+    "greeting": "Akkam, {name}",
+    "continueTitle": "Barachuu itti fufi",
+    "lessonLine": "{course} · {lesson}",
+    "continueButton": "Itti fufi",
+    "myCourses": "Koorsoota koo",
+    "seeAll": "Hunda ilaali",
+    "news": "Oduu",
+    "newCount": "{count, plural, one {# haaraa} other {# haaraa}}",
+    "noNews": "Ammaaf oduun hin jiru.",
+    "emptyTitle": "Ammaaf koorsiin hin jiru",
+    "emptyText": "Jalqabuuf tokko filadhu.",
+    "browse": "Koorsoota barbaadi",
+    "tryFree": "Barnoota bilisaa yaali",
+    "certificates": "Sertifikeetiiwwan",
+    "certificatesText": "Sertifikeetiiwwan kee asitti mul'atu.",
+    "results": "Bu'aa dhiyoo",
+    "resultsText": "Bu'aan qormaata kee asitti mul'ata.",
+    "resultPassed": "Darbeera",
+    "resultNotPassed": "Hin darbine",
+    "resultWaiting": "Madaallii eeggachaa jira",
+    "certificateReadyTitle": "Sertifikeetiin kee dhiyaatee jira",
+    "certificateReadyText": "{course} xumurteerta. Maqaa sertifikeetii kee irratti maxxanfamu mirkaneessi.",
+    "certificateReadyButton": "Maqaa koo mirkaneessi",
+    "newSessionsTitle": "Barnoota haaraa",
+    "new": "Haaraa",
+    "start": {
+      "title": "Haa jalqabnu",
+      "text": "Tarkaanfii salphaa sadii. Ni qajeelchina.",
+      "steps": [
+        {
+          "title": "Koorsii filadhu",
+          "text": "Koorsoota bilisaa fi premiyeemii ilaali.",
+          "cta": "Koorsoota barbaadi"
+        },
+        {
+          "title": "Makamuuf gaafadhu",
+          "text": "Koorsii irratti “Makamuuf gaafadhu” tuqi. Gareen Naaxiiq si fudhata, ergaas si erginna."
+        },
+        {
+          "title": "Baradhuutii haasa'i",
+          "text": "Barnoonni haaraan torban hundatti ni dhufa. Garee koorsii keessanii keessatti gaaffii gaafadhu."
+        }
+      ],
+      "tour": "Naannessiitii natti agarsiisi"
+    }
+  },
+  "myCourses": {
+    "title": "Koorsoota koo",
+    "active": "Hojii irra",
+    "completed": "Kanneen xumuraman",
+    "other": "Kan biroo",
+    "emptyActive": "Koorsiin hojii irra hin jiru",
+    "emptyCompleted": "Ammaaf koorsiin xumurame hin jiru",
+    "emptyOther": "Asitti homtuu hin jiru",
+    "emptyText": "Koorsoonni jalqabdu asitti mul'atu.",
+    "endsOn": "Hanga {date} banaadha",
+    "endedOn": "{date} xumurameera",
+    "browse": "Koorsoota barbaadi",
+    "progress": "{value}% xumurameera"
+  },
+  "teachersPage": {
+    "title": "Barsiisota keenya",
+    "subtitle": "Namoota Wiirtuu Afaanii Naaxiiq irratti barsiisan.",
+    "emptyTitle": "Barsiisonni dhiyootti asitti mul'atu",
+    "emptyText": "Yeroo kanatti koorsoota ilaali.",
+    "seeCourses": "Koorsoota ilaali"
+  },
+  "fields": {
+    "phone": {
+      "prefix": "+251",
+      "prefixLabel": "Lakkoofsa Itoophiyaa, +251 jalqabu",
+      "placeholder": "91 234 5678"
+    },
+    "password": {
+      "show": "Jecha icciitii agarsiisi",
+      "hide": "Jecha icciitii dhoksi"
+    },
+    "otp": {
+      "digit": "Lakkoofsa {index} kan {count}"
+    },
+    "file": {
+      "choose": "Faayilii filadhu",
+      "drop": "ykn asitti harkisi",
+      "limits": "{types} · hanga MB {max}",
+      "remove": "{name} balleessi",
+      "retry": "Irra deebi'ii yaali",
+      "uploading": "Fe'amaa jira… {progress}%",
+      "tooLarge": "Faayiliin kun MB {size} dha. Isa guddaan MB {max} dha.",
+      "wrongType": "Gosti faayilii kun asitti hin eeyyamamu."
+    },
+    "search": {
+      "placeholder": "Barbaadi…",
+      "clear": "Barbaaduu haqi"
+    },
+    "money": {
+      "currency": "ETB"
+    },
+    "select": {
+      "placeholder": "Filadhu…"
+    }
+  },
+  "errors": {
+    "VALIDATION_FAILED": "Bal'inni muraasni sirreeffamuu qabu. Iddoowwan mallattoo qaban ilaali.",
+    "BAD_REQUEST": "Gaaffii sana hubachuu hin dandeenye.",
+    "UNAUTHENTICATED": "Itti fufuuf maaloo seeni.",
+    "FORBIDDEN": "Kana argachuuf hayyama hin qabdu.",
+    "NOT_FOUND": "Sana argachuu hin dandeenye.",
+    "CONFLICT": "Kun nama biraatiin jijjiirameera. Haaromsiitii irra deebi'ii yaali.",
+    "RATE_LIMITED": "Yaaliin baay'eeti. Maaloo xiqqoo eegiitii irra deebi'ii yaali.",
+    "PAYLOAD_TOO_LARGE": "Kun fe'uuf baayyee guddaadha.",
+    "INTERNAL_ERROR": "Gama keenyaan wanti tokko dogoggoreera. Maaloo irra deebi'ii yaali.",
+    "SERVICE_UNAVAILABLE": "Tajaajilli kun yeroodhaaf hin argamu. Maaloo dhiyootti irra deebi'ii yaali.",
+    "NETWORK": "Amma Naaxiiq quunnamuu hin dandeenye. Walqunnamtii kee mirkaneeffadhuutii irra deebi'ii yaali.",
+    "INVALID_CREDENTIALS": "Imeeliin ykn jechi icciitii sirrii miti.",
+    "ACCOUNT_LOCKED": "Yaaliin baay'eeti. Daqiiqaa 15 booda yaali ykn jecha icciitii kee haaromsi.",
+    "COURSE_ACCESS_DENIED": "Koorsii kana ammaaf seenuu hin dandeessu.",
+    "PAYMENT_UNDER_REVIEW": "Kaffaltiin kee ilaalamaa jira. Yeroo seensi kee qophaa'u ergaa gabaabaa ni argatta.",
+    "ACCESS_EXPIRED": "Seensi kee {date} xumurameera. Haaromsuuf nu quunnamaa.",
+    "FILE_TOO_LARGE": "Faayiliin kun MB {size} dha. Isa guddaan MB {max} dha.",
+    "FILE_TYPE_NOT_ALLOWED": "Gosti faayilii kun asitti hin eeyyamamu.",
+    "MEDIA_UNAVAILABLE": "Kun amma fe'amuu hin danda'u. Irra deebi'ii yaali ykn rakkoo gabaasi.",
+    "QUIZ_TIME_UP": "Yeroon xumurameera. Deebiin kee kuufame ergameera.",
+    "PAYMENT_REFERENCE_DUPLICATE": "Wabiin kun duraan ergameera. Dogoggora yoo ta'e nu quunnamaa.",
+    "PHONE_ALREADY_REGISTERED": "Lakkoofsi kun duraanuu herrega qaba.",
+    "OTP_INVALID": "Koodiin sun sirrii miti ykn yeroon isaa darbeera. Haaraa gaafadhu.",
+    "OTP_TOO_SOON": "Koodii biraa gaafachuun dura maaloo daqiiqaa tokko eegi.",
+    "PASSWORD_LINK_INVALID": "Hidhatni kun yeroon isaa darbeera ykn duraan fayyadamameera. Haaraa gaafadhu.",
+    "CURRENT_PASSWORD_WRONG": "Jechi icciitii kee ammaa sirrii miti.",
+    "LAST_OWNER": "Yoo xiqqaate abbaan qabeenyaa tokko ni barbaachisa.",
+    "OWNER_REQUIRED": "Kana gochuu kan danda'u abbaa qabeenyaa qofa.",
+    "SLUG_TAKEN": "Teessoon marsariitii sun koorsii biroon fayyadamameera. Kan biraa filadhu.",
+    "NOT_READY_TO_PUBLISH": "Maxxansuun dura bal'inni muraasni hir'ataniiru.",
+    "CANNOT_DELETE_PUBLISHED": "Kun maxxanfameera, kanaaf dhoksuun qofa danda'ama. Dhoksuun bu'aa barattootaa eega.",
+    "IN_USE": "Kun hojii irra jira, kanaaf hin balleeffamu. Dachaa dhaabuu dandeessa.",
+    "ALREADY_ENROLLED": "Barataan kun koorsii kana keessatti duraanuu galmaa'eera.",
+    "PAYMENT_ALREADY_CHECKED": "Kaffaltiin kun duraan nama biraatiin mirkaneeffameera. Tarree haaromsi.",
+    "ENROLMENT_NOT_ALLOWED": "Haala galmee amma jiru keessatti kana gochuun hin danda'amu.",
+    "COURSE_NOT_OPEN": "Koorsiin kun amma galmeef banaa miti.",
+    "NO_ATTEMPTS_LEFT": "Yaalii qormaata kanaaf qabdu hunda fayyadamteetta.",
+    "QUIZ_NOT_READY": "Qormaanni kun maxxanfamuu dura bal'inni muraasni hir'ataniiru.",
+    "ATTEMPT_CLOSED": "Yaaliin kun duraanuu ergameera.",
+    "CERTIFICATE_NOT_READY": "Sertifikeetiin kee qophaa'aa jira. Daqiiqaa tokko booda irra deebi'ii yaali.",
+    "EMAIL_ALREADY_REGISTERED": "Imeelii kun duraanuu herrega qaba."
+  },
+  "pages": {
+    "soonText": "Fuulli kun fooyya'iinsa itti aanu keessatti ni banama.",
+    "backHome": "Gara mana deebi'i",
+    "backDashboard": "Gara gabateetti deebi'i",
+    "myCourses": "Koorsoota koo",
+    "certificates": "Sertifikeetiiwwan",
+    "profile": "Ibsa",
+    "announcements": "Beeksisoota",
+    "teachCourses": "Koorsoota koo",
+    "marking": "Madaallii",
+    "users": "Fayyadamtoota",
+    "enrolments": "Galmeewwan",
+    "adminCourses": "Koorsoota",
+    "payments": "Kaffaltiiwwan mirkaneeffamuu qaban",
+    "messages": "Ergaawwan",
+    "website": "Qabiyyee marsariitii",
+    "reports": "Gabaasawwan",
+    "activity": "Galmee sochii",
+    "settings": "Qindaa'inoota"
+  },
+  "auth": {
+    "phone": "Lakkoofsa bilbilaa",
+    "password": "Jecha icciitii",
+    "fullName": "Maqaa guutuu",
+    "email": "Imeelii",
+    "learn": "Kan barachuu barbaadu",
+    "passwordHint": "Yoo xiqqaate mallattoo 8, qubee tokko fi lakkoofsa tokko",
+    "show": "Agarsiisi",
+    "newPassword": "Jecha icciitii haaraa",
+    "register": {
+      "title": "Herrega kee banadhu",
+      "cta": "Herrega banadhu",
+      "haveAccount": "Herrega qabdaa?",
+      "signIn": "Seeni",
+      "termsLink": "Haalawwan",
+      "privacyLink": "Beeksisa dhuunfaa",
+      "termsError": "Itti fufuuf maaloo walii gali.",
+      "phoneTaken": "Lakkoofsi kun duraanuu herrega qaba.",
+      "signInInstead": "Seeni",
+      "resetInstead": "Jecha icciitii haaromsi",
+      "termsPre": "Umuriin koo waggaa 16 ykn isaa ol, akkasumas nan fudhadha",
+      "termsAnd": "fi",
+      "subtitle": "Odeeffannoo kee galchuun herrega bilisaa banadhu.",
+      "personalInfo": "Odeeffannoo dhuunfaa",
+      "accountInfo": "Odeeffannoo herregaa",
+      "passwordMismatch": "Jechi icciitii lamaan tokko miti.",
+      "emailTaken": "Imeelii kun duraanuu herrega qaba."
+    },
+    "signIn": {
+      "title": "Baga nagaan dhuftan",
+      "keep": "Seenee na eegi",
+      "forgot": "Jecha icciitii irraanfatteettaa?",
+      "cta": "Seeni",
+      "newHere": "Haaraadhaa?",
+      "create": "Herrega banadhu",
+      "locked": "Yaaliin baay'eeti. Daqiiqaa 15 booda yaali ykn jecha icciitii kee haaromsi.",
+      "subtitle": "Itti fufuuf imeelii fi jecha icciitii kee galchi."
+    },
+    "forgot": {
+      "title": "Jecha icciitii haaromsi",
+      "steps": {
+        "phone": "Bilbila",
+        "code": "Koodii",
+        "password": "Jecha icciitii",
+        "email": "Imeelii"
+      },
+      "phoneText": "Koodii ergaa gabaabaan sii erginna.",
+      "sendCode": "Koodii ergi",
+      "codeTitle": "Koodii kee galchi",
+      "codeCta": "Itti fufi",
+      "newTitle": "Jecha icciitii haaraa filadhu",
+      "save": "Jecha icciitii olkaa'i",
+      "backToSignIn": "Gara seensaatti deebi'i",
+      "doneTitle": "Jechi icciitii olkaa'ameera",
+      "doneText": "Amma seenuu dandeessa.",
+      "goSignIn": "Seeni",
+      "sentNote": "Imeelii kun herrega yoo qabaate, koodiin karaa SMS'tiin dhufaa jira.",
+      "emailText": "Imeelii ittiin galmooftee galchi. Lakkoofsa bilbilaa herrega keetii irratti koodii ergaan siif ergina."
+    },
+    "setPassword": {
+      "title": "Jecha icciitii kee qopheessi",
+      "save": "Jecha icciitii olkaa'i",
+      "doneTitle": "Jechi icciitii olkaa'ameera",
+      "doneText": "Amma seenuu dandeessa.",
+      "goSignIn": "Seeni",
+      "invalidTitle": "Hidhatni kun yeroon isaa darbeera",
+      "invalidText": "Haaraa gaafadhu.",
+      "missingToken": "Hidhatni kun guutuu miti.",
+      "requestNew": "Jecha icciitii haaromsi"
+    },
+    "code": {
+      "resendIn": "Koodii {time} keessatti irra deebi'ii ergi",
+      "resend": "Koodii irra deebi'ii ergi",
+      "resent": "Koodiin haaraan ergameera"
+    },
+    "firstName": "Maqaa jalqabaa",
+    "lastName": "Maqaa abbaa",
+    "gender": "Koorniyaa",
+    "male": "Dhiira",
+    "female": "Dhalaa",
+    "chooseOne": "Filadhu…",
+    "country": "Biyya",
+    "chooseCountry": "Biyya filadhu",
+    "city": "Magaalaa ykn gandaa",
+    "confirmPassword": "Jecha icciitii mirkaneessi"
+  },
+  "about": {
+    "title": "Waa'ee Naaxiiq",
+    "subtitle": "Wiirtuu afaanii Afaan Arabaa, Ingiliffaa fi Afaan Oromoo.",
+    "missionTitle": "Nuti eenyu",
+    "missionText": "Wiirtuun Afaanii Naaxiiq barnoota ifa ta'e fi barsiisota of eeggannoo qabaniin, kutaa keessatti amma immoo toora interneetiin, namoonni Afaan Arabaa, Ingiliffaa fi Afaan Oromoo akka baratan ni gargaara.",
+    "nameTitle": "Maaliif “Naaxiiq”?",
+    "nameText": "Naaxiiq (ناطق) Afaan Arabaa keessatti “dubbataa” jechuudha. Kaayyoon keenya salphaadha: abdii guutuun akka dubbattan isin gargaaruu.",
+    "approachTitle": "Akkamitti barsiifna",
+    "approach": [
+      {
+        "title": "Tarkaanfii tarkaanfiidhaan",
+        "text": "Koorsiin hundi kutaa gabaabaa fi barnoota viidiyoo, dubbisa, sagalee fi qormaata qabu keessa qoodameera."
+      },
+      {
+        "title": "Shaakala bu'aa qabu",
+        "text": "Qormaanni battalumatti bu'aa kenna. Barsiisonni deebii barreeffamaa sirreessanii yaada kennu."
+      },
+      {
+        "title": "Saffisa kee",
+        "text": "Yeroo kamiyyuu meeshaa kamiyyuu irratti baradhu, bakka dhaabbatte irraas itti fufi."
+      }
+    ],
+    "teachersTitle": "Barsiisota keenya",
+    "visitTitle": "Nu daawwadhu ykn nu quunnamaa",
+    "visitText": "Gaaffii waa'ee koorsoota, sadarkaalee fi kaffaltii deebisuuf gammachuudhaan qophiidha.",
+    "contactCta": "Nu quunnamaa",
+    "coursesCta": "Koorsoota barbaadi",
+    "eyebrowStory": "Seenaa keenya",
+    "eyebrowApproach": "Akkamitti barsiifna",
+    "eyebrowTeam": "Garee keenya",
+    "eyebrowVisit": "Nu daawwadhu"
+  },
+  "contact": {
+    "title": "Nu quunnamaa",
+    "subtitle": "Gaaffii waa'ee koorsoota ykn kaffaltii qabduu? Ergaa nuuf ergi.",
+    "detailsTitle": "Isin quunnamuu",
+    "phone": "Bilbila",
+    "email": "Imeelii",
+    "address": "Teessoo",
+    "hours": "Sa'aatii hojii",
+    "openMap": "Maappii keessatti bani",
+    "formTitle": "Ergaa ergi",
+    "name": "Maqaa kee",
+    "phoneField": "Lakkoofsa bilbilaa",
+    "message": "Ergaa",
+    "messageHint": "Akkamitti si gargaaruu akka dandeenyu nutti himi.",
+    "send": "Ergaa ergi",
+    "sentTitle": "Galatoomi!",
+    "sentText": "Ergaan kee nu ga'eera, dhiyootti deebii ni kennina.",
+    "sendAnother": "Ergaa biraa ergi",
+    "followTitle": "Nu hordofi"
+  },
+  "faq": {
+    "title": "Gaaffilee yeroo baay'ee gaafataman",
+    "subtitle": "Deebii saffisaa waa'ee galmaa'uu, kaffaluu fi barachuu.",
+    "stillTitle": "Ammallee gaaffii qabduu?",
+    "stillText": "Gargaaruuf gammachuudhaan qophiidha.",
+    "stillCta": "Nu quunnamaa",
+    "items": [
+      {
+        "q": "Akkamitti galmaa'a?",
+        "a": "“Bilisaan makamaa” tuqiitii maqaa kee, imeelii, lakkoofsa bilbilaa fi jecha icciitii galchi. Ergasii koorsii makamuuf gaafadhu, gareen Naaxiiq si fudhata."
+      },
+      {
+        "q": "Koorsoonni bilisaa dhaa?",
+        "a": "Koorsoonni tokko tokko bilisaan dha, kanneen biroo immoo gatii qabu, fuula koorsichaa irratti Birrii Itoophiyaatiin (ETB) agarsiifama. Koorsiin hundi gareen Naaxiiq akka si fudhatu barbaada."
+      },
+      {
+        "q": "Koorsiif akkamitti kaffala?",
+        "a": "Dabarsaa baankiitiin ykn korojoo mobaayiliitiin, ykn wiirtuu irratti maallaqa harkaatiin kaffali. Ergasii wabii kaffaltii nuuf ergi. Ni ilaalla, koorsii kees ni bana."
+      },
+      {
+        "q": "Koorsiin koo hanga yoomiitti banama?",
+        "a": "Akkuma kaffaltii kee mirkaneessinee. Kaffaltii guyyaa hojii tokko tokkoon yoo xiqqaate al tokko ni ilaalla, yeroo seensi kee qophaa'u ergaa gabaabaa ni argatta."
+      },
+      {
+        "q": "Bilbila kootiin baruu nan danda'aa?",
+        "a": "Eeyyee. Naaxiiq bilbila kamirrattuu hojjata, walqunnamtii suuta ta'een illee battalumatti fe'ama."
+      },
+      {
+        "q": "Barnoota buufachuu nan danda'aa?",
+        "a": "Barsiisaan yeroo eeyyamu PDF fi sagaleen buufatamuu danda'a, kanaaf toora interneetii malee baruu dandeessa. Viidiyoon marsariitii irratti qofa ilaalama."
+      },
+      {
+        "q": "Sertifikeetii nan argadhaa?",
+        "a": "Eeyyee. Koorsicha xumuri, qormaata dhumaa darbi (qabxiin darbuu 70% dha). Maqaa sertifikeetii kee ni mirkaneessita, gareen Naaxiiq ni mirkaneessa. Ergasii buufachuu dandeessa, nama kamiyyuu lakkoofsa isaatiin toora interneetiin mirkaneessuu danda'a."
+      },
+      {
+        "q": "Seensi koo hanga yoomiitti jira?",
+        "a": "Koorsiin hundi yeroo seensaa isaa agarsiisa. Yeroon xumurametti bu'aan kee ni mul'ata, seensa kee haaromsuu dandeenya."
+      },
+      {
+        "q": "Eenyu galmaa'uu danda'a?",
+        "a": "Nama umuriin isaa waggaa 16 ykn isaa ol ta'e kamiyyuu. Barattoota quxisuuf maaloo wiirtuu quunnamaa, nuti ni galmeessina."
+      },
+      {
+        "q": "Jecha icciitii koo irraanfadheera. Amma maal godha?",
+        "a": "Fuula seensaa irratti “Jecha icciitii irraanfatteettaa” filadhu. Jecha icciitii haaraa akka filattuuf koodii ergaa gabaabaan bilbila kee irratti ni erginna."
+      },
+      {
+        "q": "Marsariitiin afaan kamiini?",
+        "a": "Marsariitii Ingiliffaa, Amaaraa, Afaan Oromoo ykn Somaaliyaan dubbisuu dandeessa: bakka olii button afaanii fayyadami. Barnoonni koorsii Afaan Arabaa, Ingiliffaa ykn Afaan Oromoodhaan, Arabiffaan immoo mirgaa gara bitaatti agarsiifama."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Beeksisa dhuunfaa",
+    "subtitle": "Maal walitti qabna, maaliif, fi akkamitti eegna.",
+    "updated": "Yeroo dhumaa haaromfame: Sadaasa 2026",
+    "sections": [
+      {
+        "h": "Maal walitti qabna",
+        "p": [
+          "Maqaa kee, imeelii, lakkoofsa bilbilaa fi jecha icciitii kee (hash amansiisaa ta'ee qofa kuufama). Filannoodhaan suuraa, koorniyaa, biyya fi magaalaa kee.",
+          "Sochii barnootaa kee: barnoota xumurame, deebii qormaataa fi bu'aa, akkasumas sertifikeetiiwwan.",
+          "Odeeffannoo kaffaltii koorsiif nuuf erguu: mala, wabii, hanga, guyyaa fi filannoodhaan suuraa ragaa. Lakkoofsa kaardii, PIN korojoo ykn jecha icciitii baankii gonkumaa hin gaafannu.",
+          "Ergaawwan unka quunnamtii keessaan ergitu."
+        ]
+      },
+      {
+        "h": "Akkamitti itti fayyadamna",
+        "p": [
+          "Herrega kee geggeessuuf, koorsoota kee akka argattuuf fi adeemsa kee agarsiisuuf.",
+          "Kaffaltii ilaaluu fi seensa kee banuu ykn haaromsuuf.",
+          "Ergaawwan gabaabaa platformiin barbaachisu ergaaf: koodii jecha icciitii, hidhata herregaa, murtii kaffaltii fi yaadannoo seensaa.",
+          "Sertifikeetii kennuu fi nama kamiyyuu akka mirkaneessu gochuuf. Mirkaneessuun maqaa kee, koorsii fi guyyaa qofa agarsiisa."
+        ]
+      },
+      {
+        "h": "Eenyutu argaa",
+        "p": [
+          "Barsiisonni kee koorsoota isaanii keessatti adeemsa fi bu'aa kee ni arguu, lakkoofsa bilbilaa fi kaffaltii kee garuu hin arganu.",
+          "Hojjettoonni Naaxiiq wiirtuu geggeessuuf waan isaan barbaachisu ni arguu. Odeeffannoo kee hin gurgurru.",
+          "Dhiyeessitoonni amanamoon platformicha geggeessuuf nu gargaaru (hoostiingii, ergaa gabaabaa fi viidiyoo). Tajaajila kennuuf qofa odeeffannoo qabu."
+        ]
+      },
+      {
+        "h": "Kukii",
+        "p": [
+          "Seenuu kee eeguuf kukii tokko fayyadamna. Kukii beeksisaa ykn hordoffii hin fayyadamnu."
+        ]
+      },
+      {
+        "h": "Hanga yoomiitti eegna",
+        "p": [
+          "Herregni kee hojii irra yeroo jirutti fi sochii kee isa dhumaa booda waggaa 3 galmeewwan kee ni eegna. Ergasii odeeffannoo dhuunfaa kee ni balleessina.",
+          "Galmeewwan kaffaltii akkuma seerri gibiraa barbaadutti ni eegamu. Sertifikeetiiwwan yeroo hundaa akka mirkaneeffaman ni eegamu."
+        ]
+      },
+      {
+        "h": "Filannoowwan kee",
+        "p": [
+          "Maqaa, imeelii fi suuraa kee ibsa kee keessatti yeroo kamiyyuu gulaaluu dandeessa.",
+          "Herrega kee akka balleessinu nu gaafachuu dandeessa. Gaaffii guyyaa 30 keessatti ni raawwanna."
+        ]
+      },
+      {
+        "h": "Barattoota xixiqqaa",
+        "p": [
+          "Barattoonni umurii waggaa 16 irraa eegalanii of galmeessu. Kanneen xixiqqaan wiirtuun galmeeffamu."
+        ]
+      },
+      {
+        "h": "Gaaffiiwwan",
+        "p": [
+          "Yeroo kamiyyuu nu quunnamaa, odeeffannoon kee akkamitti akka qabamu ibsuuf gammachuudhaan qophiidha."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Haalawwan itti fayyadamaa",
+    "subtitle": "Seerota salphaa Naaxiiq toora interneetiin itti fayyadamuuf.",
+    "updated": "Yeroo dhumaa haaromfame: Sadaasa 2026",
+    "sections": [
+      {
+        "h": "Herrega kee",
+        "p": [
+          "Of galmeessuuf umuriin kee waggaa 16 ykn isaa ol ta'uu qaba. Odeeffannoo sirrii kenni, jecha icciitii kee iccitiidhaan qabi.",
+          "Waan herrega kee jalatti ta'uuf itti gaafatamaa dha. Nama biraa itti fayyadamaa jiraachuu yoo shakkite nutti himi."
+        ]
+      },
+      {
+        "h": "Koorsoota fi seensa",
+        "p": [
+          "Galmaa'uun koorsii hin banu. Koorsii makamuuf gaafadhu, gareen Naaxiiq si fudhata. Koorsoonni kaffaltii qaban kaffaltiin kee erga mirkaneeffameen booda illee ni banamu.",
+          "Seensi yeroo fuula koorsichaa irratti agarsiifameef ni turuu. Koorsoonni barnoota dhuunfaa keetiif qofa."
+        ]
+      },
+      {
+        "h": "Kaffaltiiwwan",
+        "p": [
+          "Marsariitii alatti (baankii, korojoo mobaayilii ykn maallaqa harkaa) kaffalta, wabii immoo nuuf ergita. Suuraan ragaa qofti koorsii hin banu.",
+          "Kaffaltii irratti wanti tokko yoo dogoggore, nu quunnamaa, sirreessuuf ni gargaarra."
+        ]
+      },
+      {
+        "h": "Meeshaalee barnootaa",
+        "p": [
+          "Viidiyoon, faayiliin fi qormaanni kan Naaxiiq fi barsiisota isaati. Maaloo hin waraabiin, hin qoodinaa, hin gurguriin.",
+          "Bakka buufannaan eeyyamametti, barnoota dhuunfaa keetiif qofa."
+        ]
+      },
+      {
+        "h": "Itti fayyadama haqa qabeessa",
+        "p": [
+          "Kabaja qabaadhu, platformicha cabsuu ykn dhaadannoo malee itti fayyadamuuf hin yaalin.",
+          "Herrega seera kana cabse dhaabuu dandeenya."
+        ]
+      },
+      {
+        "h": "Sertifikeetiiwwan",
+        "p": [
+          "Sertifikeetiin kan kennamu koorsii yeroo xumurtee fi qormaata dhumaa yeroo darbitudha. Sertifikeetii haqa-dhabeessaan argame haquu dandeenya."
+        ]
+      },
+      {
+        "h": "Jijjiirama",
+        "p": [
+          "Haalawwan kanneenii fi koorsoota keenya yeroo yeroon haaromsuu dandeenya. Guyyaan olitti jiru yeroo dhumaa jijjiirame agarsiisa."
+        ]
+      }
+    ]
+  },
+  "policyPage": {
+    "updated": "Yeroo dhumaa haaromfame {date}"
+  },
+  "profile": {
+    "title": "Ibsa",
+    "details": "Odeeffannoo koo",
+    "edit": "Odeeffannoo gulaali",
+    "editTitle": "Odeeffannoo kee gulaali",
+    "save": "Olkaa'i",
+    "saved": "Odeeffannoon olkaa'ameera",
+    "photo": "Suuraa",
+    "changePhoto": "Suuraa jijjiiri",
+    "photoSaved": "Suuraan haaromfameera",
+    "photoHint": "JPG ykn PNG, hanga MB 5",
+    "password": "Jecha icciitii",
+    "changePassword": "Jecha icciitii jijjiiri",
+    "changeTitle": "Jecha icciitii kee jijjiiri",
+    "current": "Jecha icciitii ammaa",
+    "passwordSaved": "Jechi icciitii jijjiirameera. Meeshaaleen biroo ba'aniiru.",
+    "signOut": "Ba'i",
+    "signingOut": "Ba'aa jira…",
+    "role": "Gahee",
+    "phone": "Bilbila",
+    "roles": {
+      "STUDENT": "Barataa",
+      "TEACHER": "Barsiisaa",
+      "ADMIN": "Bulchaa"
+    },
+    "paymentHistory": "Seenaa kaffaltii",
+    "location": "Iddoo",
+    "country": "Biyya",
+    "city": "Magaalaa ykn gandaa",
+    "gender": "Koorniyaa",
+    "notSet": "Hin guutamne"
+  },
+  "lessonView": {
+    "playVideo": "Viidiyoo taphachiisi: {title}",
+    "play": "Viidiyoo taphachiisi",
+    "videoFailed": "Viidiyoon kun qophaa'uu hin dandeenye. Maaloo rakkoo gabaasi.",
+    "videoProcessing": "Viidiyoon kun amma illee qophaa'aa jira. Daqiiqaa muraasa booda irra deebi'ii yaali.",
+    "tryAgain": "Irra deebi'ii yaali",
+    "pause": "Dhaabi",
+    "playAudio": "Sagalee taphachiisi",
+    "back10": "Sekondii 10 duubatti",
+    "seek": "Bakka sagalee",
+    "speed": "Saffisa si'a {speed}. Jijjiiruuf tuqi.",
+    "audioFailed": "Sagaleen kun amma taphachuu hin danda'u. Irra deebi'ii yaali ykn rakkoo gabaasi.",
+    "download": "Buufadhu",
+    "openPdf": "Bani",
+    "closePdf": "Cufi",
+    "pdfLoading": "Sanadni banamaa jira…",
+    "pdfFailed": "Sanadni kun amma banamuu hin danda'u. Irra deebi'ii yaali ykn rakkoo gabaasi.",
+    "pdfPageLabel": "{name}, fuula {page}",
+    "previousPage": "Duraa",
+    "nextPage": "Itti aanu",
+    "pageOf": "Fuula {page} kan {total}",
+    "empty": "Barnoonni kun ammaaf qabiyyee hin qabu.",
+    "playbackSpeed": "Saffisa",
+    "captions": "Barreeffama jalaa",
+    "slides": "Suuraalee",
+    "slideOf": "Suuraa {n} kan {total}",
+    "keyWords": "Jechoota ijoo",
+    "previousSlide": "Suuraa duraa",
+    "nextSlide": "Suuraa itti aanu",
+    "steps": "Tarkaanfiiwwan barnootaa",
+    "back": "Duubatti",
+    "nextStep": "Tarkaanfii itti aanu",
+    "minutes": "Daqiiqaa {n} fuullee",
+    "objectives": "Waan ati baratu",
+    "step": {
+      "INTRO": "Seensa",
+      "PREPARE": "Qophii",
+      "MAIN": "Barnoota",
+      "WATCH": "Daawwadhu",
+      "REVISE": "Irra deebi'ii ilaali",
+      "EXAMPLES": "Fakkeenyawwan"
+    },
+    "downloadFile": "{name} buufadhu"
+  },
+  "messages": {
+    "title": "Ergaawwan",
+    "filter": "Ergaawwan calaqqisi",
+    "new": "Haaraa",
+    "closed": "Cufaman",
+    "emptyNew": "Ergaan haaraan hin jiru",
+    "emptyNewText": "Ergaawwan unka quunnamtii irraa asitti mul'atu.",
+    "emptyClosed": "Ammaaf ergaan cufame hin jiru",
+    "problem": "Gabaasa rakkoo",
+    "aboutLesson": "Waa'ee barnoota: {title}",
+    "closedBy": "{name}n {date} cufame",
+    "close": "Cufi",
+    "reopen": "Irra deebi'ii bani",
+    "closedToast": "Ergaan cufameera.",
+    "reopenedToast": "Ergaan irra deebi'ee banameera."
+  },
+  "announcements": {
+    "title": "Beeksisoota",
+    "teacherHint": "Barattoota koorsoota keessaniif maxxansi.",
+    "new": "Beeksisa haaraa",
+    "newTitle": "Beeksisa haaraa",
+    "editTitle": "Beeksisa gulaali",
+    "empty": "Ammaaf beeksisni hin jiru",
+    "emptyText": "Barattoota ykn daawwattoota beeksisuuf tokko maxxansi.",
+    "noCourses": "Ammaaf koorsiin hin jiru",
+    "noCoursesText": "Yeroo bulchaan koorsii siif ramadu, barattoota isaatiif asitti maxxansuu dandeessa.",
+    "scheduled": "Sagantaa'e",
+    "edit": "{title} gulaali",
+    "delete": "{title} haqi",
+    "deleteTitle": "Beeksisa kana haquu?",
+    "deleteText": "Nama hundaaf ni badaa. Kun deebi'uu hin danda'u.",
+    "deleteCta": "Haqi",
+    "deleted": "Beeksisni haqameera.",
+    "titleField": "Mata-duree",
+    "textField": "Ergaa",
+    "audienceField": "Eenyutu argaa",
+    "audience": {
+      "PUBLIC": "Nama hundaaf",
+      "ALL_STUDENTS": "Barattoota hundaaf",
+      "COURSE": "Koorsii tokkoof"
+    },
+    "audienceHint": {
+      "PUBLIC": "Fuula oduu marsariitii irratti mul'ata.",
+      "ALL_STUDENTS": "Erga seenanii booda barataa hundaaf mul'ata.",
+      "COURSE": "Barattoota koorsii sana keessatti galmaa'aniif mul'ata."
+    },
+    "courseField": "Koorsii",
+    "chooseCourse": "Koorsii filadhu",
+    "publishAtField": "Kan maxxanfamu",
+    "publishAtHint": "Amma maxxansuuf duwwaa dhiisi.",
+    "post": "Maxxansi",
+    "save": "Olkaa'i",
+    "posted": "Beeksisni maxxanfameera.",
+    "saved": "Olkaa'ameera."
+  },
+  "learn": {
+    "back": "Gara koorsiitti deebi'i",
+    "continue": "Itti fufi: {lesson}",
+    "lessonsDone": "Barnoota {done} kan {total}",
+    "percentDone": "{value}% xumurameera",
+    "readOnly": "Koorsii kana xumurteetta. Ammallee barnoota kamiyyuu banuu dandeessa.",
+    "unitCount": "{done}/{total}",
+    "stateDone": "Xumurameera",
+    "stateCurrent": "Bakka ati jirtu",
+    "stateTodo": "Hin jalqabamne",
+    "noLessons": "Barnoonni jalqabaa dhiyootti asitti mul'ata.",
+    "contents": "Qabiyyee",
+    "contentsTitle": "Qabiyyee koorsii",
+    "lessonOf": "Barnoota {n} kan {total}",
+    "previous": "Barnoota duraa",
+    "next": "Barnoota itti aanu",
+    "markComplete": "Akka xumurametti mallatteessi",
+    "completed": "Xumurameera",
+    "completedToast": "Barnoonni xumurameera!",
+    "courseCompletedTitle": "Koorsiin xumurameera!",
+    "courseCompletedText": "Barnoota hunda xumurteetta. Baga gammadde.",
+    "quizRequired": "Xumuruuf qormaata darbi",
+    "problemLine": "Barnoota kana irratti rakkoo jiraa?",
+    "reportIt": "Gabaasi",
+    "reportTitle": "Rakkoo gabaasi",
+    "reportHint": "Wanti dogoggore nutti himi. Ni ilaalla.",
+    "reportLabel": "Maal ta'e?",
+    "reportSend": "Gabaasa ergi",
+    "reportSent": "Galatoomi. Gabaasni kee nu ga'eera.",
+    "backToCourse": "Qabiyyee koorsii",
+    "unavailableTitle": "Barnoonni kun hin argamu",
+    "unavailableText": "Wanta jijjiirame ykn dhoksame ta'uu danda'a.",
+    "takeQuiz": "Qormaata fudhadhu",
+    "quizPassed": "Qormaanni darbeera",
+    "stateLocked": "Cufameera: duraan barnoota duraa xumuri",
+    "minutesShort": "Daqiiqaa {n}",
+    "hideOutline": "Qabiyyee dhoksi",
+    "showOutline": "Qabiyyee agarsiisi",
+    "previousStep": "Tarkaanfii duraa",
+    "nextStep": "Tarkaanfii itti aanu",
+    "lockedTitle": "Duraan barnoota duraa xumuri",
+    "lockedText": "Koorsiin kun barnoota tartiiba isaatiin bana. Kana banuuf “{title}” xumuri.",
+    "lockedGo": "Barnoota sanatti deemi",
+    "weekN": "Torban {n}",
+    "new": "Haaraa",
+    "upcomingTitle": "Itti aanee kan dhufu",
+    "ongoingNote": "Barnoonni haaraan torban hundatti ni dabalama. Akkuma dabalamuun asitti ni argita."
+  },
+  "pay": {
+    "title": "Kaffaluun galmaa'i",
+    "renewTitle": "Seensa haaromsi",
+    "amount": "Hanga kaffalamu",
+    "stepPay": "Isa tokkoon kaffali",
+    "stepTell": "Waa'ee kaffaltii nutti himi",
+    "cash": "Ykn wiirtuu irratti maallaqa harkaatiin kaffali.",
+    "copy": "Waraabi",
+    "copied": "Waraabameera",
+    "copyNumber": "Lakkoofsa herregaa {provider} waraabi",
+    "noAccounts": "Odeeffannoon kaffaltii ammaaf hin qophoofne. Kaffaluuf maaloo nu quunnamaa.",
+    "contactUs": "Nu quunnamaa",
+    "method": "Akkamitti kaffalte?",
+    "bank": "Baankii",
+    "wallet": "Korojoo mobaayilii",
+    "reference": "Wabii ykn lakkoofsa daldalaa",
+    "referenceHint": "Ragaa kee ykn ergaa gabaabaa irraa.",
+    "amountPaid": "Hanga kaffalte (ETB)",
+    "paidOn": "Guyyaa kaffalame",
+    "receipt": "Suuraa ragaa",
+    "receiptHint": "Suuraan ykn PDF si'ataan akka ilaallu nu gargaara.",
+    "addReceipt": "Suuraa dabaluu",
+    "changeReceipt": "Jijjiiri",
+    "removeReceipt": "Ragaa balleessi",
+    "submit": "Kaffaltii ergi",
+    "noSecrets": "Lakkoofsa kaardii, PIN ykn jecha icciitii gonkumaa hin gaafannu.",
+    "rejectedTitle": "Kaffaltiin kee isa dhumaa hin fudhatamne",
+    "rejectedReason": "Sababa: {reason}",
+    "rejectedText": "Maaloo kana sirreessitee odeeffannoo kaffaltii kee irra deebi'ii ergi.",
+    "reviewTitle": "Kaffaltiin ilaalamaa jira",
+    "reviewText": "Yeroo seensi kee qophaa'u ergaa si erginna.",
+    "reviewRef": "Wabii {ref}",
+    "goDashboard": "Gara gabateetti deemi",
+    "submitted": "Kaffaltiin ergameera. Dhiyootti ni ilaalla.",
+    "openCourse": "Koorsicha bani",
+    "paidTitle": "Hundi qophiidha",
+    "paidText": "Koorsiin kun siif banaadha.",
+    "cancelledTitle": "Galmeen kun haqameera",
+    "cancelledText": "Fuula koorsii irraa irra deebi'ii jalqabi.",
+    "viewCourse": "Koorsicha ilaali"
+  },
+  "studentPayments": {
+    "title": "Seenaa kaffaltii",
+    "subtitle": "Kaffaltiiwwan ergite hundaa.",
+    "emptyTitle": "Ammaaf kaffaltiin hin jiru",
+    "emptyText": "Kaffaltiiwwan koorsoota kaffaltii qabaniif asitti mul'atu.",
+    "reference": "Wabii {ref}",
+    "paidOn": "{date} kaffalame",
+    "method": {
+      "BANK": "Baankii",
+      "MOBILE_WALLET": "Korojoo mobaayilii",
+      "CASH": "Maallaqa harkaa"
+    },
+    "renewal": "Haaromsa",
+    "tryAgain": "Odeeffannoo irra deebi'ii ergi",
+    "back": "Ibsa"
+  },
+  "studentNews": {
+    "title": "Oduu",
+    "subtitle": "Ergaawwan Naaxiiq fi barsiisota keessaniin.",
+    "emptyTitle": "Ammaaf oduun hin jiru",
+    "emptyText": "Beeksisni haaraan asitti mul'ata.",
+    "markRead": "Akka dubbifameetti mallatteessi",
+    "markAll": "Hunda akka dubbifameetti mallatteessi",
+    "unread": "Haaraa",
+    "forCourse": "{course}f",
+    "forEveryone": "Nama hundaaf",
+    "forStudents": "Barattoota hundaaf"
+  },
+  "certs": {
+    "title": "Sertifikeetiiwwan",
+    "subtitle": "Sertifikeetiiwwan argatte.",
+    "emptyTitle": "Ammaaf sertifikeetiin hin jiru",
+    "emptyText": "Argachuuf koorsii xumuriitii qormaata dhumaa darbi.",
+    "browse": "Koorsoota barbaadi",
+    "download": "PDF buufadhu",
+    "downloadLabel": "PDF {course} buufadhu",
+    "cancelled": "Haqameera",
+    "number": "Lakkoofsa {number}",
+    "issued": "{date} kenname",
+    "verifyHint": "Nama kamiyyuu {where} irratti mirkaneessuu danda'a.",
+    "verifyLink": "Fuula mirkaneessaa bani",
+    "onTheWay": "Karaa irra jira",
+    "finished": "{date} xumurame",
+    "finishedNoDate": "Koorsiin xumurameera",
+    "statusConfirm": "Maqaa kee mirkaneessi",
+    "statusWaiting": "Mirkaneessuu eeggachaa jira",
+    "statusReturned": "Maaloo mirkaneeffadhu",
+    "confirmText": "Baga gammadde! Maqaa sertifikeetii kee irratti maxxanfamuu barbaaddu sirriitti barreessi. Gareen Naaxiiq ni ilaala, sertifikeetii immoo si erga.",
+    "nameLabel": "Maqaa sertifikeetii irra jiru",
+    "nameHint": "Maqaa kee guutuu, akka waraqaa eenyummaa keetti.",
+    "sendName": "Mirkaneessuuf ergi",
+    "nameSent": "Ergameera. Sertifikeetiin kee yeroo qophaa'u si beeksifna.",
+    "nameOnIt": "Maqaa maxxanfamu",
+    "waitingText": "Gareen Naaxiiq ilaalaa jira. Yeroo sertifikeetiin kee qophaa'u ergaa gabaabaa ni argatta.",
+    "changeName": "Maqaa jijjiiri",
+    "changeNameTitle": "Maqaa sertifikeetii kee irra jiru jijjiiri",
+    "changeNameText": "Hanga gareen Naaxiiq sertifikeetii kee mirkaneessutti jijjiiruu dandeessa.",
+    "returnedNote": "Gareen Naaxiiq ni gaafata: {note}"
+  },
+  "quizTake": {
+    "intro": {
+      "questions": "{count, plural, one {gaaffii #} other {gaaffilee #}}",
+      "time": "{count, plural, one {daqiiqaa #} other {daqiiqaa #}}",
+      "noTime": "Daangaan yeroo hin jiru",
+      "passMark": "Qabxii darbuu {value}%",
+      "attemptsLeft": "Yaalii hafe: {left} kan {total}",
+      "attemptsUnlimited": "Yaalii daangaa hin qabne",
+      "finalNote": "Kun qormaata koorsichaa isa dhumaati.",
+      "start": "Qormaata jalqabi",
+      "resume": "Qormaata itti fufi",
+      "again": "Irra deebi'ii yaali",
+      "noAttempts": "Yaalii kee hunda fayyadamteetta. Yoo biraa barbaadde barsiisaa kee gaafadhu.",
+      "passedNote": "Qormaata kana darbiteetta. Qabxii olaanaa {score}%.",
+      "history": "Yaalii koo",
+      "back": "Gara barnootaatti deebi'i",
+      "readOnly": "Koorsii kana xumurteetta. Qormaanni cufameera."
+    },
+    "questionOf": "{n} kan {total}",
+    "dots": "Gaaffii {n}, {state}",
+    "answered": "deebifameera",
+    "notAnswered": "hin deebifamne",
+    "back": "Duubatti",
+    "next": "Itti aanu",
+    "review": "Irra deebi'ii ilaali",
+    "saving": "Olkaa'aa jira…",
+    "savedState": "Olkaa'ameera",
+    "saveFailed": "Ammaaf hin olkaa'amne. Irra deebi'ee yaalaa jira…",
+    "offline": "Toora interneetii hin qabdu. Deebiin kee meeshaa kana irra kuufameera, yeroo toora interneetitti deebitu ni ergama.",
+    "timer": "Yeroon hafe",
+    "timerLabel": "{time} hafe",
+    "timeWarning5": "Daqiiqaan 5 hafe",
+    "timeWarning1": "Daqiiqaan 1 hafe",
+    "timeUp": "Yeroon xumurameera. Deebiin kee kuufame ergameera.",
+    "true": "Dhugaa",
+    "false": "Soba",
+    "typeAnswer": "Deebii kee barreessi",
+    "writeAnswer": "Deebii kee barreessi",
+    "chooseOne": "Deebii tokko filadhu",
+    "trueFalse": "Dhugaa moo soba?",
+    "marks": "{marks, plural, one {qabxii #} other {qabxiilee #}}",
+    "reviewTitle": "Ergachuuf qophiidhaa?",
+    "reviewCount": "{answered} kan {total} deebifameera",
+    "reviewSkipped": "Gaaffiin {n} hin deebifamne",
+    "goTo": "Gaaffii {n} deemi",
+    "submit": "Deebii ergi",
+    "submitting": "Ergaa jira…",
+    "backToQuestions": "Gara gaaffiiwwanitti deebi'i",
+    "allAnswered": "Hundi deebifameera.",
+    "passedTitle": "Darbiteetta!",
+    "notPassedTitle": "Yeroo kanatti hin darbine",
+    "scoreLine": "{score}/{max} · Qabxii darbuu {pass}%",
+    "attemptsLeft": "{count, plural, =0 {Yaaliin hin hafne} one {yaaliin # hafe} other {yaalii # hafan}}",
+    "attemptsUnlimited": "Yeroo kamiyyuu irra deebi'ii yaaluu dandeessa.",
+    "tryAgain": "Irra deebi'ii yaali",
+    "reviewAnswers": "Deebii gulaali",
+    "hideReview": "Gulaala dhoksi",
+    "nextLesson": "Barnoota itti aanu",
+    "backToCourse": "Qabiyyee koorsii",
+    "waitingTitle": "Madaallii barsiisaa eeggachaa jira",
+    "waitingText": "Erga madaalamee booda qabxii kee asitti agarsiifna.",
+    "continueCourse": "Koorsii itti fufi",
+    "courseCompleteTitle": "Koorsiin xumurameera!",
+    "courseCompleteText": "Maqaa sertifikeetii kee mirkaneessi. Ergasii gareen Naaxiiq ni ilaala, sitti ni erga.",
+    "downloadCertificate": "Sertifikeetii buufadhu",
+    "yourAnswer": "Deebii kee",
+    "noAnswer": "Deebiin hin jiru",
+    "correctAnswer": "Deebii sirrii",
+    "explanation": "Ibsa",
+    "teacherComment": "Yaada barsiisaa",
+    "marksLine": "{marks}/{max}",
+    "rightLabel": "Sirrii",
+    "wrongLabel": "Sirrii miti",
+    "history": {
+      "title": "Yaalii koo",
+      "empty": "Ammaaf yaaliin hin jiru.",
+      "attemptN": "Yaalii {n}",
+      "inProgress": "Adeemsa irra",
+      "waiting": "Madaallii eeggachaa jira",
+      "passed": "Darbeera",
+      "failed": "Hin darbine",
+      "open": "Bani"
+    },
+    "unavailableTitle": "Qormaanni kun hin argamu",
+    "unavailableText": "Dhoksamuu ykn ammaaf hin maxxanfamne ta'uu danda'a.",
+    "getCertificate": "Sertifikeetii koo argadhu"
+  },
+  "chat": {
+    "whatsapp": "WhatsApp irratti nu waliin haasa'i",
+    "telegram": "Telegram irratti nu waliin haasa'i",
+    "title": "Ergaawwan",
+    "newChat": "Haasaa haaraa",
+    "searchPlaceholder": "Namoota barbaadi",
+    "back": "Gara haasaawwanitti deebi'i",
+    "empty": "Ammaaf haasaan hin jiru",
+    "emptyText": "Gareen Naaxiiq ykn barsiisaa kee wajjin haasaa jalqabi.",
+    "pick": "Haasaa filadhu",
+    "pickText": "Haasaa dubbisuu fi deebisuuf filadhu.",
+    "noContacts": "Ammaaf nama waliin haasa'uu hin jiru. Barsiisaa isaa ergaa erguuf koorsii galmaa'i.",
+    "typeToSearch": "Maqaa irraa yoo xiqqaate qubee 2 barreessi.",
+    "newTitle": "Haasaa jalqabi",
+    "team": "Gareen Naaxiiq",
+    "placeholder": "Ergaa barreessi",
+    "send": "Ergi",
+    "attach": "Faayilii maksi",
+    "record": "Ergaa sagalee waraabi",
+    "recording": "Waraabaa jira…",
+    "cancelRecording": "Waraabuu haqi",
+    "sendVoice": "Ergaa sagalee ergi",
+    "micDenied": "Ergaa sagalee ergituuf biraawzara kee keessatti maayikiroofoonii eeyyami.",
+    "micUnsupported": "Biraawzariin kun ergaa sagalee waraabuu hin danda'u.",
+    "play": "Ergaa sagalee taphachiisi",
+    "pause": "Ergaa sagalee dhaabi",
+    "download": "Buufadhu",
+    "photo": "Suuraa",
+    "voice": "Ergaa sagalee",
+    "today": "Har'a",
+    "yesterday": "Kaleessa",
+    "sending": "Ergaa jira…",
+    "failed": "Hin ergamne. Irra deebi'ii yaaluuf tuqi.",
+    "seen": "Mul'ateera",
+    "sent": "Ergameera",
+    "loadFailed": "Ergaawwan fe'uu hin dandeenye.",
+    "unread": "hin dubbifamne",
+    "caption": "Ibsa dabali",
+    "removeFile": "Faayilii balleessi",
+    "conversations": "Haasaawwan",
+    "open": "Haasaa bani",
+    "tooBig": "Faayiliin kun baayyee guddaadha. Isa guddaan MB 20 dha.",
+    "copy": "Barreeffama waraabi",
+    "copied": "Waraabameera",
+    "copyFailed": "Waraabuu hin dandeenye.",
+    "deleteMessage": "Ergaa haqi",
+    "deleteMessageTitle": "Ergaa kana haquu?",
+    "deleteMessageText": "Siif fi nama kaaniif ni balleeffama.",
+    "chatMenu": "Filannoowwan haasaa",
+    "clearHistory": "Seenaa haqi",
+    "clearTitle": "Haasaa kana haqi?",
+    "clearText": "Ergaawwan si qofaaf dhokatu. Gama kaanii isaan qabata.",
+    "deleteChat": "Haasaa haqi",
+    "deleteChatTitle": "Haasaa kana haquu?",
+    "deleteChatText": "Tarree kee irraa ni balleeffama. Gama kaanii ni qabata, yoo deebi'ee barreesse ni deebi'a."
+  },
+  "groups": {
+    "title": "Gareewwan koorsii",
+    "listLabel": "Gareewwan koorsii kee",
+    "back": "Gara gareewwanitti deebi'i",
+    "noGroups": "Ammaaf gareen hin jiru",
+    "noGroupsText": "Koorsiin hundi haasaa garee qaba. Erga koorsii keessatti fudhatamtee booda garreen isaa asitti mul'ata.",
+    "noMessages": "Ammaaf ergaan hin jiru",
+    "pick": "Garee filadhu",
+    "pickText": "Hiriyoota kutaa fi barsiisaa kee waliin dubbisuu fi barreessuuf garee koorsii bani.",
+    "courseGroup": "Garee koorsii",
+    "showMembers": "Miseensota agarsiisi",
+    "memberCount": "{count, plural, one {miseensa #} other {miseensota #}}",
+    "members": "Miseensota",
+    "membersText": "Namoonni koorsii kana keessa jiran hundi: barsiisonni, gareen Naaxiiq fi barattoonni.",
+    "teachers": "Barsiisota",
+    "team": "Gareen Naaxiiq",
+    "students": "Barattoota",
+    "roleTeacher": "Barsiisaa",
+    "roleTeam": "Gareen Naaxiiq",
+    "emptyTitle": "Haasaa jalqabi",
+    "emptyText": "Gaaffii gaafadhu, waan baratte qoodi, ykn nagaa gaafadhu. Hiriyoonni kutaa kee fi barsiisaan ni argu.",
+    "loadEarlier": "Ergaawwan duraa agarsiisi",
+    "notLoaded": "Ergaan sun ol jira. Duraan ergaawwan duraa agarsiisi.",
+    "deleted": "Ergaan kun haqameera",
+    "edited": "gulaalameera",
+    "pinned": "Maxxanfameera",
+    "pinnedMessage": "Ergaa maxxanfame",
+    "pin": "Gubbaa irratti maxxansi",
+    "unpin": "Maxxansuu dhiisi",
+    "pinnedToast": "Ergaan maxxanfameera.",
+    "unpinned": "Ergaan maxxansuun hafeera.",
+    "reply": "Deebii",
+    "replyingTo": "{name}f deebisaa jira",
+    "cancelReply": "Deebii haqi",
+    "edit": "Gulaali",
+    "editTitle": "Ergaa kee gulaali",
+    "editLabel": "Ergaa",
+    "saveEdit": "Olkaa'i",
+    "cancel": "Haqi",
+    "react": "Deebii kenni",
+    "reactionLabel": "{emoji} nama {count, plural, one {# irraa} other {# irraa}}",
+    "messageMenu": "Filannoowwan ergaa",
+    "deleteTitle": "Ergaa kana haquu?",
+    "deleteMine": "Nama garee keessa jiru hundaaf ni balleeffama.",
+    "deleteOthers": "Ergaa nama biraa nama garee keessa jiru hundaaf balleessaa jirta.",
+    "tooBig": "Faayiliin kun baayyee guddaadha. Isa guddaan viidiyoodhaaf MB 60, faayilii kaanifis MB 20 dha.",
+    "unavailableTitle": "Garee kana banuu hin dandeessu",
+    "unavailableText": "Barattoonni koorsii keessatti fudhataman, barsiisonni isaa fi gareen Naaxiiq qofti garee isaa keessa jiru."
+  },
+  "adminPayments": {
+    "receiptTitle": "Ragaa kaffaltii",
+    "receiptOpen": "Taabii haaraa keessatti bani",
+    "receiptPdf": "Ragaa kaffaltii PDF"
+  },
+  "people": {
+    "title": "Piroofayilii",
+    "openProfile": "Piroofayilii {name} bani",
+    "loadFailed": "Piroofayilii kana banuun hin danda'amne.",
+    "about": "Waa'ee",
+    "teaches": "Kan barsiisu",
+    "sharedCourses": "Koorsoota waliinii",
+    "from": "Irraa",
+    "contact": "Quunnamtii",
+    "contactHint": "Gareen Naaxiiq qofa ni argu.",
+    "message": "Ergaa ergi",
+    "editMine": "Piroofayilii koo fooyyessi",
+    "memberSince": "Miseensa {date} irraa",
+    "role": {
+      "STUDENT": "Barataa",
+      "TEACHER": "Barsiisaa",
+      "ADMIN": "Gareen Naaxiiq"
+    }
   }
 }

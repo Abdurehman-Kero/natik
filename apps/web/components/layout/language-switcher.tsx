@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Globe } from 'lucide-react';
+import { Check, ChevronDown, Globe } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
@@ -40,7 +40,7 @@ export function LanguageMenu({ className }: { className?: string }) {
           type="button"
           aria-busy={pending}
           className={cn(
-            'inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-ink transition-colors hover:bg-primary-soft hover:text-primary md:h-11',
+            'inline-flex h-10 items-center gap-1 rounded-full px-2 text-sm font-semibold text-ink transition-colors hover:bg-primary-soft hover:text-primary sm:gap-1.5 sm:px-3 md:h-11',
             className,
           )}
         >
@@ -49,6 +49,7 @@ export function LanguageMenu({ className }: { className?: string }) {
             {t('language')}: {LOCALE_NAMES[current]}
           </span>
           <span aria-hidden>{LOCALE_SHORT[current]}</span>
+          <ChevronDown className="size-3.5 opacity-70" aria-hidden />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-52">
@@ -67,8 +68,11 @@ export function LanguageMenu({ className }: { className?: string }) {
 export function LanguageList({
   className,
   onChosen,
+  tone = 'light',
 }: {
   className?: string;
+  /** "onDark" for the navy footer. */
+  tone?: 'light' | 'onDark';
   /** Called once the page shows the new language, e.g. to close the phone menu. */
   onChosen?: () => void;
 }) {
@@ -92,9 +96,13 @@ export function LanguageList({
           aria-pressed={code === current}
           className={cn(
             'min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors',
-            code === current
-              ? 'border-primary bg-primary text-white'
-              : 'border-border-strong bg-surface text-ink hover:border-primary hover:text-primary',
+            tone === 'onDark'
+              ? code === current
+                ? 'border-accent bg-accent text-ink'
+                : 'border-white/40 text-white hover:border-white hover:bg-white/10'
+              : code === current
+                ? 'border-primary bg-primary text-white'
+                : 'border-border-strong bg-surface text-ink hover:border-primary hover:text-primary',
           )}
         >
           {LOCALE_NAMES[code]}

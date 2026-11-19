@@ -1,8 +1,31 @@
+import { formatDate } from '@natik/shared';
 import { Check, ChevronDown, Circle, CircleDot, Lock } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/cn';
 import type { OutlineUnit } from '@/lib/api/learn-types';
+
+/** Marks a session added in the last few days that the student has not opened yet. */
+function NewBadge() {
+  const t = useTranslations('learn');
+  return (
+    <span className="shrink-0 rounded-full bg-primary px-2 py-0.5 text-xs font-bold tracking-wide text-white uppercase">
+      {t('new')}
+    </span>
+  );
+}
+
+/** "Greetings" with its date underneath, when the teacher set one. */
+function SessionTitle({ lesson }: { lesson: OutlineUnit['lessons'][number] }) {
+  return (
+    <span className="flex min-w-0 flex-1 flex-col">
+      <span className="truncate">{lesson.title}</span>
+      {lesson.sessionDate ? (
+        <span className="text-xs font-normal text-muted">{formatDate(lesson.sessionDate)}</span>
+      ) : null}
+    </span>
+  );
+}
 
 /** ✓ done (gold) · ● where you are · ○ not started. Never colour alone: each has its own shape and label. */
 function StateIcon({ state }: { state: 'done' | 'current' | 'todo' | 'locked' }) {
@@ -60,7 +83,7 @@ export function UnitList({
   const t = useTranslations('learn');
   return (
     <div className="flex flex-col gap-3">
-      {units.map((unit) => {
+      {units.map((unit, unitIndex) => {
         const hasCurrent = unit.lessons.some((l) => l.state === 'current' || l.id === currentId);
         return (
           <details
@@ -73,7 +96,11 @@ export function UnitList({
                 className="size-5 shrink-0 text-muted transition-transform group-open:rotate-180"
                 aria-hidden
               />
-              <span className="min-w-0 flex-1 font-semibold">{unit.title}</span>
+              <span className="min-w-0 flex-1 font-semibold">
+                <span className="text-muted">{t('weekN', { n: unitIndex + 1 })} · </span>
+                {unit.title}
+              </span>
+              {unit.lessons.some((l) => l.isNew) ? <NewBadge /> : null}
               <span className="text-sm text-muted tabular-nums">
                 {t('unitCount', { done: unit.done, total: unit.total })}
               </span>
@@ -84,7 +111,7 @@ export function UnitList({
                   <li key={lesson.id}>
                     <p className="flex min-h-12 items-center gap-3 px-4 py-2 text-muted">
                       <StateIcon state="locked" />
-                      <span className="min-w-0 flex-1">{lesson.title}</span>
+                      <SessionTitle lesson={lesson} />
                     </p>
                   </li>
                 ) : (
@@ -99,7 +126,8 @@ export function UnitList({
                       )}
                     >
                       <StateIcon state={lesson.state} />
-                      <span className="min-w-0 flex-1">{lesson.title}</span>
+                      <SessionTitle lesson={lesson} />
+                      {lesson.isNew ? <NewBadge /> : null}
                       {lesson.minutes ? (
                         <span className="text-sm font-normal text-muted tabular-nums">
                           {t('minutesShort', { n: lesson.minutes })}

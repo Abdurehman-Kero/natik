@@ -10,10 +10,17 @@ import { Card } from '@/components/ui/card';
 import { TextareaField, TextField } from '@/components/ui/input';
 import { PhoneField } from '@/components/ui/phone-field';
 import { api, useErrorMessage } from '@/lib/api/client';
+import { cn } from '@/lib/cn';
 import { apiFieldErrors, type FieldErrors, validate } from '@/lib/forms';
 
 /** Name, phone and message. Messages land in the admin inbox (FR-WEB-004). */
-export function ContactForm() {
+export function ContactForm({
+  embedded = false,
+  onSent,
+}: {
+  embedded?: boolean;
+  onSent?: () => void;
+}) {
   const t = useTranslations('contact');
   const ta = useTranslations('auth');
   const errorMessage = useErrorMessage();
@@ -41,6 +48,7 @@ export function ContactForm() {
     try {
       await api('/public/contact', { method: 'POST', json: data });
       setSent(true);
+      onSent?.();
     } catch (error) {
       setErrors(apiFieldErrors(error));
       setFormError(errorMessage(error));
@@ -51,7 +59,13 @@ export function ContactForm() {
 
   if (sent) {
     return (
-      <Card className="flex flex-col items-center gap-3 p-8 text-center" role="status">
+      <Card
+        className={cn(
+          'flex flex-col items-center gap-3 p-8 text-center',
+          embedded && 'border-0 p-2 shadow-none',
+        )}
+        role="status"
+      >
         <span
           className="flex size-14 items-center justify-center rounded-full bg-success-soft text-success"
           aria-hidden
@@ -75,9 +89,9 @@ export function ContactForm() {
   }
 
   return (
-    <Card className="rounded-2xl p-6 md:p-8">
+    <Card className={cn('rounded-2xl p-6 md:p-8', embedded && 'border-0 p-0 shadow-none md:p-0')}>
       <form onSubmit={submit} noValidate className="flex flex-col gap-5">
-        <h2 className="text-xl font-semibold">{t('formTitle')}</h2>
+        {embedded ? null : <h2 className="text-xl font-semibold">{t('formTitle')}</h2>}
         {formError ? <Alert tone="danger">{formError}</Alert> : null}
         <TextField
           label={t('name')}

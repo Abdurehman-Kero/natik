@@ -544,7 +544,7 @@ describe('course builder', () => {
       await h.client().get(up.body.url).expect(401);
     });
 
-    it('serves a free-preview lesson’s file to visitors, and downloads only when allowed', async () => {
+    it('session files open only for accepted students, and download only when allowed', async () => {
       const { teacherAgent, adminAgent, course } = await setup();
       const { unit, lesson } = await addLesson(teacherAgent, course.id);
       const up = await teacherAgent
@@ -559,10 +559,6 @@ describe('course builder', () => {
         .expect(201);
       await teacherAgent.post(`/api/v1/teach/lessons/${lesson.id}/publish`).expect(200);
       await teacherAgent.post(`/api/v1/teach/units/${unit.id}/publish`).expect(200);
-      await teacherAgent
-        .patch(`/api/v1/teach/lessons/${lesson.id}`)
-        .send({ isFreePreview: true })
-        .expect(200);
       const cover = await adminAgent
         .post('/api/v1/files')
         .field('purpose', 'COURSE_IMAGE')
@@ -570,27 +566,110 @@ describe('course builder', () => {
         .expect(201);
       await adminAgent
         .patch(`/api/v1/admin/courses/${course.id}`)
-        .send(courseBody({ title: course.title, slug: course.slug, imageFileId: cover.body.id }))
+        .send(
+          courseBody({
+            title: course.title,
+            slug: course.slug,
+            imageFileId: cover.body.id,
+            access: 'FREE',
+            priceSantim: null,
+          }),
+        )
         .expect(200);
       await adminAgent.post(`/api/v1/admin/courses/${course.id}/publish`).expect(200);
 
-      const visitor = await h.client().get(up.body.url).expect(200);
-      expect(visitor.headers['content-disposition']).toMatch(/^inline/);
-      // Downloads are off by default.
-      await h.client().get(`${up.body.url}?download=1`).expect(403);
+      // Visitors: never.
+      await h.client().get(up.body.url).expect(401);
+      // A student who asked to join but is not accepted yet: not yet.
+      const student = await h.makeUser({});
+      const studentAgent = await h.signIn(student.phone, student.password);
+      const asked = (await studentAgent.post(`/api/v1/courses/${course.id}/enrol`).expect(200))
+        .body;
+      expect(asked.status).toBe('AWAITING_APPROVAL');
+      await studentAgent.get(up.body.url).expect(403);
+      // Accepted: it opens in the page; downloads only when the teacher allows them.
+      await adminAgent.post(`/api/v1/admin/enrolments/${asked.id}/approve`).expect(200);
+      const view = await studentAgent.get(up.body.url).expect(200);
+      expect(view.headers['content-disposition']).toMatch(/^inline/);
+      await studentAgent.get(`${up.body.url}?download=1`).expect(403);
       await teacherAgent
         .patch(`/api/v1/teach/lessons/${lesson.id}`)
         .send({ downloadsAllowed: true })
         .expect(200);
-      const dl = await h.client().get(`${up.body.url}?download=1`).expect(200);
+      const dl = await studentAgent.get(`${up.body.url}?download=1`).expect(200);
       expect(dl.headers['content-disposition']).toMatch(/^attachment/);
+    });
 
-      // Without free preview, the same file closes to visitors again.
+    it('PowerPoint and Word files attach to a session and always download; programs are refused', async () => {
+      const { teacherAgent, course } = await setup();
+      const { lesson } = await addLesson(teacherAgent, course.id);
+      // A tiny .pptx: a ZIP whose parts name the presentation.
+      const pptx = Buffer.concat([
+        Buffer.from('PK\x03\x04', 'latin1'),
+        Buffer.alloc(26),
+        Buffer.from('[Content_Types].xml ppt/presentation.xml', 'latin1'),
+        Buffer.alloc(64),
+      ]);
+      const up = await teacherAgent
+        .post('/api/v1/files')
+        .field('purpose', 'LESSON_FILE')
+        .field('courseId', course.id)
+        .attach('file', pptx, 'Week 1 slides.pptx')
+        .expect(201);
+      expect(up.body.mime).toBe(
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      );
       await teacherAgent
+        .post(`/api/v1/teach/lessons/${lesson.id}/blocks`)
+        .send({ type: 'FILE', fileId: up.body.id })
+        .expect(201);
+      const file = await teacherAgent.get(up.body.url).expect(200);
+      expect(file.headers['content-disposition']).toMatch(/^attachment/);
+      // An old-style .doc is told apart by its name; the same bytes named .exe are refused.
+      const ole = Buffer.concat([
+        Buffer.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]),
+        Buffer.alloc(512),
+      ]);
+      const doc = await teacherAgent
+        .post('/api/v1/files')
+        .field('purpose', 'LESSON_FILE')
+        .field('courseId', course.id)
+        .attach('file', ole, 'notes.doc')
+        .expect(201);
+      expect(doc.body.mime).toBe('application/msword');
+      await teacherAgent
+        .post('/api/v1/files')
+        .field('purpose', 'LESSON_FILE')
+        .field('courseId', course.id)
+        .attach('file', ole, 'setup.exe')
+        .expect(415);
+      await teacherAgent
+        .post('/api/v1/files')
+        .field('purpose', 'LESSON_FILE')
+        .field('courseId', course.id)
+        .attach('file', Buffer.from('MZ fake program'.padEnd(64, ' ')), 'slides.pptx')
+        .expect(415);
+    });
+
+    it('a week holds up to 3 sessions, and a session can have a date', async () => {
+      const { teacherAgent, course } = await setup();
+      const { unit, lesson } = await addLesson(teacherAgent, course.id);
+      for (const title of ['Session 2', 'Session 3']) {
+        await teacherAgent
+          .post(`/api/v1/teach/units/${unit.id}/lessons`)
+          .send({ title })
+          .expect(201);
+      }
+      const full = await teacherAgent
+        .post(`/api/v1/teach/units/${unit.id}/lessons`)
+        .send({ title: 'Session 4' })
+        .expect(400);
+      expect(full.body.error.message).toMatch(/up to 3 sessions/);
+      const dated = await teacherAgent
         .patch(`/api/v1/teach/lessons/${lesson.id}`)
-        .send({ isFreePreview: false })
+        .send({ sessionDate: '2026-12-01T12:00:00+03:00' })
         .expect(200);
-      await h.client().get(up.body.url).expect(401);
+      expect(dated.body.sessionDate).toBe('2026-12-01T09:00:00.000Z');
     });
 
     it('checks access for videos too, and never lets them be downloaded', async () => {

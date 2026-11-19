@@ -14,6 +14,7 @@ type Params = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
   (Array.isArray(value) ? value[0] : value) ?? '';
 const STATUSES = [
+  'AWAITING_APPROVAL',
   'AWAITING_PAYMENT',
   'PAYMENT_SUBMITTED',
   'ACTIVE',
@@ -40,14 +41,16 @@ export default async function AdminEnrolmentsPage({
   for (const key of ['courseId', 'status', 'studentId'] as const) {
     if (filters[key]) query.set(key, filters[key]);
   }
-  const [data, courses] = await Promise.all([
+  const [data, courses, requests] = await Promise.all([
     apiFetch<Paged<AdminEnrolment>>(`/admin/enrolments?${query}`),
     apiFetch<{ items: { id: string; title: string }[] }>('/public/courses'),
+    apiFetch<{ count: number }>('/admin/enrolments/requests/count').catch(() => ({ count: 0 })),
   ]);
   return (
     <EnrolmentsView
       data={data}
       filters={filters}
+      requests={requests.count}
       courses={courses.items.map((c) => ({ id: c.id, title: c.title }))}
     />
   );

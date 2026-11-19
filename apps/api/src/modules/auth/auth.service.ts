@@ -1,5 +1,12 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { maskPhone, normalizePhone, type RegisterInput, type SignInInput } from '@natik/shared';
+import {
+  maskEmail,
+  maskPhone,
+  normalizePhone,
+  type RegisterInput,
+  type SignInInput,
+} from '@natik/shared';
+import { Prisma } from '../../generated/prisma/client';
 import { AppException } from '../../common/errors/app.exception';
 import { RateLimiter } from '../../common/security/rate-limiter';
 import { hashPassword, verifyPassword } from '../../common/security/password-hasher';
@@ -25,7 +32,7 @@ export interface ClientInfo {
 
 @Injectable()
 export class AuthService {
-  /** Verified against when the phone is unknown, so unknown and wrong-password answers take equally long. */
+  /** Verified against when the account is unknown, so unknown and wrong-password answers take equally long. */
   private dummyHash: Promise<string> | null = null;
 
   constructor(
@@ -41,8 +48,9 @@ export class AuthService {
   // ── Register ───────────────────────────────────────────────────────────
 
   /**
-   * Creates a student account and signs them in at once: name, phone and password are all that is
-   * needed. No SMS is sent (change request: SMS verification removed from registration).
+   * Creates a student account and signs them in at once: name, email, phone and password are all that
+   * is needed. The email is what they sign in with. No SMS is sent (change request: SMS verification
+   * removed from registration).
    */
   async register(input: RegisterInput, client: ClientInfo) {
     const phone = normalizePhone(input.phone)!;
@@ -51,6 +59,12 @@ export class AuthService {
     if (await this.prisma.user.findUnique({ where: { phone } })) {
       throw new AppException('PHONE_ALREADY_REGISTERED', HttpStatus.CONFLICT, {
         fields: { phone: ['This number already has an account.'] },
+      });
+    }
+
+    if (await this.prisma.user.findUnique({ where: { email: input.email } })) {
+      throw new AppException('EMAIL_ALREADY_REGISTERED', HttpStatus.CONFLICT, {
+        fields: { email: ['This email already has an account.'] },
       });
     }
 
@@ -63,22 +77,37 @@ export class AuthService {
 
     const now = new Date();
     const branch = await this.prisma.branch.findFirstOrThrow({ orderBy: { createdAt: 'asc' } });
-    const user = await this.prisma.user.create({
-      data: {
-        branchId: branch.id,
-        phone,
-        role: 'STUDENT',
-        fullName: input.fullName.trim(),
-        email: input.email?.trim() || null,
-        passwordHash: await hashPassword(input.password),
-        interestLanguageId: input.interestLanguageId ?? null,
-        termsAcceptedAt: now,
-        ageConfirmedAt: now,
-        lastSignInAt: now,
-        // Signing up is activity: teachers see "active today", not "not active yet".
-        lastActiveAt: now,
-      },
-    });
+    const user = await this.prisma.user
+      .create({
+        data: {
+          branchId: branch.id,
+          phone,
+          role: 'STUDENT',
+          fullName: input.fullName.trim(),
+          email: input.email,
+          passwordHash: await hashPassword(input.password),
+          interestLanguageId: input.interestLanguageId ?? null,
+          gender: input.gender ?? null,
+          country: input.country ?? null,
+          city: input.city?.trim() || null,
+          termsAcceptedAt: now,
+          ageConfirmedAt: now,
+          lastSignInAt: now,
+          // Signing up is activity: teachers see "active today", not "not active yet".
+          lastActiveAt: now,
+        },
+      })
+      .catch((error: unknown) => {
+        // Two people registering the same address at the same moment: the database refuses the second.
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+          const taken = JSON.stringify(error.meta ?? {}).includes('email') ? 'email' : 'phone';
+          throw new AppException(
+            taken === 'email' ? 'EMAIL_ALREADY_REGISTERED' : 'PHONE_ALREADY_REGISTERED',
+            HttpStatus.CONFLICT,
+          );
+        }
+        throw error;
+      });
     await this.audit.record({
       actorId: user.id,
       action: 'ACCOUNT_REGISTERED',
@@ -89,19 +118,45 @@ export class AuthService {
     return this.startSession(user, false, client);
   }
 
-  /** Sends a password-reset code. Always the same outcome for known and unknown numbers. */
-  private async sendResetCode(phone: string, client: ClientInfo) {
-    const user = await this.prisma.user.findUnique({ where: { phone } });
-    await this.otp.issue(phone, 'RESET_PASSWORD', client.ip, !!user && user.status === 'ACTIVE');
+  /**
+   * Finds the account a reset is for: by email (what the website asks for) or by phone. The code is
+   * always texted to the phone on that account. For an unknown address a stand-in key is used so the
+   * limits and the answer look the same as for a known one.
+   */
+  private async resetTarget(who: { email?: string; phone?: string }) {
+    const phone = who.phone ? normalizePhone(who.phone) : null;
+    const user = who.email
+      ? await this.prisma.user.findUnique({ where: { email: who.email } })
+      : phone
+        ? await this.prisma.user.findUnique({ where: { phone } })
+        : null;
+    const key = user?.phone ?? phone ?? `email:${who.email ?? ''}`;
+    return { user, key };
+  }
+
+  /** Sends a password-reset code. Always the same outcome for known and unknown accounts. */
+  private async sendResetCode(who: { email?: string; phone?: string }, client: ClientInfo) {
+    const { user, key } = await this.resetTarget(who);
+    await this.otp.issue(
+      key,
+      'RESET_PASSWORD',
+      client.ip,
+      !!user && user.status === 'ACTIVE' && !!user.phone,
+    );
   }
 
   // ── Sign in and out ────────────────────────────────────────────────────
 
   async signIn(input: SignInInput, client: ClientInfo) {
-    const phone = normalizePhone(input.phone)!;
+    const email = input.email ?? null;
+    const phone = input.phone ? normalizePhone(input.phone) : null;
     await this.limiter.assert(`signin-ip:${client.ip}`, 10, 60);
 
-    const user = await this.prisma.user.findUnique({ where: { phone } });
+    const user = email
+      ? await this.prisma.user.findUnique({ where: { email } })
+      : phone
+        ? await this.prisma.user.findUnique({ where: { phone } })
+        : null;
     if (user?.lockedUntil && user.lockedUntil.getTime() > Date.now()) {
       throw new AppException('ACCOUNT_LOCKED', HttpStatus.TOO_MANY_REQUESTS);
     }
@@ -109,7 +164,11 @@ export class AuthService {
     const hash = user?.passwordHash ?? (await this.getDummyHash());
     const passwordOk = await verifyPassword(hash, input.password);
     if (!user || !passwordOk || user.status !== 'ACTIVE') {
-      await this.recordFailure(user?.id ?? null, phone, client);
+      await this.recordFailure(
+        user?.id ?? null,
+        email ? maskEmail(email) : maskPhone(phone),
+        client,
+      );
       throw new AppException('INVALID_CREDENTIALS', HttpStatus.UNAUTHORIZED);
     }
 
@@ -140,20 +199,20 @@ export class AuthService {
 
   // ── Forgot / reset / set password ──────────────────────────────────────
 
-  /** Always answers the same way, whether or not the number has an account (FR-AUTH-004). */
-  async forgotPassword(phone: string, client: ClientInfo): Promise<void> {
-    await this.sendResetCode(phone, client);
+  /** Always answers the same way, whether or not the email has an account (FR-AUTH-004). */
+  async forgotPassword(who: { email?: string; phone?: string }, client: ClientInfo): Promise<void> {
+    await this.sendResetCode(who, client);
   }
 
   /** Step 2 of reset: a valid SMS code becomes a short-lived single-use token. */
   async verifyResetCode(
-    phone: string,
+    who: { email?: string; phone?: string },
     code: string,
     client: ClientInfo,
   ): Promise<{ token: string }> {
     await this.limiter.assert(`verify-ip:${client.ip}`, 30, 3600);
-    await this.otp.verify(phone, 'RESET_PASSWORD', code);
-    const user = await this.prisma.user.findUnique({ where: { phone } });
+    const { user, key } = await this.resetTarget(who);
+    await this.otp.verify(key, 'RESET_PASSWORD', code);
     if (!user || user.status !== 'ACTIVE')
       throw new AppException('OTP_INVALID', HttpStatus.BAD_REQUEST);
     return { token: await this.createPasswordToken(user.id, RESET_TOKEN_TTL_MS) };
@@ -229,7 +288,7 @@ export class AuthService {
   /** 5 wrong passwords in 15 minutes lock the account for 15 minutes (BR-AUTH-005). */
   private async recordFailure(
     userId: string | null,
-    phone: string,
+    who: string,
     client: ClientInfo,
   ): Promise<void> {
     if (userId) {
@@ -249,7 +308,7 @@ export class AuthService {
       action: 'SIGN_IN_FAILED',
       entityType: 'User',
       entityId: userId ?? 'unknown',
-      details: { phone: maskPhone(phone) },
+      details: { who },
       ip: client.ip,
     });
   }

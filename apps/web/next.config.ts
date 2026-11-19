@@ -37,9 +37,18 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    // Course pictures are shown small, so they use the lighter 60 quality; everything else 75.
+    qualities: [60, 75],
   },
   // Same-origin API: the browser calls /api/*, which is forwarded to the NestJS API.
   // In production the reverse proxy does this first; this rewrite is the fallback.
+  // Sample lessons were public before; the site now shows course introductions only.
+  async redirects() {
+    return [
+      { source: '/free-lessons', destination: '/courses', permanent: true },
+      { source: '/courses/:slug/lessons/:id', destination: '/courses/:slug', permanent: true },
+    ];
+  },
   async rewrites() {
     return [{ source: '/api/:path*', destination: `${apiUrl}/api/:path*` }];
   },

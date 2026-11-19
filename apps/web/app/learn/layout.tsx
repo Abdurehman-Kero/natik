@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ClientMessages } from '@/components/client-messages';
 import { PageFade } from '@/components/brand/page-fade';
 import { Container } from '@/components/ui/layout';
 
@@ -8,16 +9,18 @@ import { Container } from '@/components/ui/layout';
  */
 export default function LearnLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-dvh bg-canvas">
-      <Container
-        as="main"
-        id="main"
-        tabIndex={-1}
-        size="reading"
-        className="py-4 pb-32 focus:outline-none md:py-8"
-      >
-        <PageFade>{children}</PageFade>
-      </Container>
-    </div>
+    <ClientMessages area="learn">
+      <div className="min-h-dvh bg-canvas">
+        <Container
+          as="main"
+          id="main"
+          tabIndex={-1}
+          size="reading"
+          className="py-4 pb-32 focus:outline-none md:py-8"
+        >
+          <PageFade>{children}</PageFade>
+        </Container>
+      </div>
+    </ClientMessages>
   );
 }

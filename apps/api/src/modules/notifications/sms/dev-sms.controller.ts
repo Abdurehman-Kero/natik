@@ -29,3 +29,27 @@ export class DevSmsController {
     return { items };
   }
 }
+
+/** The sample accounts from `pnpm db:seed`, so the sign-in screen's quick-pick can fill in the email. */
+const SAMPLE_PHONES = ['+251911000000', '+251911000001', '+251911000002'];
+
+/** Local development only. Hidden in staging/production, like the SMS inbox above. */
+@ApiTags('Development')
+@Controller('dev/accounts')
+export class DevAccountsController {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: AppConfigService,
+  ) {}
+
+  @Public()
+  @Get()
+  async sample() {
+    if (!this.config.isLocal) throw new AppException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    const items = await this.prisma.user.findMany({
+      where: { phone: { in: SAMPLE_PHONES } },
+      select: { phone: true, email: true },
+    });
+    return { items };
+  }
+}
