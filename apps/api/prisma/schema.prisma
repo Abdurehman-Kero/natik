@@ -1176,3 +1176,13 @@ model LessonSlide {
 
   @@index([blockId, position])
 }
+
+/// File contents kept in the database itself when STORAGE_DRIVER=database (the free pilot, which has
+/// no file storage of its own). Production keeps files in an S3-compatible bucket instead.
+model StoredObject {
+  key         String   @id
+  contentType String
+  size        Int
+  data        Bytes
+  createdAt   DateTime @default(now())
+}

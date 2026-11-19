@@ -220,9 +220,11 @@ describe('public website API', () => {
           .post('/api/v1/me/photo')
           .attach('photo', png, { filename: 'b.png', contentType: 'image/png' })
       ).body.photoUrl;
-      expect((await h.client().get(teacherPhoto).redirects(0)).status).toBe(302);
+      // Opens = a link to the bucket (302), or with database storage the picture itself (200).
+      expect([200, 302]).toContain((await h.client().get(teacherPhoto).redirects(0)).status);
       expect((await h.client().get(studentPhoto).redirects(0)).status).toBe(404);
-      expect((await teacherAgent.get(studentPhoto).redirects(0)).status).toBe(302); // signed-in people can
+      // signed-in people can
+      expect([200, 302]).toContain((await teacherAgent.get(studentPhoto).redirects(0)).status);
     });
   });
 

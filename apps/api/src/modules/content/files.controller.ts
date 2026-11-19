@@ -152,9 +152,16 @@ export class FilesController {
         });
         if (!owner) throw new AppException('NOT_FOUND', HttpStatus.NOT_FOUND);
       }
-      const url = await this.storage.signedUrl(file.storageKey);
       res.setHeader('Cache-Control', 'private, max-age=240');
-      res.redirect(HttpStatus.FOUND, url);
+      const url = await this.storage.signedUrl(file.storageKey);
+      if (url) {
+        res.redirect(HttpStatus.FOUND, url);
+      } else {
+        // Files kept in the database have no bucket link: send the picture itself.
+        const { body, contentType } = await this.storage.read(file.storageKey);
+        res.setHeader('Content-Type', contentType);
+        res.send(body);
+      }
       return;
     }
 

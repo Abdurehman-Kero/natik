@@ -402,7 +402,8 @@ describe('accounts and sign-in', () => {
       expect(ok.status).toBe(201);
       expect(ok.body.photoUrl).toMatch(/^\/api\/v1\/files\//);
       const redirect = await agent.get(ok.body.photoUrl).redirects(0);
-      expect(redirect.status).toBe(302);
+      // A link to the bucket (302), or with database storage the picture itself (200).
+      expect([200, 302]).toContain(redirect.status);
 
       const fake = await agent
         .post('/api/v1/me/photo')

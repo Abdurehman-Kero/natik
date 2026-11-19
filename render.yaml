@@ -1,9 +1,20 @@
-# Render Blueprint for the PILOT: the API (and its background worker), PostgreSQL and Redis on Render.
-# The website itself runs on Vercel (see docs/PILOT-HOSTING.md).
+# Render Blueprint for the FREE PILOT: the API (and its background worker), PostgreSQL and Redis on
+# Render's free tier. The website itself runs on Vercel (see docs/PILOT-HOSTING.md).
 #
 # How to use: Render dashboard → New → Blueprint → pick this repository. Render asks for the values
-# marked `sync: false` once. Plan names are Render's current ones; if the dashboard reports an unknown
-# value, pick the plan there and keep the rest.
+# marked `sync: false` once.
+#
+# What "free" means on Render (https://render.com/docs/free):
+#   * The API goes to sleep after 15 minutes without traffic and takes about a minute to wake up.
+#     The guide shows how to keep it awake with a free pinger.
+#   * The database is deleted 30 days after it is created (14 days of grace). Fine for a pilot;
+#     the guide shows how to move the data before then. No backups.
+#   * Redis keeps nothing on disk: rate-limit counters and queued SMS messages are lost on a restart.
+#   * 512 MB of memory: printing certificates (a headless browser) may run out of it.
+#   * Files are kept in that same database (see STORAGE_DRIVER below), so they are limited by its 1 GB.
+#   * One free database and one free Redis per Render account, and 750 free hours a month shared by
+#     all free web services (one always-awake API uses almost all of it).
+# Moving up later means changing `plan: free` to a paid plan name (for example `0.5c-512mb`).
 #
 # Pilot choices (change them for production):
 #   APP_ENV=staging       real cookies (Secure), search engines kept away, but the built-in checks for
@@ -13,24 +24,22 @@
 
 databases:
   - name: natik-db
-    # `free` databases are deleted 30 days after creation (+14 days grace): fine for a first look,
-    # not for a pilot with real students. This is the smallest paid size.
-    plan: 0.1c-256mb
+    plan: free
     postgresMajorVersion: '17'
     databaseName: natik
     user: natik
     region: frankfurt
-    # Reachable from the Render services only. To run migrations from your own computer (see the guide),
-    # temporarily add your IP here in the dashboard (Access Control).
+    # Reachable from the Render services only. To run the one-time setup from your own computer (see
+    # the guide), temporarily add your IP in the dashboard (the database's Access Control).
     ipAllowList: []
 
 services:
   - type: keyvalue
     name: natik-redis
-    # `free` is 25 MB with no saving to disk: enough for rate limits and the SMS queue in a pilot.
     plan: free
     region: frankfurt
-    # The SMS queue (BullMQ) needs Redis to keep its jobs instead of evicting them.
+    # The SMS queue (BullMQ) wants Redis to keep its jobs instead of evicting them. If Render's
+    # dashboard says it cannot set this on the free plan, delete this line.
     maxmemoryPolicy: noeviction
     # Internal connections only.
     ipAllowList: []
@@ -40,12 +49,13 @@ services:
     runtime: docker
     dockerfilePath: ./apps/api/Dockerfile
     dockerContext: .
-    # Smallest paid web size. Printing certificates starts a headless browser; if that runs out of
-    # memory, move up one size.
-    plan: 0.5c-512mb
+    plan: free
     region: frankfurt
     healthCheckPath: /api/v1/health
-    autoDeployTrigger: commit
+    # Free accounts have a limited number of build minutes a month and this image takes several to
+    # build, so a new version is deployed by hand: Render → natik-api → Manual Deploy → Deploy latest
+    # commit. Change to `commit` to deploy on every push.
+    autoDeployTrigger: 'off'
     envVars:
       - key: NODE_ENV
         value: production
@@ -81,41 +91,38 @@ services:
         value: console
       - key: SMS_SENDER
         value: Natik
-      # Private file storage: any S3-compatible bucket (Cloudflare R2 recommended, see the guide).
-      - key: S3_ENDPOINT
-        sync: false
-      - key: S3_BUCKET
-        sync: false
-      - key: S3_ACCESS_KEY
-        sync: false
-      - key: S3_SECRET_KEY
-        sync: false
-      - key: S3_REGION
-        value: auto
-      - key: S3_FORCE_PATH_STYLE
-        value: 'true'
-      # Lesson videos: `local` stores them in the bucket (fine for a pilot, up to 100 MB each);
+      # Files (receipts, certificates, lesson files, pictures) are kept inside the free database, so the
+      # pilot needs no storage account and no card. A pilot-sized amount only: they share the free
+      # database's 1 GB and disappear with it after 30 days. For production switch to an S3-compatible
+      # bucket: set STORAGE_DRIVER=s3 plus S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY, S3_SECRET_KEY, S3_REGION
+      # (copy the existing files first with apps/api/prisma/copy-files-to-s3.ts, see the guide).
+      - key: STORAGE_DRIVER
+        value: database
+      # Lesson videos: `local` stores them in the file storage above (up to 100 MB each);
       # production uses Bunny Stream.
       - key: VIDEO_PROVIDER
         value: local
 
   # ── Only if the website cannot go on Vercel (for example uploads above 4.5 MB fail there) ──────────
   # Remove the leading "# " of the block below, set TRUST_PROXY_HOPS to '1' above, and skip Vercel.
+  # Two always-awake free services would use more than the 750 free hours a month, so with this block
+  # either upgrade one of them or let the website sleep too.
   #
   # - type: web
   #   name: natik-web
   #   runtime: docker
   #   dockerfilePath: ./apps/web/Dockerfile
   #   dockerContext: .
-  #   plan: 0.5c-512mb
+  #   plan: free
   #   region: frankfurt
   #   healthCheckPath: /
-  #   autoDeployTrigger: commit
+  #   autoDeployTrigger: 'off'
   #   envVars:
   #     - key: APP_ENV
   #       value: staging
   #     - key: NEXT_PUBLIC_APP_URL
   #       sync: false
   #     # The API's private address on Render: http://natik-api:10000
+  #     # (a free service cannot be reached privately, so use the API's public address instead)
   #     - key: API_INTERNAL_URL
-  #       value: http://natik-api:10000
+  #       sync: false

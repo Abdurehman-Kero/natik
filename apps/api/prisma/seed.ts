@@ -237,23 +237,33 @@ async function ensureCourseImage(
     .webp({ quality: 80 })
     .toBuffer();
   const key = `courses/${slug}.webp`;
-  const s3 = new S3Client({
-    endpoint: process.env.S3_ENDPOINT ?? 'http://localhost:9010',
-    region: process.env.S3_REGION ?? 'us-east-1',
-    forcePathStyle: true,
-    credentials: {
-      accessKeyId: process.env.S3_ACCESS_KEY ?? 'natik',
-      secretAccessKey: process.env.S3_SECRET_KEY ?? 'natik-dev-secret',
-    },
-  });
-  await s3.send(
-    new PutObjectCommand({
-      Bucket: process.env.S3_BUCKET ?? 'natik-private',
-      Key: key,
-      Body: webp,
-      ContentType: 'image/webp',
-    }),
-  );
+  if (process.env.STORAGE_DRIVER === 'database') {
+    // The free pilot keeps files inside PostgreSQL, like the API does.
+    const data = new Uint8Array(webp);
+    await prisma.storedObject.upsert({
+      where: { key },
+      create: { key, contentType: 'image/webp', size: webp.length, data },
+      update: { contentType: 'image/webp', size: webp.length, data },
+    });
+  } else {
+    const s3 = new S3Client({
+      endpoint: process.env.S3_ENDPOINT ?? 'http://localhost:9010',
+      region: process.env.S3_REGION ?? 'us-east-1',
+      forcePathStyle: true,
+      credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY ?? 'natik',
+        secretAccessKey: process.env.S3_SECRET_KEY ?? 'natik-dev-secret',
+      },
+    });
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET ?? 'natik-private',
+        Key: key,
+        Body: webp,
+        ContentType: 'image/webp',
+      }),
+    );
+  }
   const file = await prisma.fileAsset.create({
     data: {
       purpose: 'COURSE_IMAGE',

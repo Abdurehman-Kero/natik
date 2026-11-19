@@ -1,62 +1,65 @@
-# Pilot hosting: Render (API) + Vercel (website)
+# Free pilot hosting: Render (API) + Vercel (website)
 
-A cheap, quick way to put Natik online for a pilot with real people, built so that moving to Natik's own
-server later is a copy-and-switch job, not a rebuild. The final layout is in
+A free way to put Natik online for a pilot, built so that moving to Natik's own server later is a
+copy-and-switch job, not a rebuild. The final layout is in
 [`docker/compose.prod.example.yml`](../docker/compose.prod.example.yml); this guide is the stepping stone.
 
 ```
- Browser ──► Vercel (website, Next.js) ──/api/*──► Render: API + SMS queue ──► Render PostgreSQL
-                                                        │                  └─► Render Key Value (Redis)
-                                                        └─► Cloudflare R2 (private files, receipts, certificates)
+ Browser ──► Vercel (website, Next.js) ──/api/*──► Render: API + SMS queue ──► Render PostgreSQL (free)
+                                                        │                  └─► Render Key Value / Redis (free)
+                                                        └─► files kept inside that same PostgreSQL (free pilot)
 ```
 
 The website forwards `/api/*` to the API, so the browser only ever talks to one address and the sign-in
 cookie works without any cross-site settings.
 
-## 0. What you need first
+## What "free" means here (read this first)
 
-| Need                                                         | Why                                                                                                                                                                                  |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| The code on GitHub, **committed and pushed**                 | Render and Vercel build from the repository. The remote is already `Abdurehman-Kero/natik`. Everything built recently (email sign-in, profiles, speed work) must be committed first. |
-| A Render account                                             | API, database, Redis                                                                                                                                                                 |
-| A Vercel account                                             | The website. _Check Vercel's terms:_ the free Hobby plan is for personal, non-commercial use; a pilot for a business normally needs the paid Pro plan.                               |
-| A Cloudflare account (R2)                                    | Private file storage (free up to 10 GB). Any S3-compatible storage works.                                                                                                            |
-| Optional: an [Afro Message](https://afromessage.com) account | Real SMS. Without it nobody receives password-reset codes or "set your password" links (see section 6).                                                                              |
+| Part              | Free limit                                                                                                                                                           | What it means for the pilot                                                                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Render API        | Sleeps after 15 minutes without traffic, about a minute to wake ([Render: Deploy for Free](https://render.com/docs/free)). 750 free hours a month, 512 MB of memory. | The first visitor after a quiet spell waits. Fix: a free pinger keeps it awake (section 5, step 3). Printing certificates may run out of memory. |
+| Render PostgreSQL | 1 GB, **deleted 30 days after creation** (14 days of grace), no backups.                                                                                             | Fine for a pilot of a few weeks. Put the date in your calendar and follow section 6 before it.                                                   |
+| Render Redis      | In memory only, lost on a restart.                                                                                                                                   | Only rate-limit counters and queued SMS messages are lost; accounts and courses are safe.                                                        |
+| Render builds     | A limited number of build minutes a month.                                                                                                                           | A new version is deployed by hand (not on every push).                                                                                           |
+| Vercel            | The free "Hobby" plan is for personal, **non-commercial** use.                                                                                                       | A pilot for the centre may need the paid Pro plan: read Vercel's terms and decide.                                                               |
+| Files             | Kept inside the free Render database (1 GB, shared with everything else).                                                                                            | No storage account and no card. They disappear with the database after 30 days, so back up with `pg_dump` (section 6). Keep videos short.        |
 
-## 1. File storage (Cloudflare R2), 5 minutes
+## 0. What you need
 
-1. Cloudflare dashboard → **R2** → _Create bucket_ named `natik-private` (keep it **private**; the API serves files after checking who is asking).
-2. R2 → _Manage API tokens_ → create a token with **Object Read & Write** on that bucket.
-3. Write down: the **S3 endpoint** (`https://<account-id>.r2.cloudflarestorage.com`), the **Access Key ID** and the **Secret Access Key**.
+- The code on GitHub, committed and pushed (the repository is `Abdurehman-Kero/natik`; keep `main` up to date).
+- Accounts, free to open: [Render](https://render.com), [Vercel](https://vercel.com) (sign in to both with GitHub, it is simplest) and a pinger such as [UptimeRobot](https://uptimerobot.com). None of the free plans should ask for a payment card; if one does, stop there and tell me.
+- Optional now, needed before real students: an [Afro Message](https://afromessage.com) account for SMS (section 7).
+- On your computer: the project already running locally (`pnpm install` done), and PowerShell.
 
-The API does not create the bucket by itself, so it must exist before the first upload.
+## 1. File storage: nothing to set up
 
-## 2. The API, database and Redis on Render
+Receipts, certificates, lesson files and pictures are kept **inside the free database** (`STORAGE_DRIVER=database`,
+already set in [`render.yaml`](../render.yaml)). That is why the pilot needs no storage account and no card. The cost:
+they share the free database's 1 GB and they go when the database does, so they are covered by the same `pg_dump`
+backup (section 6). A few hundred receipts and PDFs fit easily; long videos do not (section 7).
 
-1. Render dashboard → **New → Blueprint** → choose the `natik` repository. Render reads [`render.yaml`](../render.yaml) and proposes: `natik-db` (PostgreSQL), `natik-redis` (Redis-compatible Key Value) and `natik-api` (the API, built from `apps/api/Dockerfile`).
-2. It asks for the values marked "sync: false":
-   - `APP_URL`: the website address. Not known yet: type `https://example.com` and fix it in step 4.
-   - `S3_ENDPOINT`, `S3_BUCKET` (`natik-private`), `S3_ACCESS_KEY`, `S3_SECRET_KEY`: from section 1.
-3. **Apply.** The first build takes about 10 minutes (it compiles the API and installs a headless browser for certificate PDFs).
-4. When it is live, open `https://natik-api-xxxx.onrender.com/api/v1/health` (the exact address is on the service page). You should see `"status":"ok"` with `database` and `redis` both `up`.
+## 2. The API, database and Redis on Render, about 15 minutes
 
-Plans: the file picks the smallest _paid_ database and API size, because Render's free tier is built for
-trying things out: a free web service goes to sleep after 15 minutes without traffic (the next visitor waits about a minute),
-and a free PostgreSQL database is deleted 30 days after creation, with 14 days of grace
-([Render: Deploy for Free](https://render.com/docs/free)). The Redis instance is left on `free` (25 MB, not saved to disk), which is
-enough for rate limits and the SMS queue.
+1. Render → **Account Settings** → connect **GitHub** and allow the `natik` repository.
+2. **New → Blueprint** → choose the `natik` repository and branch `main`. Render reads [`render.yaml`](../render.yaml) and lists three things: `natik-db` (PostgreSQL), `natik-redis` (Redis) and `natik-api` (the API). All three are on the `free` plan.
+3. It asks for one value marked "enter once": `APP_URL`. Type `https://example.com` for now (fixed in section 5, step 1).
+4. **Deploy Blueprint.** The first build takes about 10 to 15 minutes (it compiles the API and installs a headless browser for certificate PDFs).
+5. If the dashboard rejects a value in the file (for example the Redis memory setting on the free plan), remove that line or pick the option it offers, commit, and try again.
+6. Open the `natik-api` page and copy its address (`https://natik-api-xxxx.onrender.com`). Open `<that address>/api/v1/health`: you should see `"status":"ok"` with `database` and `redis` both `up`. The first request after a sleep can take a minute.
+7. Write down today's date: the free database lasts 30 days (section 6).
 
-## 3. Create the tables and the first admin (once)
+## 3. Create the tables and the first admin (once, from your computer)
 
 The API image does not carry the database tools, so this is run from your own computer, once, and again
-after any later release that adds tables.
+after any later version that adds tables.
 
-1. On the `natik-db` page copy the **External Database URL**, and add your computer's IP address under _Access Control_ (remove it again afterwards). Add `?sslmode=require` to the end if the URL has none.
-2. In PowerShell, from the repository folder:
+1. Render → `natik-db` → **Connections**: copy the **External Database URL**.
+2. On the same page, under **Access Control**, add your computer's public IP address (search "what is my IP"). Remove it again afterwards.
+3. In PowerShell, from the project folder:
 
 ```powershell
 cd apps\api
-$env:DATABASE_URL = "<the external database URL>"
+$env:DATABASE_URL = "<the external database URL>?sslmode=require"
 $env:APP_ENV = "staging"
 $env:SEED_OWNER_NAME = "Natik Owner"
 $env:SEED_OWNER_EMAIL = "<the owner's real email>"
@@ -66,59 +69,79 @@ pnpm exec prisma migrate deploy
 pnpm exec prisma db seed
 ```
 
-3. **Check the line Prisma prints** (`Datasource "db": ... at dpg-....render.com`). If it names `localhost` you are about to change your own development database: stop.
-4. The seed adds languages, levels and the owner. It does **not** add the sample teachers, students or courses (those are for `APP_ENV=local` only). The owner signs in with the **email** and password above.
+4. **Check the line Prisma prints** (`Datasource "db": ... at dpg-....render.com`). If it names `localhost` you are about to change your own development database: stop.
+5. The seed adds languages, levels, the level-check questions and the owner. It does **not** add the sample teachers, students or courses (those are for development only). The owner signs in with the **email** and password above.
 
-## 4. The website on Vercel
+## 4. The website on Vercel, about 10 minutes
 
-1. Vercel → **Add New → Project** → import the repository.
-2. **Root Directory:** `apps/web` (keep "Include source files outside of the Root Directory" on). Framework: Next.js. [`apps/web/vercel.json`](../apps/web/vercel.json) already sets the install and build commands and runs the functions in Frankfurt, next to the API.
-3. **Environment variables** (Production and Preview):
+1. Vercel → **Add New → Project** → import `natik` (allow GitHub access to the private repository).
+2. On the configure screen:
+   - **Project Name**: for example `natik-pilot`. The website address will be `https://natik-pilot.vercel.app` (Vercel adds a suffix if the name is taken; check the address after the first deploy).
+   - **Root Directory**: click _Edit_ and choose `apps/web`. Leave "Include source files outside of the Root Directory" on.
+   - Framework: Next.js. The install and build commands come from [`apps/web/vercel.json`](../apps/web/vercel.json) (it also runs the website's server code in Frankfurt, next to the API).
+3. Open **Environment Variables** and add these **before** the first deploy:
 
-| Name                           | Value                                                                                                                                                                                                                       |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `API_INTERNAL_URL`             | The Render API address, e.g. `https://natik-api-xxxx.onrender.com` (no trailing slash). It is read **while building** (the `/api` forwarding is set up then) and while running, so change it only together with a redeploy. |
-| `NEXT_PUBLIC_APP_URL`          | The website address, e.g. `https://natik-pilot.vercel.app` (or your own domain)                                                                                                                                             |
-| `APP_ENV`                      | `staging` (keeps search engines away from the pilot)                                                                                                                                                                        |
-| `ENABLE_EXPERIMENTAL_COREPACK` | `1` (makes Vercel use the project's pnpm version)                                                                                                                                                                           |
+| Name                           | Value                                                                                                                                                                                                 |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `API_INTERNAL_URL`             | The Render API address from section 2, step 6, no trailing slash. It is read **while building** (the `/api` forwarding is set up then) and while running, so change it only together with a redeploy. |
+| `NEXT_PUBLIC_APP_URL`          | The website address, e.g. `https://natik-pilot.vercel.app`                                                                                                                                            |
+| `APP_ENV`                      | `staging` (keeps search engines away from the pilot)                                                                                                                                                  |
+| `ENABLE_EXPERIMENTAL_COREPACK` | `1` (makes Vercel use the project's pnpm version)                                                                                                                                                     |
 
-4. In Project Settings → General set **Node.js Version** to 24.x (the project requires 24 or newer), then **Deploy**.
-5. Go back to Render → `natik-api` → Environment and set `APP_URL` to the real website address. Render redeploys by itself.
+4. Click **Deploy**. After it finishes, open **Settings → General → Node.js Version** and choose the highest version offered that is 24 or newer (the project needs 24+), then redeploy if you changed it.
+5. Compare the real address with `NEXT_PUBLIC_APP_URL`. If they differ, edit the variable and redeploy.
 
-## 5. Check it works (15 minutes)
+## 5. Connect the two, then check it works
 
-1. Open the website, then `/courses`, then register a student with an email, and sign out and in again.
-2. Sign in as the owner. Create a language/level if needed, a course, and add a **PDF of about 10 MB** to a lesson.
-   - This is the one thing to test on purpose. Vercel limits what its own functions accept to 4.5 MB per request ([Vercel's note on the limit](https://vercel.com/kb/guide/how-to-bypass-vercel-body-size-limit-serverless-functions)), and it is not documented whether forwarding to an outside server such as Render is exempt. If the upload fails with "413" or "payload too large", see the fallback below.
-3. Student: ask to join the course, pay with a receipt photo; admin: the receipt shows in **Payments**.
-4. Admin → **Activity log**: open a few sign-in entries (click the row; the address is in the details). Sign-ins from different phones must show **different visitor addresses**. If every entry shows the same address, set `TRUST_PROXY_HOPS` on the API (Render) to `2` (it is `2` in the file), and if it still repeats, to `3`. This matters because the sign-in and registration limits are counted per address, and one shared address would lock real users out.
+1. Render → `natik-api` → **Environment** → set `APP_URL` to the real website address → **Save**. Render restarts the API.
+2. Open the website. The home page loads, `/courses` shows an empty list (no courses yet), and sign-in with the owner's email works.
+3. **Keep the API awake.** In UptimeRobot add an **HTTP(s)** monitor for `https://natik-api-xxxx.onrender.com/api/v1/health` every 5 minutes. Without it, the website shows an error to whoever arrives first after 15 quiet minutes, because the API is still waking up. One always-awake API uses almost all of Render's 750 free hours, which is fine for one service but not two.
+4. Create a course and add a **PDF of about 10 MB** to a lesson. This is the one thing to test on purpose: Vercel limits what its own functions accept to 4.5 MB per request ([Vercel's note on the limit](https://vercel.com/kb/guide/how-to-bypass-vercel-body-size-limit-serverless-functions)), and it is not documented whether forwarding to an outside server such as Render is exempt. If the upload fails with "413" or "payload too large", see the fallback below.
+5. Register a student, ask to join the course, pay with a receipt photo; as admin the receipt shows in **Payments**.
+6. Admin → **Activity log**: open a few sign-in entries (click the row; the address is in the details). Sign-ins from different phones must show **different visitor addresses**. If every entry shows the same address, set `TRUST_PROXY_HOPS` on the API to `3` (it is `2` in the file). This matters because the sign-in and registration limits are counted per address, and one shared address would lock real users out.
 
-**Fallback if big uploads fail on Vercel:** run the website on Render as well. In [`render.yaml`](../render.yaml) un-comment the `natik-web` block, set `TRUST_PROXY_HOPS` to `1`, apply, and use the Render address instead of Vercel (nothing else changes). The cost is one more small Render service.
+**Fallback if big uploads fail on Vercel:** run the website on Render as well. In [`render.yaml`](../render.yaml) un-comment the `natik-web` block (set `API_INTERNAL_URL` to the API's public address), set `TRUST_PROXY_HOPS` to `1`, commit, and apply the Blueprint again. Two always-awake free services use more than the free 750 hours a month, so let the website sleep (no pinger for it) or upgrade one of them.
 
-## 6. What a pilot does and does not have
+## 6. Before day 30: the free database expires
+
+On day 30 the database becomes unreachable, and it is deleted 14 days later ([Render: Deploy for Free](https://render.com/docs/free)). Choose one a few days before:
+
+- **Keep Render, pay:** `natik-db` → change the plan to a paid size. This keeps the data and the address.
+- **Move to another free PostgreSQL** (for example Neon or Supabase; check their current free limits): create a database there, then copy the data:
+  1. `pg_dump "<old external URL>" --no-owner --format=custom --file natik.dump` (needs the PostgreSQL command-line tools; they come with a PostgreSQL install).
+  2. `pg_restore --no-owner --dbname "<new URL>" natik.dump`
+  3. On Render → `natik-api` → **Environment** replace `DATABASE_URL` with the new address (the "link to database" value is replaced by plain text), save.
+- **Go to the real server** (section 9).
+
+Always take the dump first, even if you intend to pay: the free database has no backups.
+
+## 7. What a pilot does and does not have
 
 - **SMS:** `SMS_PROVIDER=console` (the file's default) sends nothing. Registration and sign-in work, but **password reset codes and "set your password" links reach nobody**, so accounts created by an admin cannot be activated. To fix: get an Afro Message token, then on Render set `SMS_PROVIDER=afromessage` and `AFROMESSAGE_TOKEN` (and `AFROMESSAGE_IDENTIFIER_ID` if you have one).
-- **Videos:** `VIDEO_PROVIDER=local` keeps lesson videos in the bucket (up to 100 MB each, played through the API). Production uses Bunny Stream: create a library, enable token authentication and set `VIDEO_PROVIDER=bunny` with `BUNNY_LIBRARY_ID`, `BUNNY_API_KEY`, `BUNNY_TOKEN_KEY`.
+- **Videos:** `VIDEO_PROVIDER=local` keeps lesson videos in the same file storage (up to 100 MB each, played through the API). In this pilot that means inside the 1 GB database, so keep them short or use few. Production uses Bunny Stream: create a library, enable token authentication and set `VIDEO_PROVIDER=bunny` with `BUNNY_LIBRARY_ID`, `BUNNY_API_KEY`, `BUNNY_TOKEN_KEY`.
 - **`APP_ENV=staging`:** the API's own interactive documentation stays on at `/api/docs` and the stricter response headers of production are off. Do not put real money flows or sensitive data on it until you switch to `production` (which also requires real SMS and Bunny).
-- **Backups:** a paid Render PostgreSQL keeps daily backups; R2 keeps the files. Run the nightly off-site copy from [`RUNBOOKS.md`](RUNBOOKS.md) before real students depend on it.
+- **Backups:** the free Render database has none, and it now holds the files too. Take a `pg_dump` (section 6) every few days. Run the nightly off-site copy from [`RUNBOOKS.md`](RUNBOOKS.md) before real students depend on it.
+- **Deploying a new version:** the API is deployed by hand: Render → `natik-api` → **Manual Deploy → Deploy latest commit** (and run `prisma migrate deploy` from section 3 if the version adds tables). Vercel deploys the website by itself on every push to `main`.
 - **Direct access to the API address:** the API address on Render is public. That is normal, but it means someone could call it directly instead of through the website. Nothing is exposed that the website does not expose; only the per-address rate limits are easier to get around.
 
-## 7. Moving to Natik's own server later
+## 8. When something goes wrong
+
+| Symptom                                       | Likely cause                                                                                                                                                                                          |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Website shows an error page, health URL fails | The API is asleep or still starting (wait a minute, then set up the pinger from section 5, step 3), or an environment value is missing: read the API's **Logs** on Render, the first lines say which. |
+| Build on Render fails                         | Open the build log. Often a plan or field name Render does not accept in `render.yaml`, or the build ran out of free build minutes.                                                                   |
+| Every API call from the website fails         | `API_INTERNAL_URL` on Vercel is wrong or was changed without redeploying.                                                                                                                             |
+| "Too many attempts" for many people at once   | All visitors share one address: see section 5, step 6.                                                                                                                                                |
+| Uploads fail, other things work               | The Vercel size limit (section 5, step 4), or the free database is full (1 GB): remove old files or move to a bigger database.                                                                        |
+| Certificates do not print                     | The free API (512 MB) ran out of memory starting the headless browser: pay for a bigger size, or issue them later from the real server.                                                               |
+| `prisma migrate deploy` cannot connect        | Your IP is not in the database's Access Control, or the URL lacks `?sslmode=require`.                                                                                                                 |
+| Sign-in works locally but not online          | The website address in `APP_URL` (Render) or `NEXT_PUBLIC_APP_URL` (Vercel) does not match the real address.                                                                                          |
+
+## 9. Moving to Natik's own server later
 
 Nothing in the code is tied to Render or Vercel; all settings are environment variables.
 
 1. Build the three images from the same Dockerfiles ([`apps/api/Dockerfile`](../apps/api/Dockerfile), [`apps/web/Dockerfile`](../apps/web/Dockerfile)) and start them with [`docker/compose.prod.example.yml`](../docker/compose.prod.example.yml) (Caddy in front, `TRUST_PROXY_HOPS=1`).
 2. **Database:** `pg_dump` the Render database (External URL) and restore it on the new PostgreSQL. Then run `prisma migrate deploy` with the migrate image.
-3. **Files:** copy the bucket (`rclone sync` from R2 to the new S3-compatible storage), keep the same bucket name, and put the new endpoint and keys in the API's environment. File records in the database do not change.
-4. Copy the environment values across (the same `OTP_PEPPER`, so stored code hashes stay valid), point the domain's DNS at the new server, and keep the Vercel/Render copy for a few days as a fallback.
-
-## 8. When something goes wrong
-
-| Symptom                                       | Likely cause                                                                                                                                       |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Website shows an error page, health URL fails | The API is still starting (Render free sizes sleep), or an environment value is missing: read the API's logs on Render, the first lines say which. |
-| Every API call from the website fails         | `API_INTERNAL_URL` on Vercel is wrong or was changed without redeploying.                                                                          |
-| "Too many attempts" for many people at once   | All visitors share one address: see step 4 of section 5.                                                                                           |
-| Uploads fail, other things work               | The bucket does not exist or the R2 token is read-only; or the Vercel size limit (section 5).                                                      |
-| Certificates do not print                     | The API ran out of memory while starting the headless browser: move `natik-api` up one size.                                                       |
-| `prisma migrate deploy` cannot connect        | Your IP is not in the database's Access Control, or the URL lacks `?sslmode=require`.                                                              |
+3. **Files:** create an S3-compatible bucket and its keys, set `DATABASE_URL` and the `S3_*` values in your shell, and run `cd apps/api && pnpm exec tsx prisma/copy-files-to-s3.ts` (see the comment at the top of that file). It copies every file out of the database with the same names and can be run again safely. Then set `STORAGE_DRIVER=s3` and the same `S3_*` values on the API. File records in the database do not change.
+4. Copy the environment values across (the same `OTP_PEPPER`, so stored code hashes stay valid), point the domain's DNS at the new server, and keep the Render and Vercel copy for a few days as a fallback.

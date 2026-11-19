@@ -58,6 +58,8 @@ jobs:
       DATABASE_URL: postgresql://natik:natik@localhost:5432/natik_test?schema=public
       TEST_DATABASE_URL: postgresql://natik:natik@localhost:5432/natik_test?schema=public
       REDIS_URL: redis://localhost:6379
+      # Files are kept in the database, so this job needs no storage server.
+      STORAGE_DRIVER: database
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -93,6 +95,8 @@ jobs:
       APP_ENV: local
       DATABASE_URL: postgresql://natik:natik@localhost:5432/natik?schema=public
       REDIS_URL: redis://localhost:6379
+      # Files are kept in the database, so this job needs no storage server.
+      STORAGE_DRIVER: database
       SEED_OWNER_NAME: Natik Owner
       SEED_OWNER_PHONE: '+251911000000'
       SEED_OWNER_PASSWORD: ChangeMe2026
@@ -141,6 +145,8 @@ jobs:
       APP_ENV: local
       DATABASE_URL: postgresql://natik:natik@localhost:5432/natik?schema=public
       REDIS_URL: redis://localhost:6379
+      # Files are kept in the database, so this job needs no storage server.
+      STORAGE_DRIVER: database
       SEED_OWNER_NAME: Natik Owner
       SEED_OWNER_PHONE: '+251911000000'
       SEED_OWNER_PASSWORD: ChangeMe2026

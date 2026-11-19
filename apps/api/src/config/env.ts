@@ -31,6 +31,12 @@ export const envSchema = z.object({
   AFROMESSAGE_IDENTIFIER_ID: z.string().optional(),
   AFROMESSAGE_BASE_URL: z.url().default('https://api.afromessage.com/api'),
   SMS_SENDER: z.string().default('Natik'),
+  /**
+   * Where files (receipts, certificates, lesson files, pictures) are kept. `s3` = an S3-compatible
+   * bucket (production). `database` = inside PostgreSQL itself: no extra account, meant for the free
+   * pilot and for tests (a pilot-sized amount of files only; see docs/PILOT-HOSTING.md).
+   */
+  STORAGE_DRIVER: z.enum(['s3', 'database']).default('s3'),
   S3_ENDPOINT: z.url().default('http://localhost:9010'),
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET: z.string().default('natik-private'),
@@ -58,6 +64,8 @@ export const envSchema = z.object({
 export type Env = z.infer<typeof envSchema>;
 
 const DEV_DEFAULTS = ['OTP_PEPPER', 'S3_ACCESS_KEY', 'S3_SECRET_KEY'] as const;
+/** The storage keys only matter when files really go to a bucket. */
+const STORAGE_KEYS = ['S3_ACCESS_KEY', 'S3_SECRET_KEY'] as const;
 
 export function validateEnv(raw: Record<string, unknown>): Env {
   const result = envSchema.safeParse(raw);
@@ -95,7 +103,11 @@ export function validateEnv(raw: Record<string, unknown>): Env {
   }
   // Never run staging/production on the built-in development secrets (NFR-SEC-006).
   if (result.data.APP_ENV === 'staging' || result.data.APP_ENV === 'production') {
-    const missing = DEV_DEFAULTS.filter((key) => raw[key] === undefined || raw[key] === '');
+    const needed = DEV_DEFAULTS.filter(
+      (key) =>
+        result.data.STORAGE_DRIVER === 's3' || !(STORAGE_KEYS as readonly string[]).includes(key),
+    );
+    const missing = needed.filter((key) => raw[key] === undefined || raw[key] === '');
     if (missing.length > 0) {
       throw new Error(
         `Invalid environment configuration:\n  • ${missing.join(', ')} must be set explicitly in ${result.data.APP_ENV}.`,

@@ -63,6 +63,27 @@ describe('secrets outside local development', () => {
   });
 });
 
+describe('file storage settings', () => {
+  const pilot = { ...minimal, APP_ENV: 'staging', OTP_PEPPER: 'a-long-random-pilot-pepper' };
+  it('needs bucket keys when files go to a bucket', () => {
+    expect(() => validateEnv(pilot)).toThrowError(/S3_ACCESS_KEY, S3_SECRET_KEY/);
+    expect(validateEnv({ ...pilot, S3_ACCESS_KEY: 'k', S3_SECRET_KEY: 's' }).STORAGE_DRIVER).toBe(
+      's3',
+    );
+  });
+  it('needs no bucket at all when files are kept in the database (the free pilot)', () => {
+    expect(validateEnv({ ...pilot, STORAGE_DRIVER: 'database' }).STORAGE_DRIVER).toBe('database');
+  });
+  it('still wants the pepper in that case', () => {
+    expect(() =>
+      validateEnv({ ...minimal, APP_ENV: 'staging', STORAGE_DRIVER: 'database' }),
+    ).toThrowError(/OTP_PEPPER/);
+  });
+  it('refuses unknown drivers', () => {
+    expect(() => validateEnv({ ...minimal, STORAGE_DRIVER: 'ftp' })).toThrowError(/STORAGE_DRIVER/);
+  });
+});
+
 describe('video provider settings', () => {
   it('needs the Bunny keys when Bunny is chosen', () => {
     expect(() => validateEnv({ ...minimal, VIDEO_PROVIDER: 'bunny' })).toThrowError(
