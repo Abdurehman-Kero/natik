@@ -65,17 +65,17 @@ test.describe('Google sign-in', () => {
     await again.close();
   });
 
-  test('an email that already has a password is not signed in by Google, and says what to do', async ({
+  test('an email that already has an account with a password signs straight in with Google', async ({
     page,
     baseURL,
   }) => {
     const student = await createStudent(baseURL!);
     await page.goto(`/api/v1/auth/google/start?login_hint=${encodeURIComponent(student.email)}`);
-    await expect(page).toHaveURL(/\/sign-in\?google=exists/);
-    await expect(page.getByRole('alert').or(page.getByRole('status')).first()).toContainText(
-      'already has an account with a password',
-    );
-    await expectNoSeriousA11yIssues(page);
+    await expect(page).toHaveURL(/\/dashboard/);
+    await page.goto('/profile');
+    await expect(page.getByText('Connected', { exact: true })).toBeVisible();
+    // Their password is untouched, so "Change password" is still there.
+    await expect(page.getByRole('button', { name: 'Change password' })).toBeVisible();
   });
 
   test('a Google email that Google has not verified is refused', async ({ page }) => {

@@ -114,11 +114,12 @@ test.describe('public site flow', () => {
 
   test('the tour can be started from the menu, walked through and left', async ({
     page,
-    isMobile,
   }, testInfo) => {
     await page.goto('/');
     await ready(page);
-    if (isMobile) {
+    // Below 1024 px the header is the compact one (a menu button, no Help menu), tablets included.
+    const compact = (page.viewportSize()?.width ?? 0) < 1024;
+    if (compact) {
       await page.getByRole('button', { name: 'Open menu' }).click();
       await page.getByRole('button', { name: 'Take a tour' }).click();
     } else {

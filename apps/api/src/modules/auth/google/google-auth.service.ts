@@ -30,8 +30,6 @@ export type GoogleFailure =
   | 'invalid'
   /** Google has not verified that email address. */
   | 'unverified'
-  /** The email already has an account with a password: sign in with it, then connect Google in Profile. */
-  | 'exists'
   | 'disabled'
   /** This Google account is already connected to someone else. */
   | 'taken'
@@ -70,12 +68,11 @@ export function safeNextPath(value: string | undefined | null): string | null {
  * "Continue with Google". The rules, in order:
  *  1. Google must have verified the email.
  *  2. A person already connected to this Google account signs in.
- *  3. An account an admin created for that email, with no password yet, is connected and signs in:
- *     Google proves the person owns that email.
- *  4. An account with a password is NOT connected automatically (anyone can register with someone else's
- *     email, so that would hand the account to them). They sign in with the password, then connect
- *     Google in their Profile.
- *  5. Otherwise it is a new person: they confirm the terms and age, then the account is created.
+ *  3. An account that already exists for that email (created by an admin, or registered with a
+ *     password) is connected and signs in: Google proves the person owns that email. Its password, if
+ *     any, keeps working. (Natik does not verify emails at registration, so this trusts Google over a
+ *     password someone else may have set for an address that is not theirs; see docs/GOOGLE-SIGN-IN.md.)
+ *  4. Otherwise it is a new person: they confirm the terms and age, then the account is created.
  */
 @Injectable()
 export class GoogleAuthService {
@@ -193,8 +190,9 @@ export class GoogleAuthService {
     if (sameEmail) {
       if (sameEmail.status !== 'ACTIVE') return fail('disabled', 'sign-in', record.next);
       if (sameEmail.googleId) return fail('taken', 'sign-in', record.next);
-      if (sameEmail.passwordHash !== null) return fail('exists', 'sign-in', record.next);
-      // Created by an admin for this email and never given a password: Google proves it is them.
+      // An account already exists for this email (made by an admin, or registered with a password):
+      // Google has verified the email, so this is its owner. Connect Google and sign them in; any
+      // password they have keeps working.
       const linked = await this.prisma.user.update({
         where: { id: sameEmail.id },
         data: { googleId: profile.sub },
@@ -204,7 +202,7 @@ export class GoogleAuthService {
         action: 'GOOGLE_CONNECTED',
         entityType: 'User',
         entityId: linked.id,
-        details: { atFirstSignIn: true },
+        details: { atFirstSignIn: true, hadPassword: sameEmail.passwordHash !== null },
         ip: input.client.ip,
       });
       return this.signIn(linked, record.next, input.client);

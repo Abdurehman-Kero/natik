@@ -38,6 +38,7 @@ import { Button, LinkButton } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/cn';
 import { useSession } from '@/lib/use-session';
+import { placeCard } from './place-card';
 
 export type TourVariant = 'public' | 'student';
 
@@ -230,6 +231,8 @@ function TourRun({ variant, onClose }: { variant: TourVariant; onClose: () => vo
   const auth = useAuthDialog();
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
+  // The card's real size, so it can be kept fully on screen wherever it is placed.
+  const [cardHeight, setCardHeight] = useState(300);
   const cardRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
 
@@ -257,6 +260,12 @@ function TourRun({ variant, onClose }: { variant: TourVariant; onClose: () => vo
       window.removeEventListener('scroll', measure);
     };
   }, [measure]);
+
+  useLayoutEffect(() => {
+    const height = cardRef.current?.offsetHeight;
+    if (height) setCardHeight((current) => (current === height ? current : height));
+    // The text (and so the height) changes with the step and with the width of the window.
+  }, [index, rect]);
 
   useEffect(() => {
     nextRef.current?.focus();
@@ -297,21 +306,33 @@ function TourRun({ variant, onClose }: { variant: TourVariant; onClose: () => vo
   const Icon = step.icon;
   const journey = (variant === 'student' ? tc.raw('list') : tc.raw('journey')) as string[];
 
-  // Where the card sits: beside the highlighted part on larger screens, the bottom edge on phones,
-  // the middle of the screen for steps that do not point at anything.
+  // Where the card sits: beside the highlighted part on larger screens (always fully on screen, see
+  // placeCard), the top or bottom edge on phones, the middle of the screen for steps that do not point
+  // at anything.
   let cardStyle: CSSProperties = {};
   let cardClass =
     'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(26rem,calc(100vw-1.5rem))]';
   if (rect) {
     if (window.innerWidth < 640) {
-      cardClass = 'inset-x-3 bottom-3';
+      // On the opposite half from the highlighted part, so the card never covers what it points at.
+      cardClass =
+        rect.top + rect.height / 2 > window.innerHeight / 2
+          ? 'inset-x-3 top-3'
+          : 'inset-x-3 bottom-3';
     } else {
-      const width = 384;
-      const left = Math.min(
-        Math.max(rect.left + rect.width / 2 - width / 2, 12),
-        window.innerWidth - width - 12,
+      const width = Math.min(384, window.innerWidth - 24);
+      const spot = {
+        top: rect.top - 6,
+        left: rect.left - 6,
+        right: rect.right + 6,
+        bottom: rect.bottom + 6,
+      };
+      const { top, left } = placeCard(
+        spot,
+        { width, height: cardHeight },
+        { width: window.innerWidth, height: window.innerHeight },
       );
-      cardStyle = { top: rect.bottom + 18, left, width };
+      cardStyle = { top, left, width };
       cardClass = '';
     }
   }

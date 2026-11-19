@@ -83,7 +83,7 @@ export function SignInForm({
       )}
 
       {notice && tg.has(`notice.${notice}` as 'notice.invalid') ? (
-        <Alert tone={notice === 'cancelled' ? 'info' : notice === 'exists' ? 'warning' : 'danger'}>
+        <Alert tone={notice === 'cancelled' ? 'info' : 'danger'}>
           {tg(`notice.${notice}` as 'notice.invalid')}
         </Alert>
       ) : null}

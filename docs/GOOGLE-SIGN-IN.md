@@ -9,11 +9,9 @@ appear, and everything else works as before.
   the account is created and they are signed in. They get **no password**; they can choose one later with "Set a password" in the
   Profile (a code is emailed to them).
 - **Person who already used Google** → straight in.
-- **Account an admin created** for that email, which has not been given a password yet (a teacher, for example) → Google connects it
-  and signs them in. Google has proved the email is theirs.
-- **Account that already has a password** → Google does **not** sign in or take it over (anyone can register with someone else's email,
-  so this would hand the account to the wrong person). The sign-in page says: sign in with your password, then press **Connect** next
-  to Google in the Profile.
+- **Account that already exists for that email** (an admin created it, or the person registered with a password) → Google connects it
+  and signs them in. Google has proved the email is theirs, so there is nothing else to do. Any password they have keeps working.
+  "Connect" in the Profile is only needed to link a Google account that has a _different_ email.
 - Only emails that **Google has verified** are accepted.
 - Disabled accounts cannot sign in this way either.
 
@@ -68,15 +66,20 @@ Add the new `https://your-domain/api/v1/auth/google/callback` to **Authorized re
 you can remove the old URI later. Nothing else changes, and people who already use Google keep working (they are matched by Google's
 own id, not by the address).
 
+> **One thing to know.** Natik does not check emails when someone registers, so in theory a person could register with an email
+> that is not theirs and set a password. When the real owner later uses Google, the account is connected to them, but that other
+> person still knows the password. This is unlikely in a pilot. If you want it closed before a big launch, either (a) email people a
+> confirmation link at registration, or (b) when Google connects to an account that has a password, remove that password (the person
+> can choose a new one by email). Ask for either and it can be added.
+
 ## If it does not work
 
-| What you see                                        | Why                                                                                              |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| No Google button                                    | `GOOGLE_CLIENT_ID` or `GOOGLE_CLIENT_SECRET` is empty on the API, or the API has not restarted.  |
-| Google says **Error 400: redirect_uri_mismatch**    | The URI in step 2 is not exactly `APP_URL` + `/api/v1/auth/google/callback`.                     |
-| Google says **access blocked / app not verified**   | The app is still in "Testing": add yourself under **Audience → Test users**, or **Publish app**. |
-| Back on the sign-in page with "did not work"        | The code could not be exchanged: read the API's **Logs**. Usually a wrong client secret.         |
-| "This email already has an account with a password" | Working as designed (see above): sign in with the password, then **Connect** in the Profile.     |
+| What you see                                      | Why                                                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| No Google button                                  | `GOOGLE_CLIENT_ID` or `GOOGLE_CLIENT_SECRET` is empty on the API, or the API has not restarted.  |
+| Google says **Error 400: redirect_uri_mismatch**  | The URI in step 2 is not exactly `APP_URL` + `/api/v1/auth/google/callback`.                     |
+| Google says **access blocked / app not verified** | The app is still in "Testing": add yourself under **Audience → Test users**, or **Publish app**. |
+| Back on the sign-in page with "did not work"      | The code could not be exchanged: read the API's **Logs**. Usually a wrong client secret.         |
 
 ## On your own computer without a Google account
 

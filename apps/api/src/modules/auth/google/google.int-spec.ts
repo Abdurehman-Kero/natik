@@ -162,15 +162,36 @@ describe('Google sign-in', () => {
     expect((await agent.get('/api/v1/me').expect(200)).body.role).toBe('TEACHER');
   });
 
-  it('an account that has a password is NOT taken over by whoever has a Google account with that email', async () => {
+  it('an account registered with a password is connected too, and the password keeps working', async () => {
     const owner = await h.makeUser({});
     const agent = h.client();
     const result = await viaGoogle(agent, owner.email);
-    expect(result.location).toBe('/sign-in?google=exists');
-    expect(hasSession(result.callback)).toBe(false);
-    await agent.get('/api/v1/me').expect(401);
+    expect(result.location).toBe('/dashboard');
+    expect(hasSession(result.callback)).toBe(true);
+    expect((await agent.get('/api/v1/me').expect(200)).body).toMatchObject({
+      id: owner.id,
+      googleConnected: true,
+      hasPassword: true,
+    });
     const row = await h.prisma.user.findUniqueOrThrow({ where: { id: owner.id } });
-    expect(row.googleId).toBeNull();
+    expect(row.googleId).toBeTruthy();
+    expect(row.passwordHash).not.toBeNull();
+    // The email and password still sign in.
+    await h.signIn(owner.phone, owner.password);
+    const entries = await h.prisma.auditLog.findMany({
+      where: { actorId: owner.id, action: 'GOOGLE_CONNECTED' },
+    });
+    expect(JSON.stringify(entries.map((e) => e.details))).toContain('hadPassword');
+  });
+
+  it('an account already connected to a different Google account is not given to another one', async () => {
+    const user = await h.makeUser({});
+    // Connected (from the Profile) to a Google account with another email...
+    await viaGoogle(await h.signIn(user.phone, user.password), randomEmail(), '&mode=link');
+    // ...so a different Google account that has this account's email is refused.
+    const result = await viaGoogle(h.client(), user.email);
+    expect(result.location).toBe('/sign-in?google=taken');
+    expect(hasSession(result.callback)).toBe(false);
   });
 
   it('connecting Google from the Profile needs a signed-in person, then Google signs them in later', async () => {
