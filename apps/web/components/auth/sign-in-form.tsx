@@ -6,6 +6,7 @@ import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
+import { GoogleButton } from '@/components/auth/google-button';
 import { DevAccountSwitcher } from '@/components/dev/dev-account-switcher';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -22,17 +23,21 @@ import { type FieldErrors, validate } from '@/lib/forms';
  */
 export function SignInForm({
   next,
+  notice,
   embedded,
   onDone,
   onSwitch,
 }: {
   next: string | null;
+  /** Why "Continue with Google" did not sign the person in (the API sends them back with ?google=…). */
+  notice?: string | null;
   embedded?: boolean;
   onDone?: (home: string) => void;
   onSwitch?: () => void;
 }) {
   const t = useTranslations('auth');
   const ts = useTranslations('auth.signIn');
+  const tg = useTranslations('auth.google');
   const errorMessage = useErrorMessage();
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -77,6 +82,12 @@ export function SignInForm({
         </header>
       )}
 
+      {notice && tg.has(`notice.${notice}` as 'notice.invalid') ? (
+        <Alert tone={notice === 'cancelled' ? 'info' : notice === 'exists' ? 'warning' : 'danger'}>
+          {tg(`notice.${notice}` as 'notice.invalid')}
+        </Alert>
+      ) : null}
+
       {formError ? (
         <Alert
           tone="danger"
@@ -91,6 +102,8 @@ export function SignInForm({
           {formError.text}
         </Alert>
       ) : null}
+
+      <GoogleButton next={next} />
 
       {/* Development only: fills in a practice account (you still press Sign in). Remove before launch. */}
       {process.env.NODE_ENV === 'development' ? (

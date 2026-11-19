@@ -309,7 +309,7 @@ export class AuthService {
     return token;
   }
 
-  private async startSession(
+  async startSession(
     user: { id: string; role: 'STUDENT' | 'TEACHER' | 'ADMIN' },
     keepSignedIn: boolean,
     client: ClientInfo,

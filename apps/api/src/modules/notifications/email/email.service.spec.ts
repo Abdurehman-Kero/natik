@@ -133,6 +133,13 @@ describe('email templates', () => {
     expect(accountCreatedEmail({ ...base, role: 'TEACHER' }).text).toContain('My courses');
     expect(accountCreatedEmail({ ...base, role: 'ADMIN' }).text).toContain('dashboard');
     expect(accountCreatedEmail({ ...base, role: 'STUDENT' }).text).toContain('abdi@example.com');
+    // Everyone is told the account is theirs to manage.
+    expect(accountCreatedEmail({ ...base, role: 'TEACHER' }).text).toContain(
+      'open Profile any time',
+    );
+    expect(accountCreatedEmail({ ...base, role: 'TEACHER' }).html).toContain(
+      'change your name, photo, email or password',
+    );
   });
 
   it('never put the password in the message, only a link, and escape what people typed', () => {

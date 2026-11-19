@@ -1112,7 +1112,8 @@
     "QUIZ_NOT_READY": "Qormaanni kun maxxanfamuu dura bal'inni muraasni hir'ataniiru.",
     "ATTEMPT_CLOSED": "Yaaliin kun duraanuu ergameera.",
     "CERTIFICATE_NOT_READY": "Sertifikeetiin kee qophaa'aa jira. Daqiiqaa tokko booda irra deebi'ii yaali.",
-    "EMAIL_ALREADY_REGISTERED": "Imeelii kun duraanuu herrega qaba."
+    "EMAIL_ALREADY_REGISTERED": "Imeelii kun duraanuu herrega qaba.",
+    "GOOGLE_SIGN_UP_EXPIRED": "Galmeen kun yeroon isaa darbeera. Maaloo irra deebi'ii jalqabi."
   },
   "pages": {
     "soonText": "Fuulli kun fooyya'iinsa itti aanu keessatti ni banama.",
@@ -1218,7 +1219,31 @@
     "country": "Biyya",
     "chooseCountry": "Biyya filadhu",
     "city": "Magaalaa ykn gandaa",
-    "confirmPassword": "Jecha icciitii mirkaneessi"
+    "confirmPassword": "Jecha icciitii mirkaneessi",
+    "google": {
+      "continue": "Google fayyadamuun itti fufi",
+      "or": "ykn",
+      "notice": {
+        "cancelled": "Google fayyadamuun seenuun dhiisameera. Irra deebi'ii yaaluu ykn imeelii kee fayyadamuu dandeessa.",
+        "invalid": "Google fayyadamuun seenuun hin milkoofne. Maaloo irra deebi'i yaali.",
+        "unverified": "Google teessoo imeelii kana hin mirkaneessine; kanaaf fayyadamuu hin dandeenyu.",
+        "exists": "Imeelii kun duraanuu herrega jecha icciitii qabu qaba. Isa fayyadamuun seeni, achiin Google piroofayiliikee keessatti walitti qabsiisi.",
+        "disabled": "Herregni kun cufamee jira. Maaloo giddugaleessa quunnamaa.",
+        "taken": "Herregni Google kun duraanuu herrega Naaxiiq biraa waliin walitti qabameera.",
+        "signed-out": "Maaloo duraan seeni, achiin piroofayiliikee irraa Google walitti qabsiisi.",
+        "off": "Google fayyadamuun seenuun amma hin argamu."
+      },
+      "finishTitle": "Xiqqoo hafe",
+      "finishText": "Herrega kee banuuf bal'ina muraasa mirkaneessi.",
+      "emailFromGoogle": "Herrega Google keetii",
+      "expired": "Galmeen kun yeroo dheeraa fudhateera, yeroon isaas darbeera. Maaloo irra deebi'ii jalqabi.",
+      "startAgain": "Gara seensaatti deebi'i",
+      "connected": "Google walitti qabameera. Amma isa fayyadamuun seenuu dandeessa.",
+      "connectText": "Gara fuulduraatti saffisaan seeni.",
+      "connectedText": "Google fayyadamuun seenuu dandeessa.",
+      "connectedBadge": "Walitti qabameera",
+      "connect": "Walitti qabsiisi"
+    }
   },
   "about": {
     "title": "Waa'ee Naaxiiq",
@@ -1477,7 +1502,8 @@
     "country": "Biyya",
     "city": "Magaalaa ykn gandaa",
     "gender": "Koorniyaa",
-    "notSet": "Hin guutamne"
+    "notSet": "Hin guutamne",
+    "setPassword": "Jecha icciitii kaa'i"
   },
   "lessonView": {
     "playVideo": "Viidiyoo taphachiisi: {title}",

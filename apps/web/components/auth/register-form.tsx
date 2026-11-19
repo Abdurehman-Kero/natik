@@ -6,6 +6,7 @@ import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useId, useState } from 'react';
+import { GoogleButton } from '@/components/auth/google-button';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -159,6 +160,10 @@ export function RegisterForm({
       )}
 
       {formError ? <Alert tone="danger">{formError}</Alert> : null}
+
+      <div className="mx-auto w-full max-w-sm">
+        <GoogleButton next={next} />
+      </div>
 
       <div className="grid gap-x-10 gap-y-6 md:grid-cols-2">
         <Group title={tr('personalInfo')}>

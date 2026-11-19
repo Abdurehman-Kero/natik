@@ -1112,7 +1112,8 @@
     "QUIZ_NOT_READY": "Faahfaahin qaar ayaa ka maqan ka hor inta aan imtixaankan la daabicin.",
     "ATTEMPT_CLOSED": "Isku-dayganan hore ayaa loo gudbiyay.",
     "CERTIFICATE_NOT_READY": "Shahaadadaada waa la diyaarinayaa. Hal daqiiqo ka dib mar kale isku day.",
-    "EMAIL_ALREADY_REGISTERED": "Iimaylkan hore ayuu akoon u leeyahay."
+    "EMAIL_ALREADY_REGISTERED": "Iimaylkan hore ayuu akoon u leeyahay.",
+    "GOOGLE_SIGN_UP_EXPIRED": "Isdiiwaangelintan way dhacday. Fadlan mar kale bilow."
   },
   "pages": {
     "soonText": "Bogga waxaa la furi doonaa cusboonaysiinta soo socota.",
@@ -1218,7 +1219,31 @@
     "country": "Wadan",
     "chooseCountry": "Dooro wadanka",
     "city": "Magaalo ama tuulo",
-    "confirmPassword": "Xaqiiji erayga sirta ah"
+    "confirmPassword": "Xaqiiji erayga sirta ah",
+    "google": {
+      "continue": "Ku sii wad Google",
+      "or": "ama",
+      "notice": {
+        "cancelled": "Gelitaanka Google waa la joojiyay. Waad isku dayi kartaa mar kale ama isticmaal iimaylkaaga.",
+        "invalid": "Gelitaanka Google ma shaqayn. Fadlan mar kale isku day.",
+        "unverified": "Google ma xaqiijin ciwaankan iimaylka, sidaas darteed ma isticmaali karno.",
+        "exists": "Iimaylkan hore ayuu akoon erayga sirta ah leh u leeyahay. Ku gal, ka dibna Google ku xir Profile-kaaga.",
+        "disabled": "Akoonkan waa la xidhay. Fadlan la xiriir xarunta.",
+        "taken": "Akoonkan Google hore ayaa loogu xiray akoon Natik kale.",
+        "signed-out": "Fadlan marka hore gal, ka dibna Google ku xir Profile-kaaga.",
+        "off": "Gelitaanka Google hadda lama heli karo."
+      },
+      "finishTitle": "Wax yar ayaa harsan",
+      "finishText": "Xaqiiji faahfaahin yar si aad akoonkaaga u samaysato.",
+      "emailFromGoogle": "Ka timid akoonkaaga Google",
+      "expired": "Isdiiwaangelintan waqti dheer ayay qaadatay oo way dhacday. Fadlan mar kale bilow.",
+      "startAgain": "Ku laabo gelitaanka",
+      "connected": "Google waa la xiray. Hadda waad ku geli kartaa.",
+      "connectText": "Mar dambe si degdeg ah ku gal.",
+      "connectedText": "Waxaad ku geli kartaa Google.",
+      "connectedBadge": "Waa xiran yahay",
+      "connect": "Ku xir"
+    }
   },
   "about": {
     "title": "Ku saabsan Natik",
@@ -1477,7 +1502,8 @@
     "country": "Wadan",
     "city": "Magaalo ama tuulo",
     "gender": "Jinsi",
-    "notSet": "Lama dhammaystirin"
+    "notSet": "Lama dhammaystirin",
+    "setPassword": "Dhig erayga sirta ah"
   },
   "lessonView": {
     "playVideo": "Daawo fiidiyowga: {title}",

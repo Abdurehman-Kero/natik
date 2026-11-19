@@ -42,6 +42,13 @@ export const envSchema = z.object({
    * `console` = nothing is sent (the message is logged and, in development, shown at /api/v1/dev/email).
    * `smtp` = real email through any SMTP service (Brevo, Mailjet, your own server…).
    */
+  /**
+   * "Continue with Google": the OAuth client from Google Cloud (see docs/GOOGLE-SIGN-IN.md). Leave both
+   * empty to hide the button. `dev` (local development and tests only) fakes Google, so the whole
+   * flow can be tried without an account.
+   */
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
   EMAIL_PROVIDER: z.enum(['console', 'smtp']).default('console'),
   SMTP_HOST: z.string().optional(),
   /** 587 is the usual port; use 2525 where 25, 465 and 587 are blocked (Render's free plan). */
@@ -90,6 +97,17 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     throw new Error(
       `Invalid environment configuration:\n${lines.join('\n')}\n` +
         'Fix apps/api/.env (see apps/api/.env.example) or the deployment environment.',
+    );
+  }
+  if (result.data.GOOGLE_CLIENT_ID === 'dev') {
+    if (result.data.APP_ENV !== 'local' && result.data.APP_ENV !== 'test') {
+      throw new Error(
+        'Invalid environment configuration:\n  • GOOGLE_CLIENT_ID=dev fakes Google and is only for local development and tests.',
+      );
+    }
+  } else if (Boolean(result.data.GOOGLE_CLIENT_ID) !== Boolean(result.data.GOOGLE_CLIENT_SECRET)) {
+    throw new Error(
+      'Invalid environment configuration:\n  • GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set together (or both left empty).',
     );
   }
   if (result.data.EMAIL_PROVIDER === 'smtp') {

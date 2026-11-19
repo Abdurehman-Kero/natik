@@ -80,6 +80,22 @@ export type RegisterInput = z.infer<typeof registerSchema>;
  * People sign in with their email address. A phone number is still accepted for accounts that have no
  * email yet (older accounts), but the website only asks for the email.
  */
+/**
+ * The last step of "Continue with Google" for a new person: Google gave their name and verified email,
+ * and they add what registration normally asks for (terms, age, and optionally phone and location).
+ */
+export const googleCompleteSchema = z.object({
+  fullName: fullNameSchema,
+  /** Optional here: nothing needs a phone number any more, and they can add it in their Profile. */
+  phone: z.union([z.literal('').transform(() => undefined), phoneSchema]).optional(),
+  gender: genderSchema.optional(),
+  country: countrySchema.optional(),
+  city: citySchema.optional(),
+  acceptTerms: z.literal(true, { error: 'Please accept the Terms and Privacy notice.' }),
+  confirmAge: z.literal(true, { error: 'Please confirm you are 16 or older.' }),
+});
+export type GoogleCompleteInput = z.infer<typeof googleCompleteSchema>;
+
 export const signInSchema = z
   .object({
     email: requiredEmailSchema.optional(),

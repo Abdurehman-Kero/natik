@@ -29,6 +29,10 @@ export interface UserView {
   country: string | null;
   city: string | null;
   lastSignInAt: Date | null;
+  /** True once the person has connected a Google account (they can then use "Continue with Google"). */
+  googleConnected: boolean;
+  /** False for people who joined with Google and never chose a password (they can still reset one). */
+  hasPassword: boolean;
   erased: boolean;
   createdAt: Date;
 }
@@ -50,6 +54,8 @@ export function toUserView(user: User): UserView {
     country: user.country,
     city: user.city,
     lastSignInAt: user.lastSignInAt,
+    googleConnected: user.googleId !== null,
+    hasPassword: user.passwordHash !== null,
     erased: user.anonymisedAt !== null,
     createdAt: user.createdAt,
   };

@@ -12,10 +12,12 @@ export async function generateMetadata() {
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string | string[] }>;
+  searchParams: Promise<{ next?: string | string[]; google?: string | string[] }>;
 }) {
-  const next = safeNext((await searchParams).next);
+  const query = await searchParams;
+  const next = safeNext(query.next);
+  const google = typeof query.google === 'string' ? query.google : null;
   const user = await getCurrentUser({ tolerant: true });
   if (user) redirect(next ?? HOME_FOR_ROLE[user.role]);
-  return <SignInForm next={next} />;
+  return <SignInForm next={next} notice={google} />;
 }

@@ -1100,7 +1100,8 @@
     "QUIZ_NOT_READY": "ይህ ፈተና ከመታተሙ በፊት አንዳንድ ዝርዝሮች ይጎድላሉ።",
     "ATTEMPT_CLOSED": "ይህ ሙከራ አስቀድሞ ገብቷል።",
     "CERTIFICATE_NOT_READY": "ሰርተፊኬትዎ በመዘጋጀት ላይ ነው። ከአንድ ደቂቃ በኋላ እንደገና ይሞክሩ።",
-    "EMAIL_ALREADY_REGISTERED": "ይህ ኢሜይል አስቀድሞ መለያ አለው።"
+    "EMAIL_ALREADY_REGISTERED": "ይህ ኢሜይል አስቀድሞ መለያ አለው።",
+    "GOOGLE_SIGN_UP_EXPIRED": "ይህ ምዝገባ ጊዜው አልፏል። እባክዎ እንደገና ይጀምሩ።"
   },
   "pages": {
     "soonText": "ይህ ገጽ በሚመጣ ዝመና ይከፈታል።",
@@ -1206,7 +1207,31 @@
     "country": "አገር",
     "chooseCountry": "አገር ይምረጡ",
     "city": "ከተማ ወይም መንደር",
-    "confirmPassword": "የይለፍ ቃል ያረጋግጡ"
+    "confirmPassword": "የይለፍ ቃል ያረጋግጡ",
+    "google": {
+      "continue": "በGoogle ቀጥል",
+      "or": "ወይም",
+      "notice": {
+        "cancelled": "በGoogle መግባት ተሰርዟል። እንደገና መሞከር ወይም ኢሜይልዎን መጠቀም ይችላሉ።",
+        "invalid": "በGoogle መግባት አልተሳካም። እባክዎ እንደገና ይሞክሩ።",
+        "unverified": "Google ይህን ኢሜይል አድራሻ አላረጋገጠውም፤ ስለዚህ መጠቀም አንችልም።",
+        "exists": "ይህ ኢሜይል የይለፍ ቃል ያለው መለያ አስቀድሞ አለው። በእሱ ይግቡ፣ ከዚያ በመገለጫዎ ውስጥ Google ያገናኙ።",
+        "disabled": "ይህ መለያ ተዘግቷል። እባክዎ ማዕከሉን ያነጋግሩ።",
+        "taken": "ይህ የGoogle መለያ አስቀድሞ ከሌላ የናጢቅ መለያ ጋር ተገናኝቷል።",
+        "signed-out": "እባክዎ መጀመሪያ ይግቡ፣ ከዚያ ከመገለጫዎ Google ያገናኙ።",
+        "off": "በGoogle መግባት አሁን አይገኝም።"
+      },
+      "finishTitle": "ትንሽ ቀርቷል",
+      "finishText": "መለያዎን ለመክፈት ጥቂት ዝርዝሮችን ያረጋግጡ።",
+      "emailFromGoogle": "ከGoogle መለያዎ",
+      "expired": "ይህ ምዝገባ ረጅም ጊዜ ወስዶ ጊዜው አልፏል። እባክዎ እንደገና ይጀምሩ።",
+      "startAgain": "ወደ መግቢያ ተመለስ",
+      "connected": "Google ተገናኝቷል። አሁን በእሱ መግባት ይችላሉ።",
+      "connectText": "በሚቀጥለው ጊዜ በፍጥነት ይግቡ።",
+      "connectedText": "በGoogle መግባት ይችላሉ።",
+      "connectedBadge": "ተገናኝቷል",
+      "connect": "አገናኝ"
+    }
   },
   "about": {
     "title": "ስለ ናጢቅ",
@@ -1452,7 +1477,8 @@
     "country": "አገር",
     "city": "ከተማ ወይም መንደር",
     "gender": "ፆታ",
-    "notSet": "አልተሞላም"
+    "notSet": "አልተሞላም",
+    "setPassword": "የይለፍ ቃል ያዘጋጁ"
   },
   "lessonView": {
     "playVideo": "ቪዲዮ አጫውት፦ {title}",

@@ -166,3 +166,43 @@ describe('SMS provider settings', () => {
     ).toThrowError(/SMS_PROVIDER=console/);
   });
 });
+
+describe('Google sign-in settings', () => {
+  it('is off by default', () => {
+    expect(validateEnv(minimal).GOOGLE_CLIENT_ID).toBeUndefined();
+  });
+
+  it('needs the client id and the secret together', () => {
+    expect(() =>
+      validateEnv({ ...minimal, GOOGLE_CLIENT_ID: 'abc.apps.googleusercontent.com' }),
+    ).toThrow(/GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET/);
+    expect(() => validateEnv({ ...minimal, GOOGLE_CLIENT_SECRET: 'secret' })).toThrow(
+      /GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET/,
+    );
+    expect(
+      validateEnv({
+        ...minimal,
+        GOOGLE_CLIENT_ID: 'abc.apps.googleusercontent.com',
+        GOOGLE_CLIENT_SECRET: 'secret',
+      }).GOOGLE_CLIENT_ID,
+    ).toBe('abc.apps.googleusercontent.com');
+  });
+
+  it('accepts empty values (a blank setting on the host means "off")', () => {
+    expect(() =>
+      validateEnv({ ...minimal, GOOGLE_CLIENT_ID: '', GOOGLE_CLIENT_SECRET: '' }),
+    ).not.toThrow();
+  });
+
+  it('the pretend Google ("dev") is for local development and tests only', () => {
+    expect(() => validateEnv({ ...minimal, GOOGLE_CLIENT_ID: 'dev' })).not.toThrow();
+    expect(() =>
+      validateEnv({ ...minimal, APP_ENV: 'test', GOOGLE_CLIENT_ID: 'dev' }),
+    ).not.toThrow();
+    for (const APP_ENV of ['staging', 'production']) {
+      expect(() => validateEnv({ ...minimal, APP_ENV, GOOGLE_CLIENT_ID: 'dev' })).toThrow(
+        /only for local development and tests/,
+      );
+    }
+  });
+});

@@ -507,7 +507,8 @@
     "QUIZ_NOT_READY": "Some details are missing before this quiz can be published.",
     "ATTEMPT_CLOSED": "This attempt has already been submitted.",
     "CERTIFICATE_NOT_READY": "Your certificate is being prepared. Try again in a minute.",
-    "EMAIL_ALREADY_REGISTERED": "This email already has an account."
+    "EMAIL_ALREADY_REGISTERED": "This email already has an account.",
+    "GOOGLE_SIGN_UP_EXPIRED": "This sign-up has expired. Please start again."
   },
   "pages": {
     "soonText": "This page opens in an upcoming update.",
@@ -613,7 +614,31 @@
     "country": "Country",
     "chooseCountry": "Select country",
     "city": "City or town",
-    "confirmPassword": "Confirm password"
+    "confirmPassword": "Confirm password",
+    "google": {
+      "continue": "Continue with Google",
+      "or": "or",
+      "notice": {
+        "cancelled": "Google sign-in was cancelled. You can try again or use your email.",
+        "invalid": "Google sign-in did not work. Please try again.",
+        "unverified": "Google has not verified that email address, so we can't use it.",
+        "exists": "This email already has an account with a password. Sign in with it, then connect Google in your Profile.",
+        "disabled": "This account is switched off. Please contact the centre.",
+        "taken": "This Google account is already connected to another Natik account.",
+        "signed-out": "Please sign in first, then connect Google from your Profile.",
+        "off": "Google sign-in isn't available right now."
+      },
+      "finishTitle": "Almost there",
+      "finishText": "Confirm a few details to create your account.",
+      "emailFromGoogle": "From your Google account",
+      "expired": "This sign-up took too long and has expired. Please start again.",
+      "startAgain": "Back to sign in",
+      "connected": "Google is connected. You can now sign in with it.",
+      "connectText": "Sign in faster next time.",
+      "connectedText": "You can sign in with Google.",
+      "connectedBadge": "Connected",
+      "connect": "Connect"
+    }
   },
   "profile": {
     "title": "Profile",
@@ -645,7 +670,8 @@
     "country": "Country",
     "city": "City or town",
     "gender": "Gender",
-    "notSet": "Not set"
+    "notSet": "Not set",
+    "setPassword": "Set a password"
   },
   "users": {
     "title": "Users",

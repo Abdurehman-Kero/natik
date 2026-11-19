@@ -47,6 +47,10 @@ export default defineConfig({
           timeout: 120_000,
           env: {
             APP_ENV: 'local',
+            // Google comes back to this address, so it must be the test site, not :3000.
+            APP_URL: baseURL,
+            // Plays Google, so "Continue with Google" can be tested without an account.
+            GOOGLE_CLIENT_ID: 'dev',
             RUN_WORKER_IN_API: 'true',
             RATE_LIMIT_MULTIPLIER: '100',
             LOG_LEVEL: 'warn',

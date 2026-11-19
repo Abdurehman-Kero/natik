@@ -130,6 +130,9 @@ day without a card ([Brevo: free SMTP server](https://www.brevo.com/free-smtp-se
 2. **Verify a sender:** Brevo → _Senders, domains & dedicated IPs_ → _Senders_ → add the email address the messages come from (the
    owner's email is fine for a pilot) and confirm it from the email Brevo sends. Brevo may also need a short time to approve a new
    account for sending.
+   If that address is a Gmail or Yahoo address, Brevo cannot authenticate it: it replaces the sending domain with its own, so the
+   email may show a Brevo address and is more likely to land in spam ([Brevo: domain authentication](https://help.brevo.com/hc/en-us/articles/16045394674066)).
+   That is acceptable for a pilot. Once Natik has its own domain, verify the domain in Brevo and use an address on it.
 3. **Get the SMTP login:** Brevo → _SMTP & API_ → _SMTP_. Copy the **login** (looks like `something@smtp-brevo.com`) and create an
    **SMTP key**. The key is the password; it is shown once.
 4. On Render → `natik-api` → **Environment**, add these values (a Blueprint does not create them for you):
@@ -151,6 +154,12 @@ day without a card ([Brevo: free SMTP server](https://www.brevo.com/free-smtp-se
 
 On your own computer you can read these emails in the local Mailpit inbox (<http://localhost:8026>): in `apps/api/.env` set
 `EMAIL_PROVIDER=smtp`, `SMTP_HOST=localhost`, `SMTP_PORT=1026` and `EMAIL_FROM=Natik <natik@localhost>`.
+
+## 7b. Turn on "Continue with Google" (free, optional)
+
+Lets people sign up and sign in with a Google account. It needs a free Google Cloud "OAuth client" and two settings on the API
+(`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`). Follow [GOOGLE-SIGN-IN.md](GOOGLE-SIGN-IN.md); the redirect address to give Google is
+`https://<your website>/api/v1/auth/google/callback`. Without it the button just does not show.
 
 ## 7. What a pilot does and does not have
 

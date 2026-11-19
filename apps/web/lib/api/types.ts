@@ -17,6 +17,10 @@ export interface UserView {
   country: string | null;
   city: string | null;
   lastSignInAt: string | null;
+  /** Signed in with Google before, or connected it in the Profile. */
+  googleConnected: boolean;
+  /** False for people who joined with Google and never chose a password. */
+  hasPassword: boolean;
   erased?: boolean;
   createdAt: string;
 }

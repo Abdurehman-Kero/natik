@@ -7,7 +7,12 @@ export async function generateMetadata() {
   return { title: t('title') };
 }
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ google?: string | string[] }>;
+}) {
   const user = await requireRole(['STUDENT', 'TEACHER', 'ADMIN'], '/profile');
-  return <ProfileView user={user} />;
+  const { google } = await searchParams;
+  return <ProfileView user={user} googleResult={typeof google === 'string' ? google : null} />;
 }

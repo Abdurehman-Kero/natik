@@ -108,6 +108,11 @@ services:
         sync: false
       - key: EMAIL_FROM
         sync: false
+      # "Continue with Google" (docs/GOOGLE-SIGN-IN.md). Leave both empty and the button is hidden.
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
       # Files (receipts, certificates, lesson files, pictures) are kept inside the free database, so the
       # pilot needs no storage account and no card. A pilot-sized amount only: they share the free
       # database's 1 GB and disappear with it after 30 days. For production switch to an S3-compatible

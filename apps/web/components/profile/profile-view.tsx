@@ -5,7 +5,8 @@ import { Camera, KeyRound, LogOut, Pencil, Wallet } from 'lucide-react';
 import Link from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { type FormEvent, useRef, useState } from 'react';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
+import { GoogleMark, useGoogleEnabled } from '@/components/auth/google-button';
 import { Alert } from '@/components/ui/alert';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -30,8 +31,17 @@ import { flagOf } from '@/lib/countries';
 import { useCountryName, useCountryOptions } from '@/lib/use-country-options';
 import { apiFieldErrors, type FieldErrors, validate } from '@/lib/forms';
 
-export function ProfileView({ user }: { user: UserView }) {
+export function ProfileView({
+  user,
+  googleResult,
+}: {
+  user: UserView;
+  /** What happened when the person came back from Google (the API adds ?google=… to this page). */
+  googleResult?: string | null;
+}) {
   const t = useTranslations('profile');
+  const tg = useTranslations('auth.google');
+  const googleEnabled = useGoogleEnabled();
   const te = useTranslations('errors');
   const errorMessage = useErrorMessage();
   const router = useRouter();
@@ -42,6 +52,15 @@ export function ProfileView({ user }: { user: UserView }) {
   const [editing, setEditing] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  // Coming back from Google: say how it went once, then tidy the address.
+  useEffect(() => {
+    if (!googleResult) return;
+    if (googleResult === 'connected') toast.success(tg('connected'));
+    else if (tg.has(`notice.${googleResult}` as 'notice.invalid'))
+      toast.error(tg(`notice.${googleResult}` as 'notice.invalid'));
+    window.history.replaceState(null, '', '/profile');
+  }, [googleResult, tg]);
 
   async function uploadPhoto(file: File | undefined) {
     if (!file) return;
@@ -134,16 +153,48 @@ export function ProfileView({ user }: { user: UserView }) {
               >
                 <Pencil aria-hidden /> {t('edit')}
               </Button>
-              <Button
-                variant="secondary"
-                className="w-full sm:w-auto sm:flex-1"
-                onClick={() => setChangingPassword(true)}
-              >
-                <KeyRound aria-hidden /> {t('changePassword')}
-              </Button>
+              {user.hasPassword ? (
+                <Button
+                  variant="secondary"
+                  className="w-full sm:w-auto sm:flex-1"
+                  onClick={() => setChangingPassword(true)}
+                >
+                  <KeyRound aria-hidden /> {t('changePassword')}
+                </Button>
+              ) : (
+                // Joined with Google: there is no current password to ask for, so the emailed code proves it is them.
+                <Button asChild variant="secondary" className="w-full sm:w-auto sm:flex-1">
+                  <Link href="/forgot-password">
+                    <KeyRound aria-hidden /> {t('setPassword')}
+                  </Link>
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
+
+        {googleEnabled || user.googleConnected ? (
+          <Card>
+            <CardContent className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <GoogleMark />
+                <div className="min-w-0">
+                  <p className="font-semibold">Google</p>
+                  <p className="text-sm text-muted">
+                    {user.googleConnected ? tg('connectedText') : tg('connectText')}
+                  </p>
+                </div>
+              </div>
+              {user.googleConnected ? (
+                <Badge tone="success">{tg('connectedBadge')}</Badge>
+              ) : (
+                <Button asChild variant="secondary" size="sm">
+                  <a href="/api/v1/auth/google/start?mode=link">{tg('connect')}</a>
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        ) : null}
 
         {user.role === 'STUDENT' ? (
           <Button asChild variant="secondary" size="lg" fullWidth>

@@ -225,6 +225,8 @@ model User {
   /// E.164 (+2519…/+2517…). Null only after personal data is erased (SRS §8.2).
   phone              String?    @unique
   email              String?    @unique
+  /// Google's stable id for this person (the `sub` of their Google sign-in), once Google is connected.
+  googleId           String?    @unique
   passwordHash       String?
   role               Role       @default(STUDENT)
   isOwner            Boolean    @default(false)

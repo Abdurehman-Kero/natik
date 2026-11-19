@@ -688,7 +688,31 @@
     "country": "ሃገር",
     "chooseCountry": "ሃገር ምረጽ",
     "city": "ከተማ ወይ ዓዲ",
-    "confirmPassword": "ምስጢራዊ ቃል ኣረጋግጹ"
+    "confirmPassword": "ምስጢራዊ ቃል ኣረጋግጹ",
+    "google": {
+      "continue": "ብGoogle ቀጽሉ",
+      "or": "ወይ",
+      "notice": {
+        "cancelled": "ብGoogle ምእታው ተሰሪዙ። ዳግም ክትፍትኑ ወይ ኢመይልኩም ክትጥቀሙ ትኽእሉ ኢኹም።",
+        "invalid": "ብGoogle ምእታው ኣይሰርሐን። በጃኹም ዳግም ፈትኑ።",
+        "unverified": "Google እዚ ኢመይል ኣድራሻ ኣየረጋገጸን፤ ስለዚ ክንጥቀመሉ ኣይንኽእልን።",
+        "exists": "እዚ ኢመይል ምስጢራዊ ቃል ዘለዎ ኣካውንት ኣቐዲሙ ኣለዎ። ብእኡ ኣትዉ፣ ድሕሪኡ ኣብ ፕሮፋይልኩም Google ኣተሓሕዙ።",
+        "disabled": "እዚ ኣካውንት ተዓጽዩ ኣሎ። በጃኹም ነቲ ማእከል ተወከሱ።",
+        "taken": "እዚ Google ኣካውንት ኣቐዲሙ ምስ ካልእ ናጢቅ ኣካውንት ተተሓሒዙ ኣሎ።",
+        "signed-out": "በጃኹም መጀመርታ ኣትዉ፣ ድሕሪኡ ካብ ፕሮፋይልኩም Google ኣተሓሕዙ።",
+        "off": "ብGoogle ምእታው ሕጂ ኣይርከብን።"
+      },
+      "finishTitle": "ቀሪብና ኣለና",
+      "finishText": "ኣካውንትኩም ንምፍታሕ ዝተወሰኑ ዝርዝራት ኣረጋግጹ።",
+      "emailFromGoogle": "ካብ Google ኣካውንትኩም",
+      "expired": "እዚ ምዝገባ ነዊሕ ጊዜ ወሲዱ ኣብቂዑ ኣሎ። በጃኹም ዳግም ጀምሩ።",
+      "startAgain": "ናብ ምእታው ተመለስ",
+      "connected": "Google ተተሓሒዙ። ሕጂ ብእኡ ክትኣትዉ ትኽእሉ ኢኹም።",
+      "connectText": "ኣብ ዝቕጽል ብቕልጡፍ ኣትዉ።",
+      "connectedText": "ብGoogle ክትኣትዉ ትኽእሉ ኢኹም።",
+      "connectedBadge": "ተተሓሒዙ",
+      "connect": "ኣተሓሕዝ"
+    }
   },
   "courseButton": {
     "enrolFree": "ንምስታፍ ሕተቱ",
@@ -916,7 +940,8 @@
   },
   "errors": {
     "INVALID_CREDENTIALS": "ኢሜይል ወይ ምስጢራዊ ቃል ትኽክል ኣይኮነን።",
-    "EMAIL_ALREADY_REGISTERED": "እዚ ኢሜይል ኣቐዲሙ ሕሳብ ኣለዎ።"
+    "EMAIL_ALREADY_REGISTERED": "እዚ ኢሜይል ኣቐዲሙ ሕሳብ ኣለዎ።",
+    "GOOGLE_SIGN_UP_EXPIRED": "እዚ ምዝገባ ኣብቂዑ ኣሎ። በጃኹም ዳግም ጀምሩ።"
   },
   "people": {
     "title": "መግለጺ",
@@ -936,5 +961,8 @@
       "TEACHER": "መምህር",
       "ADMIN": "ጉጅለ ናጢቅ"
     }
+  },
+  "profile": {
+    "setPassword": "ምስጢራዊ ቃል ኣዳልዉ"
   }
 }

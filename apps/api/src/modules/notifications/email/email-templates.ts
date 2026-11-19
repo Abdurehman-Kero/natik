@@ -14,6 +14,10 @@ const ROLE_NAME: Record<Role, string> = {
   ADMIN: 'admin',
 };
 
+/** Told to everyone: the account is theirs to manage. */
+const MANAGE_HINT =
+  'The account is yours to manage: open Profile any time to change your name, photo, email or password.';
+
 /** What to do first, per kind of account. */
 const ROLE_HINT: Record<Role, string> = {
   STUDENT:
@@ -90,6 +94,8 @@ export function accountCreatedEmail(p: {
     '',
     ROLE_HINT[p.role],
     '',
+    MANAGE_HINT,
+    '',
     'If you were not expecting this message, you can ignore it. Nothing happens until you choose a password.',
     '',
     'Natik Language Centre',
@@ -99,7 +105,7 @@ export function accountCreatedEmail(p: {
     text,
     html: page({
       title: 'Your account is ready',
-      paragraphs: [`Hello ${p.name},`, intro, ROLE_HINT[p.role]],
+      paragraphs: [`Hello ${p.name},`, intro, ROLE_HINT[p.role], MANAGE_HINT],
       facts: [
         { label: 'Account', value: ROLE_NAME[p.role] },
         { label: 'Sign-in email', value: p.email },
