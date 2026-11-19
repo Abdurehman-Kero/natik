@@ -585,8 +585,8 @@
       "doneTitle": "Password saved",
       "doneText": "You can sign in now.",
       "goSignIn": "Sign in",
-      "sentNote": "If this email has an account, a code is on its way by SMS.",
-      "emailText": "Enter the email you signed up with. We'll text a code to the phone number on your account."
+      "sentNote": "If this email has an account, a code is on its way.",
+      "emailText": "Enter the email you signed up with. We'll send you a code."
     },
     "setPassword": {
       "title": "Set your password",
@@ -664,7 +664,7 @@
     "clear": "Clear filters",
     "createTitle": "New user",
     "createCta": "Create user",
-    "createHint": "They'll get an SMS link to set their password.",
+    "createHint": "We email them their sign-in details and a link to choose a password.",
     "created": "User created. A link was sent by SMS.",
     "editTitle": "Edit user",
     "edit": "Edit",
@@ -708,7 +708,18 @@
     "location": "Location",
     "email": "Email",
     "phone": "Phone",
-    "notSet": "Not set"
+    "notSet": "Not set",
+    "createdEmailed": "User created. We emailed {email} their sign-in details and a link to choose a password.",
+    "linkEmailed": "Password link emailed to {email}.",
+    "linkTitle": "Give {name} this link",
+    "linkText": "Email is not set up on this site yet (or the message could not be sent), so nothing was sent. Pass this link on yourself, for example by WhatsApp or Telegram. It works once and expires in 3 days.",
+    "linkSignInEmail": "Their sign-in email:",
+    "linkLabel": "Password link",
+    "linkCopy": "Copy link",
+    "linkCopied": "Link copied",
+    "linkCopyFailed": "Could not copy. Select the link and copy it by hand.",
+    "linkNobody": "This person has no email or phone number to send to.",
+    "linkDone": "Done"
   },
   "devSms": {
     "title": "Development SMS inbox",

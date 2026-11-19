@@ -107,7 +107,18 @@ test.describe('areas and permissions', () => {
     await dialog.getByRole('button', { name: 'Create user' }).click();
     await expect(dialog).toBeHidden();
 
-    // the new teacher was texted a link to set a password
+    // Email and SMS are not set up in the test site, so nothing really went out: the admin is shown
+    // the password link (and the sign-in email) to pass on by hand, with a Copy button.
+    const linkDialog = page.getByRole('dialog', { name: `Give ${name} this link` });
+    await expect(linkDialog).toBeVisible();
+    await expect(linkDialog.getByText(emailFor(phone))).toBeVisible();
+    await expect(linkDialog.getByLabel('Password link')).toHaveValue(/\/set-password\?token=/);
+    await expect(linkDialog.getByRole('button', { name: 'Copy link' })).toBeVisible();
+    await expectNoSeriousA11yIssues(page);
+    await linkDialog.getByRole('button', { name: 'Done' }).click();
+    await expect(linkDialog).toBeHidden();
+
+    // the same link was also queued as a text message (used when a real SMS service exists)
     expect(await latestSms(page, phone)).toContain('Set your password');
 
     // The search box takes input only once the page is ready, so the search is repeated until it runs.

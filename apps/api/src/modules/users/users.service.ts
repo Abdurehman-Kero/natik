@@ -223,7 +223,7 @@ export class UsersService {
   async create(
     actor: SessionUser,
     input: { fullName: string; phone: string; email: string; role: Role },
-  ): Promise<UserView> {
+  ): Promise<UserView & { passwordLink: string | null; sentTo: 'email' | 'sms' | null }> {
     if (input.role === 'ADMIN' && !actor.isOwner) {
       throw new AppException('OWNER_REQUIRED', HttpStatus.FORBIDDEN);
     }
@@ -247,15 +247,15 @@ export class UsersService {
         },
       }),
     );
-    await this.auth.sendPasswordLink(user, 'account.created');
+    const { link, sentTo } = await this.auth.sendPasswordLink(user, 'account.created');
     await this.audit.record({
       actorId: actor.id,
       action: input.role === 'ADMIN' ? 'ADMIN_CREATED' : 'USER_CREATED',
       entityType: 'User',
       entityId: user.id,
-      details: { role: input.role },
+      details: { role: input.role, sentTo, linkShownToAdmin: link !== null },
     });
-    return toUserView(user);
+    return { ...toUserView(user), passwordLink: link, sentTo };
   }
 
   async update(
@@ -326,16 +326,22 @@ export class UsersService {
     return toUserView(user);
   }
 
-  async sendPasswordLink(actor: SessionUser, id: string): Promise<void> {
+  /** Sends a new password link (email first). The link is returned only if nothing really went out. */
+  async sendPasswordLink(
+    actor: SessionUser,
+    id: string,
+  ): Promise<{ link: string | null; sentTo: 'email' | 'sms' | null }> {
     const target = await this.get(id);
     this.assertCanManage(actor, target);
-    await this.auth.sendPasswordLink(target, 'password.link');
+    const { link, sentTo } = await this.auth.sendPasswordLink(target, 'password.link');
     await this.audit.record({
       actorId: actor.id,
       action: 'PASSWORD_LINK_SENT',
       entityType: 'User',
       entityId: id,
+      details: { sentTo, shownToAdmin: link !== null },
     });
+    return { link, sentTo };
   }
 
   // ── Rules ──────────────────────────────────────────────────────────────

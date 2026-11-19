@@ -78,7 +78,7 @@ export class AdminUsersController {
   @Post(':id/password-link')
   @HttpCode(HttpStatus.OK)
   async passwordLink(@CurrentUser() actor: SessionUser, @Param('id') id: string) {
-    await this.users.sendPasswordLink(actor, id);
-    return { ok: true };
+    const { link, sentTo } = await this.users.sendPasswordLink(actor, id);
+    return { ok: true, link, sentTo };
   }
 }

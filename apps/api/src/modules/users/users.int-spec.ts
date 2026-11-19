@@ -156,6 +156,17 @@ describe('admin user management and permissions', () => {
       const body = newUser();
       const created = await admin.post('/api/v1/admin/users').send(body).expect(201);
       expect(created.body).toMatchObject({ role: 'TEACHER', phoneVerified: false });
+      // No real email or SMS gateway is set up in this test (nothing leaves the server), so the admin
+      // is given the link to pass on. The email that would have gone out is in the development mailbox.
+      expect(created.body.sentTo).toBeNull();
+      expect(created.body.passwordLink).toMatch(/\/set-password\?token=[\w-]+$/);
+      const mailbox = (
+        await h.client().get('/api/v1/dev/email').query({ to: body.email }).expect(200)
+      ).body.items as { subject: string; text: string }[];
+      expect(mailbox[0]!.subject).toBe('Your Natik account is ready');
+      expect(mailbox[0]!.text).toContain(`Your sign-in email: ${body.email}`);
+      expect(mailbox[0]!.text).toContain(created.body.passwordLink);
+      expect(mailbox[0]!.text).toContain('teacher account');
 
       const sms = await h.prisma.smsMessage.findFirstOrThrow({
         where: { to: body.phone },
@@ -242,7 +253,10 @@ describe('admin user management and permissions', () => {
       const owner = await h.makeUser({ role: 'ADMIN', isOwner: true });
       const admin = await h.signIn(owner.phone, owner.password);
       const student = await h.makeUser({ verified: false });
-      await admin.post(`/api/v1/admin/users/${student.id}/password-link`).expect(200);
+      const sent = await admin.post(`/api/v1/admin/users/${student.id}/password-link`).expect(200);
+      // Nothing really leaves the server in tests, so the link comes back for the admin to pass on.
+      expect(sent.body).toMatchObject({ ok: true, sentTo: null });
+      expect(sent.body.link).toMatch(/\/set-password\?token=/);
       const sms = await h.prisma.smsMessage.findFirstOrThrow({
         where: { to: student.phone },
         orderBy: { createdAt: 'desc' },

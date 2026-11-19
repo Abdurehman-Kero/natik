@@ -91,6 +91,23 @@ services:
         value: console
       - key: SMS_SENDER
         value: Natik
+      # Email: sign-in details and password links for people an admin adds, and "forgot password" codes.
+      # Free with Brevo (see section 7a of the guide). Render only asks for these when a Blueprint is first
+      # created, so on an existing Blueprint add them yourself under Environment. Without them nothing is
+      # emailed and the admin is shown the link on screen. Port 2525 because Render's free plan blocks
+      # 25, 465 and 587.
+      - key: EMAIL_PROVIDER
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
       # Files (receipts, certificates, lesson files, pictures) are kept inside the free database, so the
       # pilot needs no storage account and no card. A pilot-sized amount only: they share the free
       # database's 1 GB and disappear with it after 30 days. For production switch to an S3-compatible

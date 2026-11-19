@@ -1190,8 +1190,8 @@
       "doneTitle": "Erayga sirta ah waa la keydiyay",
       "doneText": "Hadda waad gali kartaa.",
       "goSignIn": "Gal",
-      "sentNote": "Haddii iimaylkan akoon leeyahay, koodh ayaa SMS ahaan kuugu soo socda.",
-      "emailText": "Geli iimaylka aad ku diiwaangelisay. Waxaan koodh ugu soo diri doonaa lambarka taleefanka ee akoonkaaga."
+      "sentNote": "Haddii iimaylkan akoon leeyahay, koodh ayaa kuu soo socda.",
+      "emailText": "Geli iimaylka aad ku diiwaangelisay. Koodh ayaan kuu soo diri doonaa."
     },
     "setPassword": {
       "title": "Deji erayga sirta ah",

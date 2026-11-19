@@ -4,6 +4,7 @@ import {
   maskPhone,
   normalizePhone,
   type RegisterInput,
+  type Role,
   type SignInInput,
 } from '@natik/shared';
 import { Prisma } from '../../generated/prisma/client';
@@ -14,6 +15,8 @@ import { newToken, sha256 } from '../../common/security/tokens';
 import { AppConfigService } from '../../config/app-config.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuditService } from '../audit/audit.service';
+import { accountCreatedEmail, passwordLinkEmail } from '../notifications/email/email-templates';
+import { EmailService } from '../notifications/email/email.service';
 import { SmsService } from '../notifications/sms/sms.service';
 import { OtpService } from './otp.service';
 import { SessionService } from './session.service';
@@ -40,6 +43,7 @@ export class AuthService {
     private readonly sessions: SessionService,
     private readonly otp: OtpService,
     private readonly sms: SmsService,
+    private readonly email: EmailService,
     private readonly limiter: RateLimiter,
     private readonly audit: AuditService,
     private readonly config: AppConfigService,
@@ -141,7 +145,8 @@ export class AuthService {
       key,
       'RESET_PASSWORD',
       client.ip,
-      !!user && user.status === 'ACTIVE' && !!user.phone,
+      !!user && user.status === 'ACTIVE' && (!!user.phone || !!user.email),
+      user?.email ? { email: user.email, name: user.fullName } : null,
     );
   }
 
@@ -255,15 +260,43 @@ export class AuthService {
     });
   }
 
-  /** Creates a "set your password" link token and texts it (admin-created accounts, reset links). */
+  /**
+   * Creates a "set your password" link and sends it (admin-created accounts, "send password link").
+   *
+   * It goes by **email** first (the message also says who they are and how to sign in). If email is not
+   * set up or fails, it is texted when a real SMS gateway exists. If neither really leaves the server
+   * (as in a pilot before email is configured) the link is returned instead: the admin sees it on
+   * screen and passes it on by hand. When a message really went out, the link is never returned.
+   */
   async sendPasswordLink(
-    user: { id: string; phone: string | null },
+    user: {
+      id: string;
+      fullName: string;
+      role: Role;
+      phone: string | null;
+      email: string | null;
+    },
     template: 'account.created' | 'password.link',
-  ) {
-    if (!user.phone) return;
+  ): Promise<{ link: string | null; sentTo: 'email' | 'sms' | null }> {
+    if (!user.phone && !user.email) return { link: null, sentTo: null };
     const token = await this.createPasswordToken(user.id, SET_PASSWORD_LINK_TTL_MS);
-    const link = `${this.config.get('APP_URL')}/set-password?token=${token}`;
-    await this.sms.send(user.phone, template, { link });
+    const appUrl = this.config.get('APP_URL').replace(/\/$/, '');
+    const link = `${appUrl}/set-password?token=${token}`;
+
+    if (user.email) {
+      const details = { name: user.fullName, email: user.email, link };
+      const content =
+        template === 'account.created'
+          ? accountCreatedEmail({ ...details, role: user.role, signInUrl: `${appUrl}/sign-in` })
+          : passwordLinkEmail(details);
+      if ((await this.email.send(user.email, content)).delivered)
+        return { link: null, sentTo: 'email' };
+    }
+    if (user.phone) {
+      await this.sms.send(user.phone, template, { link });
+      if (this.config.get('SMS_PROVIDER') !== 'console') return { link: null, sentTo: 'sms' };
+    }
+    return { link, sentTo: null };
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────

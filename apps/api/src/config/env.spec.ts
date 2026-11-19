@@ -63,6 +63,45 @@ describe('secrets outside local development', () => {
   });
 });
 
+describe('email settings', () => {
+  it('sends nothing by default', () => {
+    expect(validateEnv(minimal).EMAIL_PROVIDER).toBe('console');
+  });
+  it('needs the whole SMTP account when real email is chosen', () => {
+    expect(() => validateEnv({ ...minimal, EMAIL_PROVIDER: 'smtp' })).toThrowError(
+      /SMTP_HOST, EMAIL_FROM/,
+    );
+    // A login is both parts or nothing (a local test inbox needs none).
+    expect(() =>
+      validateEnv({
+        ...minimal,
+        EMAIL_PROVIDER: 'smtp',
+        SMTP_HOST: 'h',
+        EMAIL_FROM: 'a@b.c',
+        SMTP_USER: 'u',
+      }),
+    ).toThrowError(/SMTP_USER and SMTP_PASSWORD/);
+    expect(
+      validateEnv({
+        ...minimal,
+        EMAIL_PROVIDER: 'smtp',
+        SMTP_HOST: 'localhost',
+        EMAIL_FROM: 'a@b.c',
+      }).EMAIL_PROVIDER,
+    ).toBe('smtp');
+    const env = validateEnv({
+      ...minimal,
+      EMAIL_PROVIDER: 'smtp',
+      SMTP_HOST: 'smtp-relay.brevo.com',
+      SMTP_PORT: '2525',
+      SMTP_USER: 'user',
+      SMTP_PASSWORD: 'secret',
+      EMAIL_FROM: 'Natik <owner@example.com>',
+    });
+    expect(env.SMTP_PORT).toBe(2525);
+  });
+});
+
 describe('file storage settings', () => {
   const pilot = { ...minimal, APP_ENV: 'staging', OTP_PEPPER: 'a-long-random-pilot-pepper' };
   it('needs bucket keys when files go to a bucket', () => {

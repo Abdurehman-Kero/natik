@@ -8,6 +8,8 @@ import {
 } from './announcements.controller';
 import { AnnouncementsService } from './announcements.service';
 import { AdminSmsController } from './admin-sms.controller';
+import { DevEmailController } from './email/dev-email.controller';
+import { EmailService } from './email/email.service';
 import { AfroMessageSmsProvider } from './sms/afromessage-provider';
 import { DevAccountsController, DevSmsController } from './sms/dev-sms.controller';
 import { ConsoleSmsProvider, SmsProvider } from './sms/sms-provider';
@@ -19,6 +21,7 @@ import { SmsService } from './sms/sms.service';
   controllers: [
     DevSmsController,
     DevAccountsController,
+    DevEmailController,
     AdminAnnouncementsController,
     TeachAnnouncementsController,
     StudentAnnouncementsController,
@@ -26,6 +29,7 @@ import { SmsService } from './sms/sms.service';
   ],
   providers: [
     SmsService,
+    EmailService,
     AnnouncementsService,
     {
       provide: SmsProvider,
@@ -37,6 +41,6 @@ import { SmsService } from './sms/sms.service';
           : new ConsoleSmsProvider(),
     },
   ],
-  exports: [SmsService, SmsProvider, AnnouncementsService],
+  exports: [SmsService, SmsProvider, EmailService, AnnouncementsService],
 })
 export class NotificationsModule {}

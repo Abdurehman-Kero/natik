@@ -39,7 +39,8 @@ import type { Paged, UserView } from '@/lib/api/types';
 import { flagOf } from '@/lib/countries';
 import { useCountryName, useCountryOptions } from '@/lib/use-country-options';
 import { UserDetailsDialog } from './user-details-dialog';
-import { UserFormDialog } from './user-form-dialog';
+import { PasswordLinkDialog, type PasswordLinkResult } from './password-link-dialog';
+import { type CreatedUser, UserFormDialog } from './user-form-dialog';
 
 export interface UsersQuery {
   q: string;
@@ -84,12 +85,55 @@ export function UsersView({
   const [editing, setEditing] = useState<UserView | null>(null);
   const [disabling, setDisabling] = useState<UserView | null>(null);
   const [erasing, setErasing] = useState<UserView | null>(null);
+  // A password link that could not be emailed: shown so the admin can pass it on by hand.
+  const [linkResult, setLinkResult] = useState<PasswordLinkResult | null>(null);
 
   const filtered = Boolean(query.q || query.role || query.status || query.country);
   const totalPages = Math.max(1, Math.ceil(data.total / data.pageSize));
 
   function go(overrides: Partial<UsersQuery>) {
     router.push(hrefFor(query, { page: 1, ...overrides }));
+  }
+
+  /** Says what happened to the password link: emailed, texted, or (if nothing could be sent) shown to copy. */
+  function reportLink(
+    result: PasswordLinkResult,
+    messages: { emailed: string; texted: string },
+  ): void {
+    if (result.sentTo === 'email') toast.success(messages.emailed);
+    else if (result.sentTo === 'sms') toast.success(messages.texted);
+    else setLinkResult(result);
+  }
+
+  async function sendLink(u: UserView) {
+    try {
+      const sent = await api<{ link: string | null; sentTo: 'email' | 'sms' | null }>(
+        `/admin/users/${u.id}/password-link`,
+        { method: 'POST' },
+      );
+      reportLink(
+        { name: u.fullName, email: u.email, link: sent.link, sentTo: sent.sentTo },
+        {
+          emailed: t('linkEmailed', { email: u.email ?? '' }),
+          texted: t('linkSent'),
+        },
+      );
+      router.refresh();
+    } catch (error) {
+      toast.error(errorMessage(error));
+    }
+  }
+
+  function created(person: CreatedUser) {
+    reportLink(
+      {
+        name: person.fullName,
+        email: person.email,
+        link: person.passwordLink,
+        sentTo: person.sentTo,
+      },
+      { emailed: t('createdEmailed', { email: person.email ?? '' }), texted: t('created') },
+    );
   }
 
   async function run(action: () => Promise<unknown>, success: string) {
@@ -270,14 +314,7 @@ export function UsersView({
                 <DropdownMenuItem onSelect={() => setEditing(u)}>
                   <Pencil aria-hidden /> {t('edit')}
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={() =>
-                    run(
-                      () => api(`/admin/users/${u.id}/password-link`, { method: 'POST' }),
-                      t('linkSent'),
-                    )
-                  }
-                >
+                <DropdownMenuItem onSelect={() => void sendLink(u)}>
                   <Send aria-hidden /> {t('sendLink')}
                 </DropdownMenuItem>
                 {u.id !== actor.id ? (
@@ -320,7 +357,14 @@ export function UsersView({
       />
 
       <UserDetailsDialog user={viewing} onClose={() => setViewing(null)} />
-      <UserFormDialog open={creating} onOpenChange={setCreating} user={null} actor={actor} />
+      <UserFormDialog
+        open={creating}
+        onOpenChange={setCreating}
+        user={null}
+        actor={actor}
+        onCreated={created}
+      />
+      <PasswordLinkDialog result={linkResult} onClose={() => setLinkResult(null)} />
       <UserFormDialog
         open={editing !== null}
         onOpenChange={(open) => !open && setEditing(null)}

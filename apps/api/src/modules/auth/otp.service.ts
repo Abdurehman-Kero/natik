@@ -5,6 +5,8 @@ import { RateLimiter } from '../../common/security/rate-limiter';
 import { hashOtp, newOtpCode, safeEqual } from '../../common/security/tokens';
 import { AppConfigService } from '../../config/app-config.service';
 import { PrismaService } from '../../prisma/prisma.service';
+import { resetCodeEmail } from '../notifications/email/email-templates';
+import { EmailService } from '../notifications/email/email.service';
 import { SmsService } from '../notifications/sms/sms.service';
 
 export const OTP_TTL_MS = 10 * 60_000;
@@ -20,6 +22,7 @@ export class OtpService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly sms: SmsService,
+    private readonly email: EmailService,
     private readonly limiter: RateLimiter,
     private readonly config: AppConfigService,
   ) {}
@@ -28,8 +31,15 @@ export class OtpService {
    * Sends a new code. Limits are keyed on the phone number alone (not on whether an account exists),
    * so the answer is identical for known and unknown numbers (no account enumeration, FR-AUTH-004).
    * Pass `send: false` for an unknown number: limits apply, nothing is sent.
+   * With `to` (the person's email) a reset code is emailed first; the text message is the fallback.
    */
-  async issue(phone: string, purpose: OtpPurpose, ip: string | null, send = true): Promise<void> {
+  async issue(
+    phone: string,
+    purpose: OtpPurpose,
+    ip: string | null,
+    send = true,
+    to: { email: string; name: string } | null = null,
+  ): Promise<void> {
     if (!(await this.limiter.hit(`otp-cooldown:${purpose}:${phone}`, 1, RESEND_COOLDOWN_SECONDS))) {
       throw new AppException('OTP_TOO_SOON', HttpStatus.TOO_MANY_REQUESTS, {
         params: { seconds: RESEND_COOLDOWN_SECONDS },
@@ -53,7 +63,15 @@ export class OtpService {
         expiresAt: new Date(Date.now() + OTP_TTL_MS),
       },
     });
-    await this.sms.send(phone, TEMPLATE[purpose], { code });
+    if (to && purpose === 'RESET_PASSWORD') {
+      const { delivered } = await this.email.send(
+        to.email,
+        resetCodeEmail({ name: to.name, code }),
+      );
+      if (delivered) return;
+    }
+    // The key is a phone number, except for an account found by email that has none.
+    if (phone.startsWith('+')) await this.sms.send(phone, TEMPLATE[purpose], { code });
   }
 
   /** Checks a code. It is single use: success consumes it, and 5 wrong tries cancel it. */

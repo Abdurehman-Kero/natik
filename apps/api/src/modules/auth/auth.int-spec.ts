@@ -274,6 +274,22 @@ describe('accounts and sign-in', () => {
       expect(verified.body.token).toBeTruthy();
     });
 
+    it('also puts the reset code in an email (the development mailbox shows it)', async () => {
+      const user = await h.makeUser({});
+      await h.client().post('/api/v1/auth/password/forgot').send({ email: user.email }).expect(200);
+      const mail = (await h.client().get('/api/v1/dev/email').query({ to: user.email }).expect(200))
+        .body.items as { subject: string; text: string }[];
+      expect(mail[0]!.subject).toMatch(/is your Natik reset code$/);
+      const code = /reset code is (\d{6})/.exec(mail[0]!.text)?.[1];
+      expect(code).toBeTruthy();
+      const verified = await h
+        .client()
+        .post('/api/v1/auth/password/verify-code')
+        .send({ email: user.email, code })
+        .expect(200);
+      expect(verified.body.token).toBeTruthy();
+    });
+
     it('answers the same for a known and an unknown email, and texts nothing for the unknown one', async () => {
       const user = await h.makeUser({});
       const known = await h

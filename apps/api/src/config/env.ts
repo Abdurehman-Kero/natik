@@ -37,6 +37,20 @@ export const envSchema = z.object({
    * pilot and for tests (a pilot-sized amount of files only; see docs/PILOT-HOSTING.md).
    */
   STORAGE_DRIVER: z.enum(['s3', 'database']).default('s3'),
+  /**
+   * Email: account details and password links for people an admin adds, and reset codes.
+   * `console` = nothing is sent (the message is logged and, in development, shown at /api/v1/dev/email).
+   * `smtp` = real email through any SMTP service (Brevo, Mailjet, your own server…).
+   */
+  EMAIL_PROVIDER: z.enum(['console', 'smtp']).default('console'),
+  SMTP_HOST: z.string().optional(),
+  /** 587 is the usual port; use 2525 where 25, 465 and 587 are blocked (Render's free plan). */
+  SMTP_PORT: z.coerce.number().int().min(1).max(65535).default(587),
+  /** The login of the mail service. Leave both empty for a local test inbox (Mailpit). */
+  SMTP_USER: z.string().optional(),
+  SMTP_PASSWORD: z.string().optional(),
+  /** Who the messages come from, e.g. `Natik <owner@example.com>`. Most services need it verified first. */
+  EMAIL_FROM: z.string().optional(),
   S3_ENDPOINT: z.url().default('http://localhost:9010'),
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET: z.string().default('natik-private'),
@@ -77,6 +91,20 @@ export function validateEnv(raw: Record<string, unknown>): Env {
       `Invalid environment configuration:\n${lines.join('\n')}\n` +
         'Fix apps/api/.env (see apps/api/.env.example) or the deployment environment.',
     );
+  }
+  if (result.data.EMAIL_PROVIDER === 'smtp') {
+    const missing = (['SMTP_HOST', 'EMAIL_FROM'] as const).filter((key) => !result.data[key]);
+    if (missing.length > 0) {
+      throw new Error(
+        `Invalid environment configuration:\n  • ${missing.join(', ')} are required when EMAIL_PROVIDER=smtp.`,
+      );
+    }
+    // Real services need a login; a local test inbox (Mailpit) needs none. Never half of it.
+    if (Boolean(result.data.SMTP_USER) !== Boolean(result.data.SMTP_PASSWORD)) {
+      throw new Error(
+        'Invalid environment configuration:\n  • SMTP_USER and SMTP_PASSWORD must be set together (or both left empty).',
+      );
+    }
   }
   if (result.data.SMS_PROVIDER === 'afromessage' && !result.data.AFROMESSAGE_TOKEN) {
     throw new Error(

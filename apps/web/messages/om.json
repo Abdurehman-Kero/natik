@@ -1190,8 +1190,8 @@
       "doneTitle": "Jechi icciitii olkaa'ameera",
       "doneText": "Amma seenuu dandeessa.",
       "goSignIn": "Seeni",
-      "sentNote": "Imeelii kun herrega yoo qabaate, koodiin karaa SMS'tiin dhufaa jira.",
-      "emailText": "Imeelii ittiin galmooftee galchi. Lakkoofsa bilbilaa herrega keetii irratti koodii ergaan siif ergina."
+      "sentNote": "Imeelii kun herrega yoo qabaate, koodiin dhufaa jira.",
+      "emailText": "Imeelii ittiin galmooftee galchi. Koodii siif ergina."
     },
     "setPassword": {
       "title": "Jecha icciitii kee qopheessi",

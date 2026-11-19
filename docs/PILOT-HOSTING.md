@@ -115,9 +115,46 @@ On day 30 the database becomes unreachable, and it is deleted 14 days later ([Re
 
 Always take the dump first, even if you intend to pay: the free database has no backups.
 
+## 7a. Turn on email (free), about 10 minutes
+
+When an admin adds a student, teacher or admin, the person gets **an email** with their sign-in email, what to do first and a
+**link to choose their password** (the link works once and expires in 3 days; the password itself is never emailed). The same
+email service sends the 6-digit code of "Forgot password". Until you set this up, nothing is emailed and the admin sees the link
+on screen after adding someone, with a **Copy link** button, to pass on by WhatsApp or Telegram.
+
+Render's free web services block the usual mail ports 25, 465 and 587 ([Render: Deploy for Free](https://render.com/docs/free)),
+so use a mail service that also accepts **port 2525**. [Brevo](https://www.brevo.com) does, and its free plan allows 300 emails a
+day without a card ([Brevo: free SMTP server](https://www.brevo.com/free-smtp-server)). Check its current limits when you sign up.
+
+1. Create a free Brevo account.
+2. **Verify a sender:** Brevo → _Senders, domains & dedicated IPs_ → _Senders_ → add the email address the messages come from (the
+   owner's email is fine for a pilot) and confirm it from the email Brevo sends. Brevo may also need a short time to approve a new
+   account for sending.
+3. **Get the SMTP login:** Brevo → _SMTP & API_ → _SMTP_. Copy the **login** (looks like `something@smtp-brevo.com`) and create an
+   **SMTP key**. The key is the password; it is shown once.
+4. On Render → `natik-api` → **Environment**, add these values (a Blueprint does not create them for you):
+
+| Name             | Value                                               |
+| ---------------- | --------------------------------------------------- |
+| `EMAIL_PROVIDER` | `smtp`                                              |
+| `SMTP_HOST`      | `smtp-relay.brevo.com`                              |
+| `SMTP_PORT`      | `2525`                                              |
+| `SMTP_USER`      | the SMTP login from step 3                          |
+| `SMTP_PASSWORD`  | the SMTP key from step 3                            |
+| `EMAIL_FROM`     | `Natik <the sender address you verified in step 2>` |
+
+5. Save (Render restarts the API). Then in the website: **Admin → Users → New user**, add a test person with an email you can
+   read. The message should arrive within a minute: **check the spam folder** the first time. Messages sent "from" a Gmail address
+   through another service are often marked as spam; an address on your own domain is better once you have one.
+6. If the screen shows the link instead of "emailed", the message was not sent: read the API's **Logs** on Render. The line starts
+   with `Email to ...` and says why (wrong key, sender not verified, port blocked).
+
+On your own computer you can read these emails in the local Mailpit inbox (<http://localhost:8026>): in `apps/api/.env` set
+`EMAIL_PROVIDER=smtp`, `SMTP_HOST=localhost`, `SMTP_PORT=1026` and `EMAIL_FROM=Natik <natik@localhost>`.
+
 ## 7. What a pilot does and does not have
 
-- **SMS:** `SMS_PROVIDER=console` (the file's default) sends nothing. Registration and sign-in work, but **password reset codes and "set your password" links reach nobody**, so accounts created by an admin cannot be activated. To fix: get an Afro Message token, then on Render set `SMS_PROVIDER=afromessage` and `AFROMESSAGE_TOKEN` (and `AFROMESSAGE_IDENTIFIER_ID` if you have one).
+- **SMS:** not needed for the pilot. `SMS_PROVIDER=console` (the default) sends nothing; people get their password links and reset codes by **email** instead (section 7a). If email is not set up, the admin is shown the link on screen to pass on by hand. Add an Afro Message token later (`SMS_PROVIDER=afromessage` and `AFROMESSAGE_TOKEN`) if you want texts too; they are then used when an email cannot be sent.
 - **Videos:** `VIDEO_PROVIDER=local` keeps lesson videos in the same file storage (up to 100 MB each, played through the API). In this pilot that means inside the 1 GB database, so keep them short or use few. Production uses Bunny Stream: create a library, enable token authentication and set `VIDEO_PROVIDER=bunny` with `BUNNY_LIBRARY_ID`, `BUNNY_API_KEY`, `BUNNY_TOKEN_KEY`.
 - **`APP_ENV=staging`:** the API's own interactive documentation stays on at `/api/docs` and the stricter response headers of production are off. Do not put real money flows or sensitive data on it until you switch to `production` (which also requires real SMS and Bunny).
 - **Backups:** the free Render database has none, and it now holds the files too. Take a `pg_dump` (section 6) every few days. Run the nightly off-site copy from [`RUNBOOKS.md`](RUNBOOKS.md) before real students depend on it.

@@ -32,10 +32,27 @@ export interface UserFormDialogProps {
   user: UserView | null;
   /** The person using the dialog (decides which roles they may assign). */
   actor: { id: string; isOwner: boolean };
+  /** A new person was added: what happened to the email with their sign-in details and password link. */
+  onCreated?: (result: CreatedUser) => void;
+}
+
+/** The API's answer to "create user": the person, and how their password link went out. */
+export interface CreatedUser {
+  fullName: string;
+  email: string | null;
+  /** Set only when no email or text message really went out. */
+  passwordLink: string | null;
+  sentTo: 'email' | 'sms' | null;
 }
 
 /** Create or edit a user in a modal (short form, reached from the list). */
-export function UserFormDialog({ open, onOpenChange, user, actor }: UserFormDialogProps) {
+export function UserFormDialog({
+  open,
+  onOpenChange,
+  user,
+  actor,
+  onCreated,
+}: UserFormDialogProps) {
   const t = useTranslations('users');
   const ta = useTranslations('auth');
   const tp = useTranslations('profile');
@@ -97,8 +114,8 @@ export function UserFormDialog({ open, onOpenChange, user, actor }: UserFormDial
         await api(`/admin/users/${user.id}`, { method: 'PATCH', json: data });
         toast.success(t('saved'));
       } else {
-        await api('/admin/users', { method: 'POST', json: data });
-        toast.success(t('created'));
+        const created = await api<CreatedUser>('/admin/users', { method: 'POST', json: data });
+        onCreated?.(created);
       }
       onOpenChange(false);
       router.refresh();
