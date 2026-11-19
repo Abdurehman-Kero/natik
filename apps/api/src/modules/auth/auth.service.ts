@@ -288,7 +288,7 @@ export class AuthService {
       const content =
         template === 'account.created'
           ? accountCreatedEmail({ ...details, role: user.role, signInUrl: `${appUrl}/sign-in` })
-          : passwordLinkEmail(details);
+          : passwordLinkEmail({ ...details, role: user.role });
       if ((await this.email.send(user.email, content)).delivered)
         return { link: null, sentTo: 'email' };
     }

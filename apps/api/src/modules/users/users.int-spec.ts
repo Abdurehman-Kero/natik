@@ -163,10 +163,11 @@ describe('admin user management and permissions', () => {
       const mailbox = (
         await h.client().get('/api/v1/dev/email').query({ to: body.email }).expect(200)
       ).body.items as { subject: string; text: string }[];
-      expect(mailbox[0]!.subject).toBe('Your Natik account is ready');
+      expect(mailbox[0]!.subject).toBe('Welcome to Natik: your teacher account is ready');
       expect(mailbox[0]!.text).toContain(`Your sign-in email: ${body.email}`);
       expect(mailbox[0]!.text).toContain(created.body.passwordLink);
-      expect(mailbox[0]!.text).toContain('teacher account');
+      expect(mailbox[0]!.text).toContain('given you access as a teacher at Natik Language Centre');
+      expect(mailbox[0]!.text).toContain('Only you choose it');
 
       const sms = await h.prisma.smsMessage.findFirstOrThrow({
         where: { to: body.phone },

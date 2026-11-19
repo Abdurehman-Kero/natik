@@ -1,4 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { GoogleAuthService } from './google-auth.service';
 import { createHarness, type Harness, randomEmail, randomPhone } from '../../../test/harness';
 
 // "dev" plays Google: the login hint is the email that signs in (see DevGoogleOAuthClient).
@@ -267,6 +268,24 @@ describe('Google sign-in', () => {
     expect(
       (await protocolRelative.get('/api/v1/auth/google/pending').expect(200)).body.next,
     ).toBeNull();
+  });
+
+  it('an unexpected crash sends the person back to the sign-in page instead of showing raw JSON', async () => {
+    const service = h.app.get(GoogleAuthService);
+    const start = vi.spyOn(service, 'begin').mockRejectedValueOnce(new Error('redis is down'));
+    const failedStart = await h.client().get('/api/v1/auth/google/start').redirects(0);
+    expect(failedStart.status).toBe(302);
+    expect(failedStart.headers.location).toBe('/sign-in?google=invalid');
+    start.mockRestore();
+
+    const finish = vi.spyOn(service, 'finish').mockRejectedValueOnce(new Error('database is down'));
+    const failedCallback = await h
+      .client()
+      .get('/api/v1/auth/google/callback?code=x&state=y')
+      .redirects(0);
+    expect(failedCallback.status).toBe(302);
+    expect(failedCallback.headers.location).toBe('/sign-in?google=invalid');
+    finish.mockRestore();
   });
 
   it('records Google sign-ups and sign-ins in the activity log', async () => {

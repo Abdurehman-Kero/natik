@@ -14,18 +14,61 @@ const ROLE_NAME: Record<Role, string> = {
   ADMIN: 'admin',
 };
 
+const ROLE_TITLE: Record<Role, string> = {
+  STUDENT: 'Student',
+  TEACHER: 'Teacher',
+  ADMIN: 'Administrator',
+};
+
 /** Told to everyone: the account is theirs to manage. */
 const MANAGE_HINT =
   'The account is yours to manage: open Profile any time to change your name, photo, email or password.';
 
-/** What to do first, per kind of account. */
-const ROLE_HINT: Record<Role, string> = {
-  STUDENT:
-    'After you sign in, open Courses, choose a course and ask to join. The Natik team accepts you, and then the course opens.',
-  TEACHER:
-    'After you sign in, open My courses to add weeks and sessions, mark your students’ work and answer their questions.',
-  ADMIN:
-    'After you sign in you will find the dashboard: enrolments, payments, courses, users and the website editor.',
+/** Told with every password link: nobody else sees or sets the password. */
+const PASSWORD_PRIVACY =
+  'Your password stays private. Only you choose it, nobody at Natik (administrators included) can see it, and it is never sent by email. The link works once and only for you.';
+
+/**
+ * What each kind of person is told: what the Natik team gave them, what that lets them do, and the
+ * first thing to open. Plain words, because many readers are new to online learning.
+ */
+const ROLE_WELCOME: Record<Role, { intro: string; canDo: string[]; first: string }> = {
+  STUDENT: {
+    intro:
+      'The Natik team has created a student account for you at Natik Language Centre, so you can learn with us.',
+    canDo: [
+      'Look through the courses and ask to join the ones you like. The Natik team accepts you, and then the course opens.',
+      'Follow each week’s lessons, take the quizzes and see how far you have come.',
+      'Chat with your teacher and your classmates in your course group.',
+      'Receive your certificate when you finish a course.',
+    ],
+    first:
+      'Open Courses, choose a course and ask to join. The Natik team accepts you, and then the course opens.',
+  },
+  TEACHER: {
+    intro:
+      'The Natik team has given you access as a teacher at Natik Language Centre. You can now teach on Natik.',
+    canDo: [
+      'Build your courses: add weeks and sessions with lessons, files and quizzes.',
+      'See the students in your courses and follow their progress.',
+      'Mark your students’ quizzes and written work, and give them feedback.',
+      'Answer questions and talk with your students in each course group.',
+    ],
+    first:
+      'Open My courses to add weeks and sessions, mark your students’ work and answer their questions.',
+  },
+  ADMIN: {
+    intro:
+      'The Natik team has given you access as an administrator of Natik Language Centre. You can now help run the centre.',
+    canDo: [
+      'Accept students into courses and check their payments.',
+      'Manage the courses, the teachers and the students.',
+      'Edit the website and send announcements.',
+      'See the reports and the activity log.',
+    ],
+    first:
+      'Open the dashboard: enrolments, payments, courses, users and the website editor. Administrators can see people’s personal details, so keep your password private.',
+  },
 };
 
 const escapeHtml = (value: string): string =>
@@ -40,12 +83,27 @@ function page(options: {
   title: string;
   paragraphs: string[];
   facts?: { label: string; value: string }[];
+  /** A short bulleted list under a heading (what the person can do). */
+  list?: { title: string; items: string[] };
   button?: { label: string; url: string };
+  /** More paragraphs, after the button. */
+  after?: string[];
   footnote: string;
 }): string {
   const paragraphs = options.paragraphs
     .map((p) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.5">${escapeHtml(p)}</p>`)
     .join('');
+  const after = (options.after ?? [])
+    .map((p) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.5">${escapeHtml(p)}</p>`)
+    .join('');
+  const list = options.list
+    ? `<p style="margin:8px 0 6px;font-size:16px;font-weight:700">${escapeHtml(options.list.title)}</p>` +
+      `<ul style="margin:0 0 16px;padding-left:22px;font-size:16px;line-height:1.5">` +
+      options.list.items
+        .map((item) => `<li style="margin:0 0 6px">${escapeHtml(item)}</li>`)
+        .join('') +
+      '</ul>'
+    : '';
   const facts = (options.facts ?? [])
     .map(
       (f) =>
@@ -66,8 +124,8 @@ function page(options: {
     `<div style="font-size:13px;letter-spacing:2px;color:#b69a4a;font-weight:700">NATIK LANGUAGE CENTRE</div>` +
     `<div style="font-size:22px;font-weight:700;margin-top:6px">${escapeHtml(options.title)}</div></div>` +
     `<div style="background:#ffffff;padding:24px;border-radius:0 0 14px 14px">${paragraphs}` +
-    (facts ? `<table style="margin:0 0 8px;border-collapse:collapse">${facts}</table>` : '') +
-    `${button}<p style="margin:0;font-size:13px;color:#5b6770">${escapeHtml(options.footnote)}</p></div></div></body></html>`
+    (facts ? `<table style="margin:0 0 16px;border-collapse:collapse">${facts}</table>` : '') +
+    `${list}${button}${after}<p style="margin:0;font-size:13px;color:#5b6770">${escapeHtml(options.footnote)}</p></div></div></body></html>`
   );
 }
 
@@ -79,20 +137,27 @@ export function accountCreatedEmail(p: {
   link: string;
   signInUrl: string;
 }): EmailContent {
-  const intro = `The Natik team created a ${ROLE_NAME[p.role]} account for you.`;
+  const welcome = ROLE_WELCOME[p.role];
+  const canDoTitle = `As ${p.role === 'ADMIN' ? 'an administrator' : `a ${ROLE_NAME[p.role]}`} you can:`;
+  const afterSignIn = `Then sign in at ${p.signInUrl} with your email and the password you chose.`;
   const text = [
     `Hello ${p.name},`,
     '',
-    intro,
+    welcome.intro,
     '',
+    `Your role: ${ROLE_TITLE[p.role]}`,
     `Your sign-in email: ${p.email}`,
     '',
-    'Choose your password here (the link works once and expires in 3 days):',
+    canDoTitle,
+    ...welcome.canDo.map((item) => `- ${item}`),
+    '',
+    'To get started, choose your password here (the link works once and expires in 3 days):',
     p.link,
     '',
-    `Then sign in at ${p.signInUrl} with your email and the password you chose.`,
+    PASSWORD_PRIVACY,
     '',
-    ROLE_HINT[p.role],
+    afterSignIn,
+    welcome.first,
     '',
     MANAGE_HINT,
     '',
@@ -101,16 +166,18 @@ export function accountCreatedEmail(p: {
     'Natik Language Centre',
   ].join('\n');
   return {
-    subject: 'Your Natik account is ready',
+    subject: `Welcome to Natik: your ${ROLE_NAME[p.role]} account is ready`,
     text,
     html: page({
-      title: 'Your account is ready',
-      paragraphs: [`Hello ${p.name},`, intro, ROLE_HINT[p.role], MANAGE_HINT],
+      title: `Welcome to Natik, ${ROLE_NAME[p.role]}`,
+      paragraphs: [`Hello ${p.name},`, welcome.intro],
       facts: [
-        { label: 'Account', value: ROLE_NAME[p.role] },
+        { label: 'Your role', value: ROLE_TITLE[p.role] },
         { label: 'Sign-in email', value: p.email },
       ],
+      list: { title: canDoTitle, items: welcome.canDo },
       button: { label: 'Choose your password', url: p.link },
+      after: [PASSWORD_PRIVACY, afterSignIn, welcome.first, MANAGE_HINT],
       footnote:
         'The link works once and expires in 3 days. If you were not expecting this message, ignore it: nothing happens until you choose a password.',
     }),
@@ -118,16 +185,25 @@ export function accountCreatedEmail(p: {
 }
 
 /** An admin sent a fresh link (a forgotten password, or the first link expired). */
-export function passwordLinkEmail(p: { name: string; email: string; link: string }): EmailContent {
+export function passwordLinkEmail(p: {
+  name: string;
+  email: string;
+  link: string;
+  role: Role;
+}): EmailContent {
+  const intro = `The Natik team sent you a link to set a new password for your ${ROLE_NAME[p.role]} account at Natik Language Centre.`;
   const text = [
     `Hello ${p.name},`,
     '',
-    'The Natik team sent you a link to set a new password.',
+    intro,
     '',
+    `Your role: ${ROLE_TITLE[p.role]}`,
     `Your sign-in email: ${p.email}`,
     '',
     'Choose your password here (the link works once and expires in 3 days):',
     p.link,
+    '',
+    PASSWORD_PRIVACY,
     '',
     'If you were not expecting this message, you can ignore it.',
     '',
@@ -138,9 +214,13 @@ export function passwordLinkEmail(p: { name: string; email: string; link: string
     text,
     html: page({
       title: 'Set a new password',
-      paragraphs: [`Hello ${p.name},`, 'The Natik team sent you a link to set a new password.'],
-      facts: [{ label: 'Sign-in email', value: p.email }],
+      paragraphs: [`Hello ${p.name},`, intro],
+      facts: [
+        { label: 'Your role', value: ROLE_TITLE[p.role] },
+        { label: 'Sign-in email', value: p.email },
+      ],
       button: { label: 'Choose your password', url: p.link },
+      after: [PASSWORD_PRIVACY],
       footnote:
         'The link works once and expires in 3 days. If you were not expecting this message, ignore it.',
     }),

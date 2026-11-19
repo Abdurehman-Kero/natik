@@ -64,7 +64,12 @@ describe('email service', () => {
     const email = new EmailService(configFor({ EMAIL_PROVIDER: 'console' }));
     const result = await email.send(
       'a@example.com',
-      passwordLinkEmail({ name: 'Abdi', email: 'a@example.com', link: 'https://x.test/set?t=1' }),
+      passwordLinkEmail({
+        name: 'Abdi',
+        email: 'a@example.com',
+        link: 'https://x.test/set?t=1',
+        role: 'STUDENT',
+      }),
     );
     expect(result.delivered).toBe(false);
     expect(email.delivers).toBe(false);
@@ -97,7 +102,7 @@ describe('email service', () => {
     const raw = (smtp.received[0] ?? '')
       .replaceAll('=' + String.fromCharCode(13, 10), '')
       .replaceAll('=3D', '=');
-    expect(raw).toContain('Subject: Your Natik account is ready');
+    expect(raw).toContain('Subject: Welcome to Natik: your teacher account is ready');
     expect(raw).toContain('To: sara@example.com');
     expect(raw).toContain('From: Natik <owner@example.com>');
     expect(raw).toContain('https://natik.test/set-password?token=abc123');
@@ -132,6 +137,22 @@ describe('email templates', () => {
     expect(accountCreatedEmail({ ...base, role: 'STUDENT' }).text).toContain('ask to join');
     expect(accountCreatedEmail({ ...base, role: 'TEACHER' }).text).toContain('My courses');
     expect(accountCreatedEmail({ ...base, role: 'ADMIN' }).text).toContain('dashboard');
+    // Each one is told, in words, what the Natik team gave them.
+    const student = accountCreatedEmail({ ...base, role: 'STUDENT' });
+    expect(student.text).toContain('created a student account for you at Natik Language Centre');
+    expect(student.text).toContain('Your role: Student');
+    expect(student.text).toContain('As a student you can:');
+    const teacher = accountCreatedEmail({ ...base, role: 'TEACHER' });
+    expect(teacher.text).toContain('given you access as a teacher at Natik Language Centre');
+    expect(teacher.text).toContain('Your role: Teacher');
+    expect(teacher.text).toContain('Mark your students’ quizzes and written work');
+    expect(teacher.text).not.toContain('Accept students into courses');
+    expect(teacher.subject).toBe('Welcome to Natik: your teacher account is ready');
+    const admin = accountCreatedEmail({ ...base, role: 'ADMIN' });
+    expect(admin.text).toContain('given you access as an administrator of Natik Language Centre');
+    expect(admin.text).toContain('As an administrator you can:');
+    expect(admin.html).toContain('<li');
+    expect(admin.html).toContain('Administrator');
     expect(accountCreatedEmail({ ...base, role: 'STUDENT' }).text).toContain('abdi@example.com');
     // Everyone is told the account is theirs to manage.
     expect(accountCreatedEmail({ ...base, role: 'TEACHER' }).text).toContain(
@@ -140,6 +161,29 @@ describe('email templates', () => {
     expect(accountCreatedEmail({ ...base, role: 'TEACHER' }).html).toContain(
       'change your name, photo, email or password',
     );
+  });
+
+  it('tell people their password is private: only they set it and nobody can see it', () => {
+    const base = {
+      name: 'Abdi',
+      email: 'abdi@example.com',
+      link: 'https://natik.test/set-password?token=t',
+    };
+    for (const role of ['STUDENT', 'TEACHER', 'ADMIN'] as const) {
+      const created = accountCreatedEmail({
+        ...base,
+        role,
+        signInUrl: 'https://natik.test/sign-in',
+      });
+      const resent = passwordLinkEmail({ ...base, role });
+      for (const mail of [created, resent]) {
+        expect(mail.text).toContain('Only you choose it');
+        expect(mail.text).toContain('administrators included');
+        expect(mail.text).toContain('never sent by email');
+        expect(mail.html).toContain('Only you choose it');
+      }
+      expect(resent.text).toContain(`${role.toLowerCase()} account`);
+    }
   });
 
   it('never put the password in the message, only a link, and escape what people typed', () => {

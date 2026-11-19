@@ -1,8 +1,20 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { googleCompleteSchema } from '@natik/shared';
 import type { CookieOptions, Response } from 'express';
 import { createZodDto } from 'nestjs-zod';
+import { AppException } from '../../../common/errors/app.exception';
 import { AppConfigService } from '../../../config/app-config.service';
 import type { ClientInfo } from '../auth.service';
 import { type AuthedRequest, Public } from '../decorators';
@@ -27,6 +39,8 @@ const clientOf = (req: AuthedRequest): ClientInfo => ({
 @ApiTags('Auth')
 @Controller('auth')
 export class GoogleAuthController {
+  private readonly logger = new Logger('Google');
+
   constructor(
     private readonly google: GoogleAuthService,
     private readonly sessions: SessionService,
@@ -43,6 +57,20 @@ export class GoogleAuthController {
       path: COOKIE_PATH,
       maxAge: maxAgeSeconds * 1000,
     };
+  }
+
+  /**
+   * The browser opens the start and callback addresses itself, so a crash must not end as raw JSON on a
+   * white page. The cause is logged (with the request id) and the person goes back to try again.
+   */
+  private bail(req: AuthedRequest, res: Response, error: unknown) {
+    const requestId = (req as unknown as { id?: string }).id;
+    if (error instanceof AppException) {
+      this.logger.warn({ requestId, err: error.message }, 'Google sign-in refused');
+    } else {
+      this.logger.error({ requestId, err: error }, 'Google sign-in stopped by an error');
+    }
+    return res.redirect(HttpStatus.FOUND, `${req.user ? '/profile' : '/sign-in'}?google=invalid`);
   }
 
   /** The sign-in screens ask this to know whether to show the Google button. */
@@ -65,15 +93,19 @@ export class GoogleAuthController {
     if (!this.google.enabled) return res.redirect(HttpStatus.FOUND, '/sign-in?google=off');
     const linking = mode === 'link';
     if (linking && !req.user) return res.redirect(HttpStatus.FOUND, '/sign-in?google=signed-out');
-    const { url, state } = await this.google.begin({
-      next: safeNextPath(next),
-      mode: linking ? 'link' : 'sign-in',
-      userId: linking ? (req.user?.id ?? null) : null,
-      loginHint: loginHint?.slice(0, 200),
-      ip: req.ip ?? null,
-    });
-    res.cookie(STATE_COOKIE, state, this.cookieOptions(10 * 60));
-    return res.redirect(HttpStatus.FOUND, url);
+    try {
+      const { url, state } = await this.google.begin({
+        next: safeNextPath(next),
+        mode: linking ? 'link' : 'sign-in',
+        userId: linking ? (req.user?.id ?? null) : null,
+        loginHint: loginHint?.slice(0, 200),
+        ip: req.ip ?? null,
+      });
+      res.cookie(STATE_COOKIE, state, this.cookieOptions(10 * 60));
+      return res.redirect(HttpStatus.FOUND, url);
+    } catch (error) {
+      return this.bail(req, res, error);
+    }
   }
 
   /** Where Google sends the person back to. Always ends by redirecting to a page of the website. */
@@ -86,16 +118,20 @@ export class GoogleAuthController {
     @Query('state') state?: string,
     @Query('error') error?: string,
   ) {
-    const outcome = await this.google.finish({
-      code,
-      state,
-      error,
-      stateCookie: readCookie(req.headers.cookie, STATE_COOKIE),
-      sessionUserId: req.user?.id ?? null,
-      client: clientOf(req),
-    });
-    res.clearCookie(STATE_COOKIE, { path: COOKIE_PATH });
-    return res.redirect(HttpStatus.FOUND, this.apply(outcome, res));
+    try {
+      const outcome = await this.google.finish({
+        code,
+        state,
+        error,
+        stateCookie: readCookie(req.headers.cookie, STATE_COOKIE),
+        sessionUserId: req.user?.id ?? null,
+        client: clientOf(req),
+      });
+      res.clearCookie(STATE_COOKIE, { path: COOKIE_PATH });
+      return res.redirect(HttpStatus.FOUND, this.apply(outcome, res));
+    } catch (failure) {
+      return this.bail(req, res, failure);
+    }
   }
 
   /** Sets what the outcome needs (a session, or the "finish signing up" cookie) and says where to go. */
