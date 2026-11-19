@@ -124,7 +124,7 @@ export const certificateNameSchema = z.object({
     .trim()
     .min(3, 'Write your full name as it should appear on the certificate.')
     .max(80, 'That name is too long for the certificate.')
-    .refine((v) => /\p{L}/u.test(v) && !/[<>{}\[\]\/@#$%^*=+|~`_]/.test(v), {
+    .refine((v) => /\p{L}/u.test(v) && !/[<>{}[\]/@#$%^*=+|~`_]/.test(v), {
       message: 'Use letters only (spaces, dots, hyphens and apostrophes are fine).',
     })
     .transform((v) => v.replace(/\s+/g, ' ')),

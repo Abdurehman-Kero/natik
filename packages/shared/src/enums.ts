@@ -13,6 +13,9 @@ export type Role = keyof typeof Role;
 export const UserStatus = defineEnum('ACTIVE', 'DISABLED');
 export type UserStatus = keyof typeof UserStatus;
 
+export const Gender = defineEnum('MALE', 'FEMALE');
+export type Gender = keyof typeof Gender;
+
 export const SessionKind = defineEnum('PERSISTENT', 'BROWSER', 'STAFF');
 export type SessionKind = keyof typeof SessionKind;
 
@@ -141,6 +144,7 @@ export type SmsStatus = keyof typeof SmsStatus;
 export const ALL_ENUMS = {
   Role,
   UserStatus,
+  Gender,
   SessionKind,
   OtpPurpose,
   TextDirection,
